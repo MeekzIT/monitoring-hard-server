@@ -11,9 +11,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
 using Newtonsoft.Json;
+/*using System.Data.Sqlite;*/
+using System.Data.SQLite;
 //using System.Data.SqlClient;
+
+// git add .
+// git commit --amend
+// ctrl + x
+// git push origin +main
 
 struct TCPData
 {
@@ -269,15 +275,19 @@ class Program
         DateTime localDate = new DateTime();
         localDate = DateTime.UtcNow;
         Console.WriteLine(localDate.ToString());
-        SqlConnection sqlConnection = null;
-        string cS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\MoikaData.mdf;Integrated Security=True";
-        sqlConnection = new SqlConnection(cS);
-        SqlCommand sqlCommand = null;
+        SQLiteConnection sqlConnection = null;
+        //string cS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\MoikaData.mdf;Integrated Security=True";
+        // string cS = @"";
+        sqlConnection = new SQLiteConnection("Data Source=MoikaData.db; Version = 3;");
+        SQLiteCommand sqlCommand = null;
         sqlConnection.Open();
-        SqlDataReader sqlDataReader = null;
+        SQLiteDataReader sqlDataReader = null;
         try
         {
-            sqlCommand = new SqlCommand($"SELECT OunerID FROM Devices WHERE OunerID={DataArray[2]}", sqlConnection);
+            /*var sqlCommandTest = new SQLiteCommand($"SELECT * FROM sqlite_master WHERE type='table';", sqlConnection);
+            var sqlreaderTest = sqlCommandTest.ExecuteReader();
+            Console.WriteLine(sqlreaderTest.ToString());*/
+            sqlCommand = new SQLiteCommand($"SELECT OunerID FROM Devices WHERE OunerID={DataArray[2]};", sqlConnection);
             sqlDataReader = sqlCommand.ExecuteReader();
             bool tempState = false;
             while (sqlDataReader.Read())
@@ -291,7 +301,7 @@ class Program
             if (tempState)
             {
                 Console.WriteLine("UPDATE DEVICE");
-                sqlCommand = new SqlCommand($"UPDATE [Devices] SET " +
+                sqlCommand = new SQLiteCommand($"UPDATE [Devices] SET " +
                     $"DeviceType=" +
                     $"@DeviceType, " +
                     $"Version=" +
@@ -587,7 +597,7 @@ class Program
             {
                 Console.WriteLine("NEW DEVICE");
                 sqlCommand.Parameters.Clear();
-                sqlCommand = new SqlCommand(
+                sqlCommand = new SQLiteCommand(
                     $"INSERT INTO [Devices] (" +
                     $"OunerID, " +
                     $"DeviceType, " +
@@ -903,15 +913,17 @@ class Program
         DateTime localDate = new DateTime();
         localDate = DateTime.UtcNow;
         Console.WriteLine(localDate.ToString());
-        SqlConnection sqlConnection = null;
-        string cS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\MoikaData.mdf;Integrated Security=True";
-        sqlConnection = new SqlConnection(cS);
-        SqlCommand sqlCommand = null;
+        SQLiteConnection sqlConnection = null;
+        //string cS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\MoikaData.mdf;Integrated Security=True";
+        //sqlConnection = new SQLiteConnection("Data Source=MoikaData.db;");
+        sqlConnection = new SQLiteConnection("Data Source=MoikaData.db; Version = 3;");
+        //sqlConnection = new SqliteConnection(cS);
+        SQLiteCommand sqlCommand = null;
         sqlConnection.Open();
-        SqlDataReader sqlDataReader = null;
+        SQLiteDataReader sqlDataReader = null;
         try
         {
-            sqlCommand = new SqlCommand($"SELECT * FROM Devices", sqlConnection);
+            sqlCommand = new SQLiteCommand($"SELECT * FROM Devices", sqlConnection);
             DataTable dataTable = new DataTable();
             sqlDataReader = sqlCommand.ExecuteReader();
             dataTable.Load(sqlDataReader);
