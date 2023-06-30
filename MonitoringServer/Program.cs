@@ -99,9 +99,18 @@ struct TCPData
 
 class Program
 {
+    public static SQLiteConnection sqlConnection = null;
+    //string cS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\MoikaData.mdf;Integrated Security=True";
+    // string cS = @"";
+    
+    public static SQLiteCommand sqlCommand = null;
+    
+    public static SQLiteDataReader sqlDataReader = null;
     static async Task Main(string[] args)
     {
         // Start TCP listener
+        sqlConnection = new SQLiteConnection("Data Source=MoikaData.db; Version = 3;");
+        sqlConnection.Open();
         _ = Task.Run(() => StartTcpListener());
 
         // Start HTTP listener
@@ -109,6 +118,7 @@ class Program
 
         Console.WriteLine("Press Enter to exit.");
         Console.ReadLine();
+        sqlConnection.Close();
     }
     static async Task StartTcpListener()
     {
@@ -152,16 +162,61 @@ class Program
         string requestUrl = context.Request.Url.ToString();
         /*Console.WriteLine($"Received HTTP request: {requestUrl}");*/
         char[] UrlArray=context.Request.Url.PathAndQuery.ToArray();
+        uint SendOunerID = 0;
 
-        if (requestUrl.EndsWith("/ALL") && context.Request.HttpMethod == "GET")
+        if (context.Request.HttpMethod == "GET") {
+            if (requestUrl.EndsWith("/ALL") && context.Request.HttpMethod == "GET")
+            {
+                Console.WriteLine(requestUrl);
+                string jsonResponse = SendCommandAll();
+                byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                context.Response.StatusCode = 200;
+                context.Response.ContentType = "application/json";
+                context.Response.ContentLength64 = responseJsonData.Length;
+                context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                context.Response.OutputStream.Close();
+            }
+            else if (UrlArray[0] == '/' && 
+                UrlArray[1] == 'D' && 
+                UrlArray[2] == 'E' && 
+                UrlArray[3] == 'V' && 
+                UrlArray[4] == 'I' && 
+                UrlArray[5] == 'C' && 
+                UrlArray[6] == 'E' &&
+                UrlArray[7] == '/')
+            {
+                for (int i = 8; i < UrlArray.Length; i++)
+                {
+                    if(UrlArray[i] == '/')
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        SendOunerID = (uint)(SendOunerID * 10 + (UrlArray[i] - 48));
+                    }
+                }
+                //SendOunerData(SendOunerID);
+                Console.WriteLine(requestUrl);
+                string jsonResponse = SendOunerData(SendOunerID);
+                byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                context.Response.StatusCode = 200;
+                context.Response.ContentType = "application/json";
+                context.Response.ContentLength64 = responseJsonData.Length;
+                context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                context.Response.OutputStream.Close();
+            }
+            else
+            {
+                Console.WriteLine(context.Request.Url.PathAndQuery.ToString());
+                context.Response.StatusCode = 404;
+                context.Response.OutputStream.Close();
+            }
+        }
+        else
         {
-            Console.WriteLine(requestUrl);
-            string jsonResponse = SendCommandAll();
-            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-            context.Response.StatusCode = 200;
-            context.Response.ContentType = "application/json";
-            context.Response.ContentLength64 = responseJsonData.Length;
-            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+            Console.WriteLine(context.Request.Url.PathAndQuery.ToString());
+            context.Response.StatusCode = 404;
             context.Response.OutputStream.Close();
         }
     }
@@ -256,9 +311,6 @@ class Program
                     SQLWriteForTCP(TCPTempArray);
                 }
             }
-            /////////SQL//////////
-
-            ///////END SQL////////
 
             // Clean up resources
             stream.Close();
@@ -275,18 +327,9 @@ class Program
         DateTime localDate = new DateTime();
         localDate = DateTime.UtcNow;
         Console.WriteLine(localDate.ToString());
-        SQLiteConnection sqlConnection = null;
-        //string cS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\MoikaData.mdf;Integrated Security=True";
-        // string cS = @"";
-        sqlConnection = new SQLiteConnection("Data Source=MoikaData.db; Version = 3;");
-        SQLiteCommand sqlCommand = null;
-        sqlConnection.Open();
-        SQLiteDataReader sqlDataReader = null;
+        sqlDataReader = null;
         try
         {
-            /*var sqlCommandTest = new SQLiteCommand($"SELECT * FROM sqlite_master WHERE type='table';", sqlConnection);
-            var sqlreaderTest = sqlCommandTest.ExecuteReader();
-            Console.WriteLine(sqlreaderTest.ToString());*/
             sqlCommand = new SQLiteCommand($"SELECT OunerID FROM Devices WHERE OunerID={DataArray[2]};", sqlConnection);
             sqlDataReader = sqlCommand.ExecuteReader();
             bool tempState = false;
@@ -904,23 +947,13 @@ class Program
                 sqlDataReader.Close();
             }
         }
-        sqlConnection.Close();
+        //sqlConnection.Close();
     }
     static string SendCommandAll() 
     {
         string SendMassages = null;
         Console.WriteLine("ALL");
-        DateTime localDate = new DateTime();
-        localDate = DateTime.UtcNow;
-        Console.WriteLine(localDate.ToString());
-        SQLiteConnection sqlConnection = null;
-        //string cS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\MoikaData.mdf;Integrated Security=True";
-        //sqlConnection = new SQLiteConnection("Data Source=MoikaData.db;");
-        sqlConnection = new SQLiteConnection("Data Source=MoikaData.db; Version = 3;");
-        //sqlConnection = new SqliteConnection(cS);
-        SQLiteCommand sqlCommand = null;
-        sqlConnection.Open();
-        SQLiteDataReader sqlDataReader = null;
+        sqlDataReader = null;
         try
         {
             sqlCommand = new SQLiteCommand($"SELECT * FROM Devices", sqlConnection);
@@ -928,30 +961,6 @@ class Program
             sqlDataReader = sqlCommand.ExecuteReader();
             dataTable.Load(sqlDataReader);
             SendMassages = JsonConvert.SerializeObject(dataTable);
-            /*var items = new Dictionary<object, Dictionary<string, object>>();
-            while (sqlDataReader.Read())
-            {
-                var item = new Dictionary<string, object>(sqlDataReader.FieldCount - 1);
-                for (var i = 1; i < sqlDataReader.FieldCount; i++)
-                {
-                    item[sqlDataReader.GetName(i)] = sqlDataReader.GetValue(i);
-                }
-                items[sqlDataReader.GetValue(0)] = item;
-            }
-            string json = JsonConvert.SerializeObject(items, Formatting.Indented);
-
-
-            Console.WriteLine(json);
-            SendMassages = json;*/
-            /*var fileName = @"C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\FileJson.json";
-            File.WriteAllTextAsync(fileName, json);*/
-
-
-            /*            while (sqlDataReader.Read())
-                        {
-                            SendMassages=sqlDataReader.GetString(0);
-                        }
-                        Console.WriteLine(SendMassages);*/
         }
         catch (Exception ex)
         {
@@ -964,7 +973,35 @@ class Program
                 sqlDataReader.Close();
             }
         }
-        sqlConnection.Close();
+        //sqlConnection.Close();
+        return SendMassages;
+    }
+    static string SendOunerData(uint MyOunerID)
+    {
+        string SendMassages = null;
+        Console.WriteLine("Owner ID");
+        sqlDataReader = null;
+        try
+        {
+            sqlCommand = new SQLiteCommand($"SELECT * FROM Devices WHERE OunerID={MyOunerID}", sqlConnection);
+            DataTable dataTable = new DataTable();
+            sqlDataReader = sqlCommand.ExecuteReader();
+            dataTable.Load(sqlDataReader);
+            SendMassages = JsonConvert.SerializeObject(dataTable);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+        }
+        finally
+        {
+            if (sqlDataReader != null && !sqlDataReader.IsClosed)
+            {
+                sqlDataReader.Close();
+            }
+        }
+        //sqlConnection.Close();
+        //Console.WriteLine(SendMassages);
         return SendMassages;
     }
 }
