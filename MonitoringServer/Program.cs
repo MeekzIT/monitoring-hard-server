@@ -107,10 +107,17 @@ class Program
         string requestUrl = context.Request.Url.ToString();
         /*Console.WriteLine($"Received HTTP request: {requestUrl}");*/
         char[] UrlArray=context.Request.Url.PathAndQuery.ToArray();
-        
+        string requestPath = context.Request.Url.AbsolutePath;
+        //string[] temp = context.Request.QueryString.AllKeys.GetValue();
+  /*      for (int i = 0; i < temp.Length; i++)
+        {
+            Console.WriteLine(temp[i]);
+        }*/
 
         if (context.Request.HttpMethod == "GET") {
-            if (requestUrl.EndsWith("/ALL"))
+            //Console.WriteLine(context.Request.QueryString.AllKeys + "-----");
+
+            if (requestUrl.EndsWith("/api/v1/devices"))
             {
                 try
                 {
@@ -141,7 +148,7 @@ class Program
                     context.Response.OutputStream.Close();
                 }
             }
-            else if (requestUrl.EndsWith("/CONFIG"))
+            else if (requestUrl.EndsWith("/api/v1/config"))
             {
                 try
                 {
@@ -172,29 +179,13 @@ class Program
                     context.Response.OutputStream.Close();
                 }
             }
-            else if (UrlArray[0] == '/' && 
-                UrlArray[1] == 'D' && 
-                UrlArray[2] == 'E' && 
-                UrlArray[3] == 'V' && 
-                UrlArray[4] == 'I' && 
-                UrlArray[5] == 'C' && 
-                UrlArray[6] == 'E' &&
-                UrlArray[7] == '/')
+            else if (requestPath==("/api/v1/devices/"))
             {
+                string id = context.Request.QueryString["id"];
                 try
                 {
-                    uint SendOwnerID = 0;
-                    for (int i = 8; i < UrlArray.Length; i++)
-                    {
-                        if (UrlArray[i] == '/')
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            SendOwnerID = (uint)(SendOwnerID * 10 + (UrlArray[i] - 48));
-                        }
-                    }
+                    uint SendOwnerID = uint.Parse(id);
+
                     Console.WriteLine(requestUrl);
                     string jsonResponse = SendOunerData(SendOwnerID);
                     byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
@@ -222,29 +213,13 @@ class Program
                     context.Response.OutputStream.Close();
                 }
             }
-            else if (UrlArray[0] == '/' &&
-                UrlArray[1] == 'C' &&
-                UrlArray[2] == 'O' &&
-                UrlArray[3] == 'N' &&
-                UrlArray[4] == 'F' &&
-                UrlArray[5] == 'I' &&
-                UrlArray[6] == 'G' &&
-                UrlArray[7] == '/')
+            else if (requestPath == ("/api/v1/config/"))
             {
+                string id = context.Request.QueryString["id"];
                 try
                 {
-                    uint SendOwnerID = 0;
-                    for (int i = 8; i < UrlArray.Length; i++)
-                    {
-                        if (UrlArray[i] == '/')
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            SendOwnerID = (uint)(SendOwnerID * 10 + (UrlArray[i] - 48));
-                        }
-                    }
+                    uint SendOwnerID = uint.Parse(id);
+
                     Console.WriteLine(requestUrl);
                     string jsonResponse = SendOunerConfig(SendOwnerID);
                     byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
@@ -281,7 +256,7 @@ class Program
         }
         else if(context.Request.HttpMethod == "POST")
         {
-            if (requestUrl.EndsWith("/CHANGE"))
+            if (requestUrl.EndsWith("/api/v1/devie/edit"))
             {
                 try
                 {
@@ -320,7 +295,7 @@ class Program
                     context.Response.Close();
                 }
             }
-            else if (requestUrl.EndsWith("/DELETE"))
+            else if (requestUrl.EndsWith("/api/v1/device/destroy"))
             {
                 try
                 {
