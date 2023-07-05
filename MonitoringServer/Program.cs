@@ -21,84 +21,20 @@ using System.Data.SQLite;
 // ctrl + x
 // git push origin +main
 
-struct TCPData
-{
-    public uint Devicetype;
-    public uint Version;
-    public uint OunerID;
-    public uint RFID1;
-    public uint RFID2;
-    public uint MoykaID;
-    public uint BoxID;
-    public uint Language;
-    public uint WorkingMode;
-    public uint FreeCard;
-    public uint CoinNominal;
-    public uint BillNominal;
-    public uint CashLessNominal;
-    public uint CoinCount;
-    public uint BillCount;
-    public uint CashLessCount;
-    public uint CoinCountTotal;
-    public uint BillCountTotal;
-    public uint CashLessCountTotal;
-    public uint RelayOffTime;
-    public uint F1Nominal;
-    public uint F2Nominal;
-    public uint F3Nominal;
-    public uint F4Nominal;
-    public uint F5Nominal;
-    public uint F6Nominal;
-    public uint F1ModeName;
-    public uint F2ModeName;
-    public uint F3ModeName;
-    public uint F4ModeName;
-    public uint F5ModeName;
-    public uint F6ModeName;
-    public uint F1Color;
-    public uint F2Color;
-    public uint F3Color;
-    public uint F4Color;
-    public uint F5Color;
-    public uint F6Color;
-    public uint F1Count;
-    public uint F2Count;
-    public uint F3Count;
-    public uint F4Count;
-    public uint F5Count;
-    public uint F6Count;
-    public uint F1CountTotal;
-    public uint F2CountTotal;
-    public uint F3CountTotal;
-    public uint F4CountTotal;
-    public uint F5CountTotal;
-    public uint F6CountTotal;
-    public uint B1Nominal;
-    public uint B2Nominal;
-    public uint B3Nominal;
-    public uint B4Nominal;
-    public uint B5Nominal;
-    public uint B6Nominal;
-    public uint SleepCount;
-    public uint RollTime;
-    public uint Sleep1ptr;
-    public uint Sleep2ptr;
-    public uint Sleep3ptr;
-    public uint Sleep4ptr;
-    public uint Sleep5ptr;
-    public uint Sleep6ptr;
-    public uint Sleep1Color;
-    public uint Sleep2Color;
-    public uint Sleep3Color;
-    public uint Sleep4Color;
-    public uint Sleep5Color;
-    public uint Sleep6Color;
-    public DateTime MyTime;
-}
-
-
 class Program
 {
+    public class ConfigDevice
+    {
+        public int OwnerID { get; set; }
+        public int ParamNO { get; set; }
+        public int NewData { get; set; }
+    }
+
+    public class DeletDevice
+    {
+        public int OwnerID { get; set; }
+    }
+
     public static SQLiteConnection sqlConnection = null;
     //string cS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\MoikaData.mdf;Integrated Security=True";
     // string cS = @"";
@@ -109,6 +45,15 @@ class Program
     static async Task Main(string[] args)
     {
         // Start TCP listener
+        if (File.Exists("MoikaData.db")) 
+        {
+            Console.WriteLine("Database is success");
+        }
+        else
+        {
+            Console.WriteLine("Database is not success");
+            Environment.Exit(0);
+        }
         sqlConnection = new SQLiteConnection("Data Source=MoikaData.db; Version = 3;");
         sqlConnection.Open();
         _ = Task.Run(() => StartTcpListener());
@@ -162,19 +107,70 @@ class Program
         string requestUrl = context.Request.Url.ToString();
         /*Console.WriteLine($"Received HTTP request: {requestUrl}");*/
         char[] UrlArray=context.Request.Url.PathAndQuery.ToArray();
-        uint SendOunerID = 0;
+        
 
         if (context.Request.HttpMethod == "GET") {
-            if (requestUrl.EndsWith("/ALL") && context.Request.HttpMethod == "GET")
+            if (requestUrl.EndsWith("/ALL"))
             {
-                Console.WriteLine(requestUrl);
-                string jsonResponse = SendCommandAll();
-                byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                context.Response.StatusCode = 200;
-                context.Response.ContentType = "application/json";
-                context.Response.ContentLength64 = responseJsonData.Length;
-                context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                context.Response.OutputStream.Close();
+                try
+                {
+                    Console.WriteLine(requestUrl);
+                    string jsonResponse = SendCommandAll();
+                    byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                    context.Response.StatusCode = 200;
+                    context.Response.ContentType = "application/json";
+                    context.Response.ContentLength64 = responseJsonData.Length;
+                    context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                }
+                catch (Exception ex)
+                {
+                    string errorMessage = ex.Message;
+                    var errorObject = new
+                    {
+                        error = errorMessage
+                    };
+
+                    string errorResponse = JsonConvert.SerializeObject(errorObject);
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                }
+                finally
+                {
+                    context.Response.OutputStream.Close();
+                }
+            }
+            else if (requestUrl.EndsWith("/CONFIG"))
+            {
+                try
+                {
+                    Console.WriteLine(requestUrl);
+                    string jsonResponse = SendConfigTable();
+                    byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                    context.Response.StatusCode = 200;
+                    context.Response.ContentType = "application/json";
+                    context.Response.ContentLength64 = responseJsonData.Length;
+                    context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                }
+                catch (Exception ex)
+                {
+                    string errorMessage = ex.Message;
+                    var errorObject = new
+                    {
+                        error = errorMessage
+                    };
+
+                    string errorResponse = JsonConvert.SerializeObject(errorObject);
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                }
+                finally
+                {
+                    context.Response.OutputStream.Close();
+                }
             }
             else if (UrlArray[0] == '/' && 
                 UrlArray[1] == 'D' && 
@@ -185,26 +181,179 @@ class Program
                 UrlArray[6] == 'E' &&
                 UrlArray[7] == '/')
             {
-                for (int i = 8; i < UrlArray.Length; i++)
+                try
                 {
-                    if(UrlArray[i] == '/')
+                    uint SendOwnerID = 0;
+                    for (int i = 8; i < UrlArray.Length; i++)
                     {
-                        break;
+                        if (UrlArray[i] == '/')
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            SendOwnerID = (uint)(SendOwnerID * 10 + (UrlArray[i] - 48));
+                        }
                     }
-                    else
-                    {
-                        SendOunerID = (uint)(SendOunerID * 10 + (UrlArray[i] - 48));
-                    }
+                    Console.WriteLine(requestUrl);
+                    string jsonResponse = SendOunerData(SendOwnerID);
+                    byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                    context.Response.StatusCode = 200;
+                    context.Response.ContentType = "application/json";
+                    context.Response.ContentLength64 = responseJsonData.Length;
+                    context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
                 }
-                //SendOunerData(SendOunerID);
-                Console.WriteLine(requestUrl);
-                string jsonResponse = SendOunerData(SendOunerID);
-                byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                context.Response.StatusCode = 200;
-                context.Response.ContentType = "application/json";
-                context.Response.ContentLength64 = responseJsonData.Length;
-                context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                catch (Exception ex)
+                {
+                    string errorMessage = ex.Message;
+                    var errorObject = new
+                    {
+                        error = errorMessage
+                    };
+
+                    string errorResponse = JsonConvert.SerializeObject(errorObject);
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                }
+                finally
+                {
+                    context.Response.OutputStream.Close();
+                }
+            }
+            else if (UrlArray[0] == '/' &&
+                UrlArray[1] == 'C' &&
+                UrlArray[2] == 'O' &&
+                UrlArray[3] == 'N' &&
+                UrlArray[4] == 'F' &&
+                UrlArray[5] == 'I' &&
+                UrlArray[6] == 'G' &&
+                UrlArray[7] == '/')
+            {
+                try
+                {
+                    uint SendOwnerID = 0;
+                    for (int i = 8; i < UrlArray.Length; i++)
+                    {
+                        if (UrlArray[i] == '/')
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            SendOwnerID = (uint)(SendOwnerID * 10 + (UrlArray[i] - 48));
+                        }
+                    }
+                    Console.WriteLine(requestUrl);
+                    string jsonResponse = SendOunerConfig(SendOwnerID);
+                    byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                    context.Response.StatusCode = 200;
+                    context.Response.ContentType = "application/json";
+                    context.Response.ContentLength64 = responseJsonData.Length;
+                    context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                }
+                catch (Exception ex)
+                {
+                    string errorMessage = ex.Message;
+                    var errorObject = new
+                    {
+                        error = errorMessage
+                    };
+
+                    string errorResponse = JsonConvert.SerializeObject(errorObject);
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                }
+                finally
+                {
+                    context.Response.OutputStream.Close();
+                }
+            }
+            else
+            {
+                Console.WriteLine(context.Request.Url.PathAndQuery.ToString());
+                context.Response.StatusCode = 404;
                 context.Response.OutputStream.Close();
+            }
+        }
+        else if(context.Request.HttpMethod == "POST")
+        {
+            if (requestUrl.EndsWith("/CHANGE"))
+            {
+                try
+                {
+                    // Read the request body
+                    string requestBody;
+                    using (StreamReader reader = new StreamReader(context.Request.InputStream))
+                    {
+                        requestBody = reader.ReadToEnd();
+                    }
+
+                    var configDevice = JsonConvert.DeserializeObject<ConfigDevice>(requestBody);
+
+                    /*Console.WriteLine(configDevice.OwnerID.ToString());
+                    Console.WriteLine(configDevice.ParamNO.ToString());
+                    Console.WriteLine(configDevice.NewData.ToString());*/
+
+                    SaveConfigParam(configDevice);
+
+                    context.Response.StatusCode = (int)HttpStatusCode.OK;
+                }
+                catch (Exception ex)
+                {
+                    string errorMessage = ex.Message;
+                    var errorObject = new
+                    {
+                        error = errorMessage
+                    };
+                    string errorResponse = JsonConvert.SerializeObject(errorObject);
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                }
+                finally
+                {
+                    context.Response.Close();
+                }
+            }
+            else if (requestUrl.EndsWith("/DELETE"))
+            {
+                try
+                {
+                    // Read the request body
+                    string requestBody;
+                    using (StreamReader reader = new StreamReader(context.Request.InputStream))
+                    {
+                        requestBody = reader.ReadToEnd();
+                    }
+
+                    DeletDevice[] deletDevices = JsonConvert.DeserializeObject<DeletDevice[]>(requestBody);
+
+                    Deleting(deletDevices);
+
+                    context.Response.StatusCode = (int)HttpStatusCode.OK;
+                }
+                catch (Exception ex)
+                {
+                    string errorMessage = ex.Message;
+                    var errorObject = new
+                    {
+                        error = errorMessage
+                    };
+                    string errorResponse = JsonConvert.SerializeObject(errorObject);
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                }
+                finally
+                {
+                    context.Response.Close();
+                }
             }
             else
             {
@@ -247,7 +396,6 @@ class Program
 
 
                 bool StartUncoding = false;
-                bool StartCommand = false;
                 int j=0;
                 for (int i = 0; i < message.Length; i++)
                 {
@@ -266,49 +414,23 @@ class Program
 
                         TCPTempArray[j] = TCPTempArray[j]*10 + (uint)Char.GetNumericValue(tempChar);
                     }
-                    else if (StartCommand)
-                    {
-/*                        if(message[i] == '/' && message[i + 1] == 'A' && message[i + 2] == 'L' && message[i + 3] == 'L') { }
-                        {
-                            //string Nmessage = SendCommandAll();
-
-                            string Nmessage = "HTTP/1.1 200 OK"+13+ "Date: Thu, 29 Jul 2021 19:20:01 GMT" +
-                                13 + "Content-Type: text/html; charset=utf-8" + 
-                                13 + "Content-Length: 2" +
-                                13 + "Connection: close" + 
-                                13 + "Server: gunicorn/19.9.0" + 
-                                13 + "Access-Control-Allow-Origin: *" + 
-                                13 + "Access-Control-Allow-Credentials: true" + 13 + 13 +"OK";
-                            var response = Encoding.UTF8.GetBytes($"{Nmessage}");
-                            await stream.WriteAsync(response, 0, response.Length);
-                            //HTTPGetPackageALL();
-                            break;
-                        }*/
-                    }
                     else if (message[i+1]==' ' && message[i] == ':' && message[i - 1] == 'e' && message[i - 2] == 'v' && message[i - 3] == 'a' && message[i - 4] == 'l' && message[i - 5] == 'S') 
                     {
                         i++;
                         StartUncoding = true;
-                        StartCommand = false;
                     }
-/*                    else if (message[i + 1] == ' ' && message[i] == 'T' && message[i - 1] == 'E' && message[i - 2] == 'G')
-                    {
-                        i++;
-                        StartCommand = true;
-                        StartUncoding = false;
-                    }*/
                 }
-                /*for (int i = 0; i < TCPTempArray.Length; i++)
-                {
-                    Console.WriteLine(TCPTempArray[i]);
-                }*/
-                // Echo the message back to the client
-                //var response = Encoding.UTF8.GetBytes($"Echo: {message}");
-                //await stream.WriteAsync(response, 0, response.Length);
                 Console.WriteLine(message);
                 if(StartUncoding)
                 {
                     SQLWriteForTCP(TCPTempArray);
+                    string SendTCPMassage = CheckConfigDevice(TCPTempArray);
+                    Console.WriteLine(SendTCPMassage);
+                    if(SendTCPMassage != "NO1" && SendTCPMassage != "NO2" && SendTCPMassage != "ERROR")
+                    {
+                        byte[] sendClientData = Encoding.ASCII.GetBytes(SendTCPMassage);
+                        stream.Write(sendClientData, 0, sendClientData.Length);
+                    }
                 }
             }
 
@@ -330,7 +452,7 @@ class Program
         sqlDataReader = null;
         try
         {
-            sqlCommand = new SQLiteCommand($"SELECT OunerID FROM Devices WHERE OunerID={DataArray[2]};", sqlConnection);
+            sqlCommand = new SQLiteCommand($"SELECT OwnerID FROM Devices WHERE OwnerID={DataArray[2]};", sqlConnection);
             sqlDataReader = sqlCommand.ExecuteReader();
             bool tempState = false;
             while (sqlDataReader.Read())
@@ -485,10 +607,10 @@ class Program
                     $"@Sleep6Color, " +
                     $"DataTime=" +
                     $"@DataTime " +
-                    $"WHERE OunerID={DataArray[2]}",
+                    $"WHERE OwnerID={DataArray[2]}",
                     sqlConnection);
                 
-                sqlCommand.Parameters.AddWithValue("OunerID", (int)DataArray[2]);
+                sqlCommand.Parameters.AddWithValue("OwnerID", (int)DataArray[2]);
                 sqlCommand.Parameters.AddWithValue("DeviceType", (int)DataArray[0]);
                 sqlCommand.Parameters.AddWithValue("Version", (int)DataArray[1]);
                 sqlCommand.Parameters.AddWithValue("RFID1", (int)DataArray[3]);
@@ -634,7 +756,6 @@ class Program
                 Console.Write(DataArray[68] + ",");
                 Console.Write(DataArray[69] + ",");
                 Console.WriteLine();
-                Console.WriteLine();
             }
             else
             {
@@ -642,7 +763,7 @@ class Program
                 sqlCommand.Parameters.Clear();
                 sqlCommand = new SQLiteCommand(
                     $"INSERT INTO [Devices] (" +
-                    $"OunerID, " +
+                    $"OwnerID, " +
                     $"DeviceType, " +
                     $"Version, " +
                     $"RFID1, " +
@@ -714,7 +835,7 @@ class Program
                     $"Sleep6Color," +
                     $"DataTime) " +
                     $"VALUES (" +
-                    $"@OunerID, " +
+                    $"@OwnerID, " +
                     $"@DeviceType, " +
                     $"@Version, " +
                     $"@RFID1, " +
@@ -787,7 +908,7 @@ class Program
                     $"@DataTime) " ,
                     sqlConnection);
 
-                sqlCommand.Parameters.AddWithValue("OunerID", (int)DataArray[2]);
+                sqlCommand.Parameters.AddWithValue("OwnerID", (int)DataArray[2]);
                 sqlCommand.Parameters.AddWithValue("DeviceType", (int)DataArray[0]);
                 sqlCommand.Parameters.AddWithValue("Version", (int)DataArray[1]);
                 sqlCommand.Parameters.AddWithValue("RFID1", (int)DataArray[3]);
@@ -932,7 +1053,6 @@ class Program
                 Console.Write(DataArray[68] + ",");
                 Console.Write(DataArray[69] + ",");
                 Console.WriteLine();
-                Console.WriteLine();
             }
         }
         catch (Exception ex)
@@ -941,7 +1061,7 @@ class Program
         }
         finally
         {
-            Array.Clear(DataArray,0, DataArray.Length);
+            //Array.Clear(DataArray,0, DataArray.Length);
             if (sqlDataReader != null && !sqlDataReader.IsClosed)
             {
                 sqlDataReader.Close();
@@ -976,14 +1096,41 @@ class Program
         //sqlConnection.Close();
         return SendMassages;
     }
-    static string SendOunerData(uint MyOunerID)
+    static string SendConfigTable()
+    {
+        string SendMassages = null;
+        Console.WriteLine("Config");
+        sqlDataReader = null;
+        try
+        {
+            sqlCommand = new SQLiteCommand($"SELECT * FROM Config", sqlConnection);
+            DataTable dataTable = new DataTable();
+            sqlDataReader = sqlCommand.ExecuteReader();
+            dataTable.Load(sqlDataReader);
+            SendMassages = JsonConvert.SerializeObject(dataTable);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+        }
+        finally
+        {
+            if (sqlDataReader != null && !sqlDataReader.IsClosed)
+            {
+                sqlDataReader.Close();
+            }
+        }
+        //sqlConnection.Close();
+        return SendMassages;
+    }
+    static string SendOunerData(uint MyOwnerID)
     {
         string SendMassages = null;
         Console.WriteLine("Owner ID");
         sqlDataReader = null;
         try
         {
-            sqlCommand = new SQLiteCommand($"SELECT * FROM Devices WHERE OunerID={MyOunerID}", sqlConnection);
+            sqlCommand = new SQLiteCommand($"SELECT * FROM Devices WHERE OwnerID={MyOwnerID}", sqlConnection);
             DataTable dataTable = new DataTable();
             sqlDataReader = sqlCommand.ExecuteReader();
             dataTable.Load(sqlDataReader);
@@ -1003,5 +1150,175 @@ class Program
         //sqlConnection.Close();
         //Console.WriteLine(SendMassages);
         return SendMassages;
+    }
+    static void SaveConfigParam(ConfigDevice config)
+    {
+        Console.WriteLine("Save Config");
+        sqlDataReader = null;
+        try
+        {
+            sqlCommand = new SQLiteCommand($"SELECT OwnerID FROM Config WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};", sqlConnection);
+            sqlDataReader = sqlCommand.ExecuteReader();
+            bool tempState = false;
+            while (sqlDataReader.Read())
+            {
+                int tempSql = sqlDataReader.GetInt32(0);
+                tempState = true;
+            }
+            sqlDataReader.Close();
+            if (tempState)
+            {
+                Console.WriteLine("UPDATE Config paradeters");
+                sqlCommand = new SQLiteCommand($"UPDATE [Config] SET " +
+                    $"NewData=" +
+                    $"@NewData " +
+                    $"WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};",
+                    sqlConnection);
+
+                sqlCommand.Parameters.AddWithValue("NewData", config.NewData);
+                sqlCommand.ExecuteNonQuery();
+            }
+            else
+            {
+                Console.WriteLine("NEW Config");
+                sqlCommand.Parameters.Clear();
+                sqlCommand = new SQLiteCommand(
+                    $"INSERT INTO [Config] (" +
+                    $"OwnerID," + 
+                    $"ParamNO," +
+                    $"NewData) " +
+                    $"VALUES (" +
+                    $"@OwnerID," +
+                    $"@ParamNO," +
+                    $"@NewData) ",
+                    sqlConnection);
+
+                sqlCommand.Parameters.AddWithValue("OwnerID", config.OwnerID);
+                sqlCommand.Parameters.AddWithValue("ParamNO", config.ParamNO);
+                sqlCommand.Parameters.AddWithValue("NewData", config.NewData);
+                sqlCommand.ExecuteNonQuery();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+        }
+        finally
+        {
+            if (sqlDataReader != null && !sqlDataReader.IsClosed)
+            {
+                sqlDataReader.Close();
+            }
+        }
+    }
+    static string CheckConfigDevice(uint[] DataArray)
+    {
+        string SendMassage = null;
+        sqlDataReader = null;
+        try
+        {
+            Console.WriteLine(DataArray[2]);
+            sqlCommand = new SQLiteCommand($"SELECT * FROM Config WHERE OwnerID={DataArray[2]}", sqlConnection);
+            DataTable dataTable = new DataTable();
+            sqlDataReader = sqlCommand.ExecuteReader();
+            dataTable.Load(sqlDataReader);
+            if (dataTable != null)
+            {
+                string TempJSON = JsonConvert.SerializeObject(dataTable);
+                Console.WriteLine(TempJSON);
+                ConfigDevice[] configDevices = JsonConvert.DeserializeObject<ConfigDevice[]>(TempJSON);
+                bool noChang = true;
+                for (int i = 0; i < configDevices.Length; i++)
+                {
+                    Console.WriteLine(configDevices[i].ToString());
+                    if(DataArray[configDevices[i].ParamNO] != configDevices[i].NewData)
+                    {
+                        noChang = false;
+                        SendMassage = SendMassage + "P" + configDevices[i].ParamNO.ToString() + "-" + configDevices[i].NewData + ",";
+                    }
+                    else if (DataArray[configDevices[i].ParamNO] == configDevices[i].NewData)
+                    {
+                        sqlCommand = new SQLiteCommand($"DELETE FROM Config WHERE OwnerID={DataArray[2]} AND ParamNO={configDevices[i].ParamNO};", sqlConnection);
+                        sqlCommand.ExecuteNonQuery();
+                    }
+                }
+                if (noChang)
+                {
+                    SendMassage = "NO2";
+                }
+                else
+                {
+                    SendMassage = "Config: " + SendMassage;
+                }
+            }
+            else
+            {
+                SendMassage = "NO1";
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+            SendMassage = "ERROR";
+        }
+        finally
+        {
+            Array.Clear(DataArray, 0, DataArray.Length);
+            if (sqlDataReader != null && !sqlDataReader.IsClosed)
+            {
+                sqlDataReader.Close();
+            }
+        }
+        return SendMassage;
+    }
+    static string SendOunerConfig(uint MyOwnerID)
+    {
+        string SendMassages = null;
+        Console.WriteLine("Owner ID");
+        sqlDataReader = null;
+        try
+        {
+            sqlCommand = new SQLiteCommand($"SELECT * FROM Config WHERE OwnerID={MyOwnerID}", sqlConnection);
+            DataTable dataTable = new DataTable();
+            sqlDataReader = sqlCommand.ExecuteReader();
+            dataTable.Load(sqlDataReader);
+            SendMassages = JsonConvert.SerializeObject(dataTable);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+        }
+        finally
+        {
+            if (sqlDataReader != null && !sqlDataReader.IsClosed)
+            {
+                sqlDataReader.Close();
+            }
+        }
+        //sqlConnection.Close();
+        //Console.WriteLine(SendMassages);
+        return SendMassages;
+    }
+    static void Deleting(DeletDevice[] deletDevices)
+    {
+        try
+        {
+            for (int i = 0; i < deletDevices.Length; i++)
+            {
+                sqlCommand = new SQLiteCommand($"DELETE FROM Devices WHERE OwnerID={deletDevices[i].OwnerID};", sqlConnection);
+                sqlCommand.ExecuteNonQuery();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+        }
+        finally
+        {
+            if (sqlDataReader != null && !sqlDataReader.IsClosed)
+            {
+                sqlDataReader.Close();
+            }
+        }
     }
 }
