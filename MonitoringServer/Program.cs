@@ -58,7 +58,6 @@ class Program
         sqlConnection.Open();
         _ = Task.Run(() => StartTcpListener());
 
-        // Start HTTP listener
         _ = Task.Run(() => StartHttpListener());
 
         Console.WriteLine("Press Enter to exit.");
@@ -1223,7 +1222,7 @@ class Program
                 }
                 else
                 {
-                    SendMassage = "Config: " + SendMassage;
+                    SendMassage = "Config: " + SendMassage + "#";
                 }
             }
             else
