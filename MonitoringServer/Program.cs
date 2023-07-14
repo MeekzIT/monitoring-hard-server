@@ -268,13 +268,24 @@ class Program
 
                     var configDevice = JsonConvert.DeserializeObject<ConfigDevice>(requestBody);
 
-                    /*Console.WriteLine(configDevice.OwnerID.ToString());
-                    Console.WriteLine(configDevice.ParamNO.ToString());
-                    Console.WriteLine(configDevice.NewData.ToString());*/
+                    string SaveConfigParamState = null;
+                    SaveConfigParamState = SaveConfigParam(configDevice);
 
-                    SaveConfigParam(configDevice);
+                    if(SaveConfigParamState == "OK")
+                    {
+                        context.Response.ContentType = "text/plain";
+                        byte[] responseData = Encoding.UTF8.GetBytes("Confirmed");
+                        context.Response.OutputStream.Write(responseData, 0, responseData.Length);
+                        context.Response.StatusCode = (int)HttpStatusCode.OK;
+                    }
+                    else
+                    {
+                        context.Response.ContentType = "text/plain";
+                        byte[] responseData = Encoding.UTF8.GetBytes(SaveConfigParamState);
+                        context.Response.OutputStream.Write(responseData, 0, responseData.Length);
+                        context.Response.StatusCode = (int)HttpStatusCode.OK;
+                    }
 
-                    context.Response.StatusCode = (int)HttpStatusCode.OK;
                 }
                 catch (Exception ex)
                 {
@@ -349,7 +360,7 @@ class Program
         {
             var stream = client.GetStream();
             var buffer = new byte[4096];
-            uint[] TCPTempArray = new uint[70];
+            uint[] TCPTempArray = new uint[149];
             Array.Clear(buffer, 0, buffer.Length);
             Array.Clear(TCPTempArray, 0, TCPTempArray.Length); 
 
@@ -580,7 +591,165 @@ class Program
                     $"Sleep6Color=" +
                     $"@Sleep6Color, " +
                     $"DataTime=" +
-                    $"@DataTime " +
+                    $"@DataTime, " +
+                    $"P0=" +
+                    $"@P0, " +
+                    $"P1=" +
+                    $"@P1, " +
+                    $"P2=" +
+                    $"@P2, " +
+                    $"P3=" +
+                    $"@P3, " +
+                    $"P4=" +
+                    $"@P4, " +
+                    $"P5=" +
+                    $"@P5, " +
+                    $"P6=" +
+                    $"@P6, " +
+                    $"P7=" +
+                    $"@P7, " +
+                    $"P8=" +
+                    $"@P8, " +
+                    $"P9=" +
+                    $"@P9, " +
+                    $"P10=" +
+                    $"@P10, " +
+                    $"P11=" +
+                    $"@P11, " +
+                    $"P12=" +
+                    $"@P12, " +
+                    $"P13=" +
+                    $"@P13, " +
+                    $"P14=" +
+                    $"@P14, " +
+                    $"P15=" +
+                    $"@P15, " +
+                    $"P16=" +
+                    $"@P16, " +
+                    $"P17=" +
+                    $"@P17, " +
+                    $"P18=" +
+                    $"@P18, " +
+                    $"P19=" +
+                    $"@P19, " +
+                    $"P20=" +
+                    $"@P20, " +
+                    $"P21=" +
+                    $"@P21, " +
+                    $"P22=" +
+                    $"@P22, " +
+                    $"P23=" +
+                    $"@P23, " +
+                    $"P24=" +
+                    $"@P24, " +
+                    $"P25=" +
+                    $"@P25, " +
+                    $"P26=" +
+                    $"@P26, " +
+                    $"P27=" +
+                    $"@P27, " +
+                    $"P28=" +
+                    $"@P28, " +
+                    $"P29=" +
+                    $"@P29, " +
+                    $"P30=" +
+                    $"@P30, " +
+                    $"P31=" +
+                    $"@P31, " +
+                    $"P32=" +
+                    $"@P32, " +
+                    $"P33=" +
+                    $"@P33, " +
+                    $"P34=" +
+                    $"@P34, " +
+                    $"P35=" +
+                    $"@P35, " +
+                    $"P36=" +
+                    $"@P36, " +
+                    $"P37=" +
+                    $"@P37, " +
+                    $"P38=" +
+                    $"@P38, " +
+                    $"P39=" +
+                    $"@P39, " +
+                    $"P40=" +
+                    $"@P40, " +
+                    $"P41=" +
+                    $"@P41, " +
+                    $"P42=" +
+                    $"@P42, " +
+                    $"P43=" +
+                    $"@P43, " +
+                    $"P44=" +
+                    $"@P44, " +
+                    $"P45=" +
+                    $"@P45, " +
+                    $"P46=" +
+                    $"@P46, " +
+                    $"P47=" +
+                    $"@P47, " +
+                    $"P48=" +
+                    $"@P48, " +
+                    $"P49=" +
+                    $"@P49, " +
+                    $"P50=" +
+                    $"@P50, " +
+                    $"P51=" +
+                    $"@P51, " +
+                    $"P52=" +
+                    $"@P52, " +
+                    $"P53=" +
+                    $"@P53, " +
+                    $"P54=" +
+                    $"@P54, " +
+                    $"P55=" +
+                    $"@P55, " +
+                    $"P56=" +
+                    $"@P56, " +
+                    $"P57=" +
+                    $"@P57, " +
+                    $"P58=" +
+                    $"@P58, " +
+                    $"P59=" +
+                    $"@P59, " +
+                    $"P60=" +
+                    $"@P60, " +
+                    $"P61=" +
+                    $"@P61, " +
+                    $"P62=" +
+                    $"@P62, " +
+                    $"P63=" +
+                    $"@P63, " +
+                    $"P64=" +
+                    $"@P64, " +
+                    $"P65=" +
+                    $"@P65, " +
+                    $"P66=" +
+                    $"@P66, " +
+                    $"P67=" +
+                    $"@P67, " +
+                    $"P68=" +
+                    $"@P68, " +
+                    $"P69=" +
+                    $"@P69, " +
+                    $"P70=" +
+                    $"@P70, " +
+                    $"P71=" +
+                    $"@P71, " +
+                    $"P72=" +
+                    $"@P72, " +
+                    $"P73=" +
+                    $"@P73, " +
+                    $"P74=" +
+                    $"@P74, " +
+                    $"P75=" +
+                    $"@P75, " +
+                    $"P76=" +
+                    $"@P76, " +
+                    $"P77=" +
+                    $"@P77, " +
+                    $"P78=" +
+                    $"@P78 " +
                     $"WHERE OwnerID={DataArray[2]}",
                     sqlConnection);
                 
@@ -656,80 +825,86 @@ class Program
                 sqlCommand.Parameters.AddWithValue("Sleep6Color", (int)DataArray[69]);
                 string sqlFormattedDate = localDate.ToString("yyyy-MM-dd  HH:mm:ss");
                 sqlCommand.Parameters.AddWithValue("DataTime", sqlFormattedDate);
-
+                sqlCommand.Parameters.AddWithValue("P0", (int)DataArray[70]);
+                sqlCommand.Parameters.AddWithValue("P1", (int)DataArray[71]);
+                sqlCommand.Parameters.AddWithValue("P2", (int)DataArray[72]);
+                sqlCommand.Parameters.AddWithValue("P3", (int)DataArray[73]);
+                sqlCommand.Parameters.AddWithValue("P4", (int)DataArray[74]);
+                sqlCommand.Parameters.AddWithValue("P5", (int)DataArray[75]);
+                sqlCommand.Parameters.AddWithValue("P6", (int)DataArray[76]);
+                sqlCommand.Parameters.AddWithValue("P7", (int)DataArray[77]);
+                sqlCommand.Parameters.AddWithValue("P8", (int)DataArray[78]);
+                sqlCommand.Parameters.AddWithValue("P9", (int)DataArray[79]);
+                sqlCommand.Parameters.AddWithValue("P10", (int)DataArray[80]);
+                sqlCommand.Parameters.AddWithValue("P11", (int)DataArray[81]);
+                sqlCommand.Parameters.AddWithValue("P12", (int)DataArray[82]);
+                sqlCommand.Parameters.AddWithValue("P13", (int)DataArray[83]);
+                sqlCommand.Parameters.AddWithValue("P14", (int)DataArray[84]);
+                sqlCommand.Parameters.AddWithValue("P15", (int)DataArray[85]);
+                sqlCommand.Parameters.AddWithValue("P16", (int)DataArray[86]);
+                sqlCommand.Parameters.AddWithValue("P17", (int)DataArray[87]);
+                sqlCommand.Parameters.AddWithValue("P18", (int)DataArray[88]);
+                sqlCommand.Parameters.AddWithValue("P19", (int)DataArray[89]);
+                sqlCommand.Parameters.AddWithValue("P20", (int)DataArray[90]);
+                sqlCommand.Parameters.AddWithValue("P21", (int)DataArray[91]);
+                sqlCommand.Parameters.AddWithValue("P22", (int)DataArray[92]);
+                sqlCommand.Parameters.AddWithValue("P23", (int)DataArray[93]);
+                sqlCommand.Parameters.AddWithValue("P24", (int)DataArray[94]);
+                sqlCommand.Parameters.AddWithValue("P25", (int)DataArray[95]);
+                sqlCommand.Parameters.AddWithValue("P26", (int)DataArray[96]);
+                sqlCommand.Parameters.AddWithValue("P27", (int)DataArray[97]);
+                sqlCommand.Parameters.AddWithValue("P28", (int)DataArray[98]);
+                sqlCommand.Parameters.AddWithValue("P29", (int)DataArray[99]);
+                sqlCommand.Parameters.AddWithValue("P30", (int)DataArray[100]);
+                sqlCommand.Parameters.AddWithValue("P31", (int)DataArray[101]);
+                sqlCommand.Parameters.AddWithValue("P32", (int)DataArray[102]);
+                sqlCommand.Parameters.AddWithValue("P33", (int)DataArray[103]);
+                sqlCommand.Parameters.AddWithValue("P34", (int)DataArray[104]);
+                sqlCommand.Parameters.AddWithValue("P35", (int)DataArray[105]);
+                sqlCommand.Parameters.AddWithValue("P36", (int)DataArray[106]);
+                sqlCommand.Parameters.AddWithValue("P37", (int)DataArray[107]);
+                sqlCommand.Parameters.AddWithValue("P38", (int)DataArray[108]);
+                sqlCommand.Parameters.AddWithValue("P39", (int)DataArray[109]);
+                sqlCommand.Parameters.AddWithValue("P40", (int)DataArray[110]);
+                sqlCommand.Parameters.AddWithValue("P41", (int)DataArray[111]);
+                sqlCommand.Parameters.AddWithValue("P42", (int)DataArray[112]);
+                sqlCommand.Parameters.AddWithValue("P43", (int)DataArray[113]);
+                sqlCommand.Parameters.AddWithValue("P44", (int)DataArray[114]);
+                sqlCommand.Parameters.AddWithValue("P45", (int)DataArray[115]);
+                sqlCommand.Parameters.AddWithValue("P46", (int)DataArray[116]);
+                sqlCommand.Parameters.AddWithValue("P47", (int)DataArray[117]);
+                sqlCommand.Parameters.AddWithValue("P48", (int)DataArray[118]);
+                sqlCommand.Parameters.AddWithValue("P49", (int)DataArray[119]);
+                sqlCommand.Parameters.AddWithValue("P50", (int)DataArray[120]);
+                sqlCommand.Parameters.AddWithValue("P51", (int)DataArray[121]);
+                sqlCommand.Parameters.AddWithValue("P52", (int)DataArray[122]);
+                sqlCommand.Parameters.AddWithValue("P53", (int)DataArray[123]);
+                sqlCommand.Parameters.AddWithValue("P54", (int)DataArray[124]);
+                sqlCommand.Parameters.AddWithValue("P55", (int)DataArray[125]);
+                sqlCommand.Parameters.AddWithValue("P56", (int)DataArray[126]);
+                sqlCommand.Parameters.AddWithValue("P57", (int)DataArray[127]);
+                sqlCommand.Parameters.AddWithValue("P58", (int)DataArray[128]);
+                sqlCommand.Parameters.AddWithValue("P59", (int)DataArray[129]);
+                sqlCommand.Parameters.AddWithValue("P60", (int)DataArray[130]);
+                sqlCommand.Parameters.AddWithValue("P61", (int)DataArray[131]);
+                sqlCommand.Parameters.AddWithValue("P62", (int)DataArray[132]);
+                sqlCommand.Parameters.AddWithValue("P63", (int)DataArray[133]);
+                sqlCommand.Parameters.AddWithValue("P64", (int)DataArray[134]);
+                sqlCommand.Parameters.AddWithValue("P65", (int)DataArray[135]);
+                sqlCommand.Parameters.AddWithValue("P66", (int)DataArray[136]);
+                sqlCommand.Parameters.AddWithValue("P67", (int)DataArray[137]);
+                sqlCommand.Parameters.AddWithValue("P68", (int)DataArray[138]);
+                sqlCommand.Parameters.AddWithValue("P69", (int)DataArray[139]);
+                sqlCommand.Parameters.AddWithValue("P70", (int)DataArray[140]);
+                sqlCommand.Parameters.AddWithValue("P71", (int)DataArray[141]);
+                sqlCommand.Parameters.AddWithValue("P72", (int)DataArray[142]);
+                sqlCommand.Parameters.AddWithValue("P73", (int)DataArray[143]);
+                sqlCommand.Parameters.AddWithValue("P74", (int)DataArray[144]);
+                sqlCommand.Parameters.AddWithValue("P75", (int)DataArray[145]);
+                sqlCommand.Parameters.AddWithValue("P76", (int)DataArray[146]);
+                sqlCommand.Parameters.AddWithValue("P77", (int)DataArray[147]);
+                sqlCommand.Parameters.AddWithValue("P78", (int)DataArray[148]);
                 sqlCommand.ExecuteNonQuery();
-
-                Console.Write(DataArray[0] + ",");
-                Console.Write(DataArray[1] + ",");
-                Console.Write(DataArray[2] + ",");
-                Console.Write(DataArray[3] + ",");
-                Console.Write(DataArray[4] + ",");
-                Console.Write(DataArray[5] + ",");
-                Console.Write(DataArray[6] + ",");
-                Console.Write(DataArray[7] + ",");
-                Console.Write(DataArray[8] + ",");
-                Console.Write(DataArray[9] + ",");
-                Console.Write(DataArray[10] + ",");
-                Console.Write(DataArray[11] + ",");
-                Console.Write(DataArray[12] + ",");
-                Console.Write(DataArray[13] + ",");
-                Console.Write(DataArray[14] + ",");
-                Console.Write(DataArray[15] + ",");
-                Console.Write(DataArray[16] + ",");
-                Console.Write(DataArray[17] + ",");
-                Console.Write(DataArray[18] + ",");
-                Console.Write(DataArray[19] + ",");
-                Console.Write(DataArray[20] + ",");
-                Console.Write(DataArray[21] + ",");
-                Console.Write(DataArray[22] + ",");
-                Console.Write(DataArray[23] + ",");
-                Console.Write(DataArray[24] + ",");
-                Console.Write(DataArray[25] + ",");
-                Console.Write(DataArray[26] + ",");
-                Console.Write(DataArray[27] + ",");
-                Console.Write(DataArray[28] + ",");
-                Console.Write(DataArray[29] + ",");
-                Console.Write(DataArray[30] + ",");
-                Console.Write(DataArray[31] + ",");
-                Console.Write(DataArray[32] + ",");
-                Console.Write(DataArray[33] + ",");
-                Console.Write(DataArray[34] + ",");
-                Console.Write(DataArray[35] + ",");
-                Console.Write(DataArray[36] + ",");
-                Console.Write(DataArray[37] + ",");
-                Console.Write(DataArray[38] + ",");
-                Console.Write(DataArray[39] + ",");
-                Console.Write(DataArray[40] + ",");
-                Console.Write(DataArray[41] + ",");
-                Console.Write(DataArray[42] + ",");
-                Console.Write(DataArray[43] + ",");
-                Console.Write(DataArray[44] + ",");
-                Console.Write(DataArray[45] + ",");
-                Console.Write(DataArray[46] + ",");
-                Console.Write(DataArray[47] + ",");
-                Console.Write(DataArray[48] + ",");
-                Console.Write(DataArray[49] + ",");
-                Console.Write(DataArray[50] + ",");
-                Console.Write(DataArray[51] + ",");
-                Console.Write(DataArray[52] + ",");
-                Console.Write(DataArray[53] + ",");
-                Console.Write(DataArray[54] + ",");
-                Console.Write(DataArray[55] + ",");
-                Console.Write(DataArray[56] + ",");
-                Console.Write(DataArray[57] + ",");
-                Console.Write(DataArray[58] + ",");
-                Console.Write(DataArray[59] + ",");
-                Console.Write(DataArray[60] + ",");
-                Console.Write(DataArray[61] + ",");
-                Console.Write(DataArray[62] + ",");
-                Console.Write(DataArray[63] + ",");
-                Console.Write(DataArray[64] + ",");
-                Console.Write(DataArray[65] + ",");
-                Console.Write(DataArray[66] + ",");
-                Console.Write(DataArray[67] + ",");
-                Console.Write(DataArray[68] + ",");
-                Console.Write(DataArray[69] + ",");
-                Console.WriteLine();
             }
             else
             {
@@ -807,8 +982,87 @@ class Program
                     $"Sleep4Color, " +
                     $"Sleep5Color, " +
                     $"Sleep6Color," +
-                    $"DataTime) " +
-                    $"VALUES (" +
+                    $"DataTime," +
+                    $"P0," +
+                    $"P1," +
+                    $"P2," +
+                    $"P3," +
+                    $"P4," +
+                    $"P5," +
+                    $"P6," +
+                    $"P7," +
+                    $"P8," +
+                    $"P9," +
+                    $"P10," +
+                    $"P11," +
+                    $"P12," +
+                    $"P13," +
+                    $"P14," +
+                    $"P15," +
+                    $"P16," +
+                    $"P17," +
+                    $"P18," +
+                    $"P19," +
+                    $"P20," +
+                    $"P21," +
+                    $"P22," +
+                    $"P23," +
+                    $"P24," +
+                    $"P25," +
+                    $"P26," +
+                    $"P27," +
+                    $"P28," +
+                    $"P29," +
+                    $"P30," +
+                    $"P31," +
+                    $"P32," +
+                    $"P33," +
+                    $"P34," +
+                    $"P35," +
+                    $"P36," +
+                    $"P37," +
+                    $"P38," +
+                    $"P39," +
+                    $"P40," +
+                    $"P41," +
+                    $"P42," +
+                    $"P43," +
+                    $"P44," +
+                    $"P45," +
+                    $"P46," +
+                    $"P47," +
+                    $"P48," +
+                    $"P49," +
+                    $"P50," +
+                    $"P51," +
+                    $"P52," +
+                    $"P53," +
+                    $"P54," +
+                    $"P55," +
+                    $"P56," +
+                    $"P57," +
+                    $"P58," +
+                    $"P59," +
+                    $"P60," +
+                    $"P61," +
+                    $"P62," +
+                    $"P63," +
+                    $"P64," +
+                    $"P65," +
+                    $"P66," +
+                    $"P67," +
+                    $"P68," +
+                    $"P69," +
+                    $"P70," +
+                    $"P71," +
+                    $"P72," +
+                    $"P73," +
+                    $"P74," +
+                    $"P75," +
+                    $"P76," +
+                    $"P77," +
+                    $"P78" +
+                    $") VALUES (" +
                     $"@OwnerID, " +
                     $"@DeviceType, " +
                     $"@Version, " +
@@ -879,7 +1133,87 @@ class Program
                     $"@Sleep4Color, " +
                     $"@Sleep5Color, " +
                     $"@Sleep6Color," +
-                    $"@DataTime) " ,
+                    $"@DataTime," +
+                    $"@P0," +
+                    $"@P1," +
+                    $"@P2," +
+                    $"@P3," +
+                    $"@P4," +
+                    $"@P5," +
+                    $"@P6," +
+                    $"@P7," +
+                    $"@P8," +
+                    $"@P9," +
+                    $"@P10," +
+                    $"@P11," +
+                    $"@P12," +
+                    $"@P13," +
+                    $"@P14," +
+                    $"@P15," +
+                    $"@P16," +
+                    $"@P17," +
+                    $"@P18," +
+                    $"@P19," +
+                    $"@P20," +
+                    $"@P21," +
+                    $"@P22," +
+                    $"@P23," +
+                    $"@P24," +
+                    $"@P25," +
+                    $"@P26," +
+                    $"@P27," +
+                    $"@P28," +
+                    $"@P29," +
+                    $"@P30," +
+                    $"@P31," +
+                    $"@P32," +
+                    $"@P33," +
+                    $"@P34," +
+                    $"@P35," +
+                    $"@P36," +
+                    $"@P37," +
+                    $"@P38," +
+                    $"@P39," +
+                    $"@P40," +
+                    $"@P41," +
+                    $"@P42," +
+                    $"@P43," +
+                    $"@P44," +
+                    $"@P45," +
+                    $"@P46," +
+                    $"@P47," +
+                    $"@P48," +
+                    $"@P49," +
+                    $"@P50," +
+                    $"@P51," +
+                    $"@P52," +
+                    $"@P53," +
+                    $"@P54," +
+                    $"@P55," +
+                    $"@P56," +
+                    $"@P57," +
+                    $"@P58," +
+                    $"@P59," +
+                    $"@P60," +
+                    $"@P61," +
+                    $"@P62," +
+                    $"@P63," +
+                    $"@P64," +
+                    $"@P65," +
+                    $"@P66," +
+                    $"@P67," +
+                    $"@P68," +
+                    $"@P69," +
+                    $"@P70," +
+                    $"@P71," +
+                    $"@P72," +
+                    $"@P73," +
+                    $"@P74," +
+                    $"@P75," +
+                    $"@P76," +
+                    $"@P77," +
+                    $"@P78" +
+                    $") " ,
                     sqlConnection);
 
                 sqlCommand.Parameters.AddWithValue("OwnerID", (int)DataArray[2]);
@@ -954,79 +1288,86 @@ class Program
                 sqlCommand.Parameters.AddWithValue("Sleep6Color", (int)DataArray[69]);
                 string sqlFormattedDate = localDate.ToString("yyyy-MM-dd  HH:mm:ss");
                 sqlCommand.Parameters.AddWithValue("DataTime", sqlFormattedDate);
+                sqlCommand.Parameters.AddWithValue("P0", (int)DataArray[70]);
+                sqlCommand.Parameters.AddWithValue("P1", (int)DataArray[71]);
+                sqlCommand.Parameters.AddWithValue("P2", (int)DataArray[72]);
+                sqlCommand.Parameters.AddWithValue("P3", (int)DataArray[73]);
+                sqlCommand.Parameters.AddWithValue("P4", (int)DataArray[74]);
+                sqlCommand.Parameters.AddWithValue("P5", (int)DataArray[75]);
+                sqlCommand.Parameters.AddWithValue("P6", (int)DataArray[76]);
+                sqlCommand.Parameters.AddWithValue("P7", (int)DataArray[77]);
+                sqlCommand.Parameters.AddWithValue("P8", (int)DataArray[78]);
+                sqlCommand.Parameters.AddWithValue("P9", (int)DataArray[79]);
+                sqlCommand.Parameters.AddWithValue("P10", (int)DataArray[80]);
+                sqlCommand.Parameters.AddWithValue("P11", (int)DataArray[81]);
+                sqlCommand.Parameters.AddWithValue("P12", (int)DataArray[82]);
+                sqlCommand.Parameters.AddWithValue("P13", (int)DataArray[83]);
+                sqlCommand.Parameters.AddWithValue("P14", (int)DataArray[84]);
+                sqlCommand.Parameters.AddWithValue("P15", (int)DataArray[85]);
+                sqlCommand.Parameters.AddWithValue("P16", (int)DataArray[86]);
+                sqlCommand.Parameters.AddWithValue("P17", (int)DataArray[87]);
+                sqlCommand.Parameters.AddWithValue("P18", (int)DataArray[88]);
+                sqlCommand.Parameters.AddWithValue("P19", (int)DataArray[89]);
+                sqlCommand.Parameters.AddWithValue("P20", (int)DataArray[90]);
+                sqlCommand.Parameters.AddWithValue("P21", (int)DataArray[91]);
+                sqlCommand.Parameters.AddWithValue("P22", (int)DataArray[92]);
+                sqlCommand.Parameters.AddWithValue("P23", (int)DataArray[93]);
+                sqlCommand.Parameters.AddWithValue("P24", (int)DataArray[94]);
+                sqlCommand.Parameters.AddWithValue("P25", (int)DataArray[95]);
+                sqlCommand.Parameters.AddWithValue("P26", (int)DataArray[96]);
+                sqlCommand.Parameters.AddWithValue("P27", (int)DataArray[97]);
+                sqlCommand.Parameters.AddWithValue("P28", (int)DataArray[98]);
+                sqlCommand.Parameters.AddWithValue("P29", (int)DataArray[99]);
+                sqlCommand.Parameters.AddWithValue("P30", (int)DataArray[100]);
+                sqlCommand.Parameters.AddWithValue("P31", (int)DataArray[101]);
+                sqlCommand.Parameters.AddWithValue("P32", (int)DataArray[102]);
+                sqlCommand.Parameters.AddWithValue("P33", (int)DataArray[103]);
+                sqlCommand.Parameters.AddWithValue("P34", (int)DataArray[104]);
+                sqlCommand.Parameters.AddWithValue("P35", (int)DataArray[105]);
+                sqlCommand.Parameters.AddWithValue("P36", (int)DataArray[106]);
+                sqlCommand.Parameters.AddWithValue("P37", (int)DataArray[107]);
+                sqlCommand.Parameters.AddWithValue("P38", (int)DataArray[108]);
+                sqlCommand.Parameters.AddWithValue("P39", (int)DataArray[109]);
+                sqlCommand.Parameters.AddWithValue("P40", (int)DataArray[110]);
+                sqlCommand.Parameters.AddWithValue("P41", (int)DataArray[111]);
+                sqlCommand.Parameters.AddWithValue("P42", (int)DataArray[112]);
+                sqlCommand.Parameters.AddWithValue("P43", (int)DataArray[113]);
+                sqlCommand.Parameters.AddWithValue("P44", (int)DataArray[114]);
+                sqlCommand.Parameters.AddWithValue("P45", (int)DataArray[115]);
+                sqlCommand.Parameters.AddWithValue("P46", (int)DataArray[116]);
+                sqlCommand.Parameters.AddWithValue("P47", (int)DataArray[117]);
+                sqlCommand.Parameters.AddWithValue("P48", (int)DataArray[118]);
+                sqlCommand.Parameters.AddWithValue("P49", (int)DataArray[119]);
+                sqlCommand.Parameters.AddWithValue("P50", (int)DataArray[120]);
+                sqlCommand.Parameters.AddWithValue("P51", (int)DataArray[121]);
+                sqlCommand.Parameters.AddWithValue("P52", (int)DataArray[122]);
+                sqlCommand.Parameters.AddWithValue("P53", (int)DataArray[123]);
+                sqlCommand.Parameters.AddWithValue("P54", (int)DataArray[124]);
+                sqlCommand.Parameters.AddWithValue("P55", (int)DataArray[125]);
+                sqlCommand.Parameters.AddWithValue("P56", (int)DataArray[126]);
+                sqlCommand.Parameters.AddWithValue("P57", (int)DataArray[127]);
+                sqlCommand.Parameters.AddWithValue("P58", (int)DataArray[128]);
+                sqlCommand.Parameters.AddWithValue("P59", (int)DataArray[129]);
+                sqlCommand.Parameters.AddWithValue("P60", (int)DataArray[130]);
+                sqlCommand.Parameters.AddWithValue("P61", (int)DataArray[131]);
+                sqlCommand.Parameters.AddWithValue("P62", (int)DataArray[132]);
+                sqlCommand.Parameters.AddWithValue("P63", (int)DataArray[133]);
+                sqlCommand.Parameters.AddWithValue("P64", (int)DataArray[134]);
+                sqlCommand.Parameters.AddWithValue("P65", (int)DataArray[135]);
+                sqlCommand.Parameters.AddWithValue("P66", (int)DataArray[136]);
+                sqlCommand.Parameters.AddWithValue("P67", (int)DataArray[137]);
+                sqlCommand.Parameters.AddWithValue("P68", (int)DataArray[138]);
+                sqlCommand.Parameters.AddWithValue("P69", (int)DataArray[139]);
+                sqlCommand.Parameters.AddWithValue("P70", (int)DataArray[140]);
+                sqlCommand.Parameters.AddWithValue("P71", (int)DataArray[141]);
+                sqlCommand.Parameters.AddWithValue("P72", (int)DataArray[142]);
+                sqlCommand.Parameters.AddWithValue("P73", (int)DataArray[143]);
+                sqlCommand.Parameters.AddWithValue("P74", (int)DataArray[144]);
+                sqlCommand.Parameters.AddWithValue("P75", (int)DataArray[145]);
+                sqlCommand.Parameters.AddWithValue("P76", (int)DataArray[146]);
+                sqlCommand.Parameters.AddWithValue("P77", (int)DataArray[147]);
+                sqlCommand.Parameters.AddWithValue("P78", (int)DataArray[148]);
                 sqlCommand.ExecuteNonQuery();
-
-                Console.Write(DataArray[0] + ",");
-                Console.Write(DataArray[1] + ",");
-                Console.Write(DataArray[2] + ",");
-                Console.Write(DataArray[3] + ",");
-                Console.Write(DataArray[4] + ",");
-                Console.Write(DataArray[5] + ",");
-                Console.Write(DataArray[6] + ",");
-                Console.Write(DataArray[7] + ",");
-                Console.Write(DataArray[8] + ",");
-                Console.Write(DataArray[9] + ",");
-                Console.Write(DataArray[10] + ",");
-                Console.Write(DataArray[11] + ",");
-                Console.Write(DataArray[12] + ",");
-                Console.Write(DataArray[13] + ",");
-                Console.Write(DataArray[14] + ",");
-                Console.Write(DataArray[15] + ",");
-                Console.Write(DataArray[16] + ",");
-                Console.Write(DataArray[17] + ",");
-                Console.Write(DataArray[18] + ",");
-                Console.Write(DataArray[19] + ",");
-                Console.Write(DataArray[20] + ",");
-                Console.Write(DataArray[21] + ",");
-                Console.Write(DataArray[22] + ",");
-                Console.Write(DataArray[23] + ",");
-                Console.Write(DataArray[24] + ",");
-                Console.Write(DataArray[25] + ",");
-                Console.Write(DataArray[26] + ",");
-                Console.Write(DataArray[27] + ",");
-                Console.Write(DataArray[28] + ",");
-                Console.Write(DataArray[29] + ",");
-                Console.Write(DataArray[30] + ",");
-                Console.Write(DataArray[31] + ",");
-                Console.Write(DataArray[32] + ",");
-                Console.Write(DataArray[33] + ",");
-                Console.Write(DataArray[34] + ",");
-                Console.Write(DataArray[35] + ",");
-                Console.Write(DataArray[36] + ",");
-                Console.Write(DataArray[37] + ",");
-                Console.Write(DataArray[38] + ",");
-                Console.Write(DataArray[39] + ",");
-                Console.Write(DataArray[40] + ",");
-                Console.Write(DataArray[41] + ",");
-                Console.Write(DataArray[42] + ",");
-                Console.Write(DataArray[43] + ",");
-                Console.Write(DataArray[44] + ",");
-                Console.Write(DataArray[45] + ",");
-                Console.Write(DataArray[46] + ",");
-                Console.Write(DataArray[47] + ",");
-                Console.Write(DataArray[48] + ",");
-                Console.Write(DataArray[49] + ",");
-                Console.Write(DataArray[50] + ",");
-                Console.Write(DataArray[51] + ",");
-                Console.Write(DataArray[52] + ",");
-                Console.Write(DataArray[53] + ",");
-                Console.Write(DataArray[54] + ",");
-                Console.Write(DataArray[55] + ",");
-                Console.Write(DataArray[56] + ",");
-                Console.Write(DataArray[57] + ",");
-                Console.Write(DataArray[58] + ",");
-                Console.Write(DataArray[59] + ",");
-                Console.Write(DataArray[60] + ",");
-                Console.Write(DataArray[61] + ",");
-                Console.Write(DataArray[62] + ",");
-                Console.Write(DataArray[63] + ",");
-                Console.Write(DataArray[64] + ",");
-                Console.Write(DataArray[65] + ",");
-                Console.Write(DataArray[66] + ",");
-                Console.Write(DataArray[67] + ",");
-                Console.Write(DataArray[68] + ",");
-                Console.Write(DataArray[69] + ",");
-                Console.WriteLine();
             }
         }
         catch (Exception ex)
@@ -1125,57 +1466,67 @@ class Program
         //Console.WriteLine(SendMassages);
         return SendMassages;
     }
-    static void SaveConfigParam(ConfigDevice config)
+    static string SaveConfigParam(ConfigDevice config)
     {
+        string returnState = null;
         Console.WriteLine("Save Config");
         sqlDataReader = null;
         try
         {
-            sqlCommand = new SQLiteCommand($"SELECT OwnerID FROM Config WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};", sqlConnection);
-            sqlDataReader = sqlCommand.ExecuteReader();
-            bool tempState = false;
-            while (sqlDataReader.Read())
+            if (config.ParamNO > 2)
             {
-                int tempSql = sqlDataReader.GetInt32(0);
-                tempState = true;
-            }
-            sqlDataReader.Close();
-            if (tempState)
-            {
-                Console.WriteLine("UPDATE Config paradeters");
-                sqlCommand = new SQLiteCommand($"UPDATE [Config] SET " +
-                    $"NewData=" +
-                    $"@NewData " +
-                    $"WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};",
-                    sqlConnection);
+                sqlCommand = new SQLiteCommand($"SELECT OwnerID FROM Config WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};", sqlConnection);
+                sqlDataReader = sqlCommand.ExecuteReader();
+                bool tempState = false;
+                while (sqlDataReader.Read())
+                {
+                    int tempSql = sqlDataReader.GetInt32(0);
+                    tempState = true;
+                }
+                sqlDataReader.Close();
+                if (tempState)
+                {
+                    Console.WriteLine("UPDATE Config paradeters");
+                    sqlCommand = new SQLiteCommand($"UPDATE [Config] SET " +
+                        $"NewData=" +
+                        $"@NewData " +
+                        $"WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};",
+                        sqlConnection);
 
-                sqlCommand.Parameters.AddWithValue("NewData", config.NewData);
-                sqlCommand.ExecuteNonQuery();
+                    sqlCommand.Parameters.AddWithValue("NewData", config.NewData);
+                    sqlCommand.ExecuteNonQuery();
+                }
+                else
+                {
+                    Console.WriteLine("NEW Config");
+                    sqlCommand.Parameters.Clear();
+                    sqlCommand = new SQLiteCommand(
+                        $"INSERT INTO [Config] (" +
+                        $"OwnerID," +
+                        $"ParamNO," +
+                        $"NewData) " +
+                        $"VALUES (" +
+                        $"@OwnerID," +
+                        $"@ParamNO," +
+                        $"@NewData) ",
+                        sqlConnection);
+
+                    sqlCommand.Parameters.AddWithValue("OwnerID", config.OwnerID);
+                    sqlCommand.Parameters.AddWithValue("ParamNO", config.ParamNO);
+                    sqlCommand.Parameters.AddWithValue("NewData", config.NewData);
+                    sqlCommand.ExecuteNonQuery();
+                }
+                returnState = "OK";
             }
             else
             {
-                Console.WriteLine("NEW Config");
-                sqlCommand.Parameters.Clear();
-                sqlCommand = new SQLiteCommand(
-                    $"INSERT INTO [Config] (" +
-                    $"OwnerID," + 
-                    $"ParamNO," +
-                    $"NewData) " +
-                    $"VALUES (" +
-                    $"@OwnerID," +
-                    $"@ParamNO," +
-                    $"@NewData) ",
-                    sqlConnection);
-
-                sqlCommand.Parameters.AddWithValue("OwnerID", config.OwnerID);
-                sqlCommand.Parameters.AddWithValue("ParamNO", config.ParamNO);
-                sqlCommand.Parameters.AddWithValue("NewData", config.NewData);
-                sqlCommand.ExecuteNonQuery();
+                returnState = "Error ParametrNO";
             }
         }
         catch (Exception ex)
         {
             Console.Error.WriteLine(ex.Message);
+            returnState = ex.Message;
         }
         finally
         {
@@ -1184,6 +1535,7 @@ class Program
                 sqlDataReader.Close();
             }
         }
+        return returnState;
     }
     static string CheckConfigDevice(uint[] DataArray)
     {
@@ -1199,12 +1551,12 @@ class Program
             if (dataTable != null)
             {
                 string TempJSON = JsonConvert.SerializeObject(dataTable);
-                Console.WriteLine(TempJSON);
+                //Console.WriteLine(TempJSON);
                 ConfigDevice[] configDevices = JsonConvert.DeserializeObject<ConfigDevice[]>(TempJSON);
                 bool noChang = true;
                 for (int i = 0; i < configDevices.Length; i++)
                 {
-                    Console.WriteLine(configDevices[i].ToString());
+                    //Console.WriteLine(configDevices[i].ToString());
                     if(DataArray[configDevices[i].ParamNO] != configDevices[i].NewData)
                     {
                         noChang = false;
