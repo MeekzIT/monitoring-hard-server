@@ -69,7 +69,3 @@ C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\obj\Release\net6.0\Monit
 C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\obj\Release\net6.0\ref\MonitoringServer.dll
 C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\obj\Release\net6.0\MonitoringServer.pdb
 C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\obj\Release\net6.0\MonitoringServer.genruntimeconfig.cache
-C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\bin\Release\net6.0\MonitoringServer.dll.manifest
-C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\bin\Release\net6.0\MonitoringServer.application
-C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\obj\Release\net6.0\MonitoringServer.dll.manifest
-C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\obj\Release\net6.0\MonitoringServer.application
