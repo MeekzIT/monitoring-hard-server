@@ -38,14 +38,14 @@ class Program
     public static SQLiteConnection sqlConnection = null;
     //string cS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\MoikaData.mdf;Integrated Security=True";
     // string cS = @"";
-    
+
     public static SQLiteCommand sqlCommand = null;
-    
+
     public static SQLiteDataReader sqlDataReader = null;
     static async Task Main(string[] args)
     {
         // Start TCP listener
-        if (File.Exists("MoikaData.db")) 
+        if (File.Exists("MoikaData.db"))
         {
             Console.WriteLine("Database is success");
         }
@@ -77,7 +77,7 @@ class Program
             //Console.WriteLine(localDate.ToString());
 
             // Start a new task to handle the client connection
-           _ = HandleClientAsync(client);
+            _ = HandleClientAsync(client);
         }
     }
 
@@ -105,15 +105,16 @@ class Program
         // Example: Get the request URL and send a response
         string requestUrl = context.Request.Url.ToString();
         /*Console.WriteLine($"Received HTTP request: {requestUrl}");*/
-        char[] UrlArray=context.Request.Url.PathAndQuery.ToArray();
+        char[] UrlArray = context.Request.Url.PathAndQuery.ToArray();
         string requestPath = context.Request.Url.AbsolutePath;
         //string[] temp = context.Request.QueryString.AllKeys.GetValue();
-  /*      for (int i = 0; i < temp.Length; i++)
-        {
-            Console.WriteLine(temp[i]);
-        }*/
+        /*      for (int i = 0; i < temp.Length; i++)
+              {
+                  Console.WriteLine(temp[i]);
+              }*/
 
-        if (context.Request.HttpMethod == "GET") {
+        if (context.Request.HttpMethod == "GET")
+        {
             //Console.WriteLine(context.Request.QueryString.AllKeys + "-----");
 
             if (requestUrl.EndsWith("/api/v1/devices"))
@@ -178,7 +179,7 @@ class Program
                     context.Response.OutputStream.Close();
                 }
             }
-            else if (requestPath==("/api/v1/devices/"))
+            else if (requestPath == ("/api/v1/devices/"))
             {
                 string id = context.Request.QueryString["id"];
                 try
@@ -246,6 +247,40 @@ class Program
                     context.Response.OutputStream.Close();
                 }
             }
+            else if (requestPath == ("/api/v1/Owner/"))
+            {
+                string id = context.Request.QueryString["id"];
+                try
+                {
+                    uint SendOwnerID = uint.Parse(id);
+
+                    Console.WriteLine(requestUrl);
+                    string jsonResponse = SendAllOuners(SendOwnerID);
+                    byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                    context.Response.StatusCode = 200;
+                    context.Response.ContentType = "application/json";
+                    context.Response.ContentLength64 = responseJsonData.Length;
+                    context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                }
+                catch (Exception ex)
+                {
+                    string errorMessage = ex.Message;
+                    var errorObject = new
+                    {
+                        error = errorMessage
+                    };
+
+                    string errorResponse = JsonConvert.SerializeObject(errorObject);
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                }
+                finally
+                {
+                    context.Response.OutputStream.Close();
+                }
+            }
             else
             {
                 Console.WriteLine(context.Request.Url.PathAndQuery.ToString());
@@ -253,7 +288,7 @@ class Program
                 context.Response.OutputStream.Close();
             }
         }
-        else if(context.Request.HttpMethod == "POST")
+        else if (context.Request.HttpMethod == "POST")
         {
             if (requestUrl.EndsWith("/api/v1/devie/edit"))
             {
@@ -271,7 +306,7 @@ class Program
                     string SaveConfigParamState = null;
                     SaveConfigParamState = SaveConfigParam(configDevice);
 
-                    if(SaveConfigParamState == "OK")
+                    if (SaveConfigParamState == "OK")
                     {
                         context.Response.ContentType = "text/plain";
                         byte[] responseData = Encoding.UTF8.GetBytes("Confirmed");
@@ -362,7 +397,7 @@ class Program
             var buffer = new byte[4096];
             uint[] TCPTempArray = new uint[150];
             Array.Clear(buffer, 0, buffer.Length);
-            Array.Clear(TCPTempArray, 0, TCPTempArray.Length); 
+            Array.Clear(TCPTempArray, 0, TCPTempArray.Length);
 
             while (true)
             {
@@ -381,7 +416,7 @@ class Program
 
 
                 bool StartUncoding = false;
-                int j=0;
+                int j = 0;
                 for (int i = 0; i < message.Length; i++)
                 {
                     if (message[i] == 13)
@@ -395,23 +430,23 @@ class Program
                             j++;
                             continue;
                         }
-                        Char tempChar=message[i];
+                        Char tempChar = message[i];
 
-                        TCPTempArray[j] = TCPTempArray[j]*10 + (uint)Char.GetNumericValue(tempChar);
+                        TCPTempArray[j] = TCPTempArray[j] * 10 + (uint)Char.GetNumericValue(tempChar);
                     }
-                    else if (message[i+1]==' ' && message[i] == ':' && message[i - 1] == 'e' && message[i - 2] == 'v' && message[i - 3] == 'a' && message[i - 4] == 'l' && message[i - 5] == 'S') 
+                    else if (message[i + 1] == ' ' && message[i] == ':' && message[i - 1] == 'e' && message[i - 2] == 'v' && message[i - 3] == 'a' && message[i - 4] == 'l' && message[i - 5] == 'S')
                     {
                         i++;
                         StartUncoding = true;
                     }
                 }
                 Console.WriteLine(message);
-                if(StartUncoding)
+                if (StartUncoding)
                 {
                     SQLWriteForTCP(TCPTempArray);
                     string SendTCPMassage = CheckConfigDevice(TCPTempArray);
                     Console.WriteLine(SendTCPMassage);
-                    if(SendTCPMassage != "NO1" && SendTCPMassage != "NO2" && SendTCPMassage != "ERROR")
+                    if (SendTCPMassage != "NO1" && SendTCPMassage != "NO2" && SendTCPMassage != "ERROR")
                     {
                         byte[] sendClientData = Encoding.ASCII.GetBytes(SendTCPMassage);
                         stream.Write(sendClientData, 0, sendClientData.Length);
@@ -756,7 +791,7 @@ class Program
                     $"@P149 " +
                     $"WHERE P2={DataArray[2]}",
                     sqlConnection);
-    
+
                 string sqlFormattedDate = localDate.ToString("yyyy-MM-dd  HH:mm:ss");
                 sqlCommand.Parameters.AddWithValue("DataTime", sqlFormattedDate);
                 sqlCommand.Parameters.AddWithValue("P0", (int)DataArray[0]);
@@ -1220,7 +1255,7 @@ class Program
                     $"@P147," +
                     $"@P148," +
                     $"@P149 " +
-                    $") " ,
+                    $") ",
                     sqlConnection);
 
                 string sqlFormattedDate = localDate.ToString("yyyy-MM-dd  HH:mm:ss");
@@ -1392,7 +1427,7 @@ class Program
         }
         //sqlConnection.Close();
     }
-    static string SendCommandAll() 
+    static string SendCommandAll()
     {
         string SendMassages = null;
         Console.WriteLine("ALL");
@@ -1565,7 +1600,7 @@ class Program
                 for (int i = 0; i < configDevices.Length; i++)
                 {
                     //Console.WriteLine(configDevices[i].ToString());
-                    if(DataArray[configDevices[i].ParamNO] != configDevices[i].NewData)
+                    if (DataArray[configDevices[i].ParamNO] != configDevices[i].NewData)
                     {
                         noChang = false;
                         SendMassage = SendMassage + "P" + configDevices[i].ParamNO.ToString() + "-" + configDevices[i].NewData + ",";
@@ -1654,5 +1689,33 @@ class Program
                 sqlDataReader.Close();
             }
         }
+    }
+    static string SendAllOuners(uint MyOwnerID)
+    {
+        string SendMassages = null;
+        Console.WriteLine("All Owner ID");
+        sqlDataReader = null;
+        try
+        {
+            sqlCommand = new SQLiteCommand($"SELECT * FROM Devices WHERE P2>={MyOwnerID*1000} AND P2<={(MyOwnerID+1) * 1000}", sqlConnection);
+            DataTable dataTable = new DataTable();
+            sqlDataReader = sqlCommand.ExecuteReader();
+            dataTable.Load(sqlDataReader);
+            SendMassages = JsonConvert.SerializeObject(dataTable);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+        }
+        finally
+        {
+            if (sqlDataReader != null && !sqlDataReader.IsClosed)
+            {
+                sqlDataReader.Close();
+            }
+        }
+        //sqlConnection.Close();
+        //Console.WriteLine(SendMassages);
+        return SendMassages;
     }
 }
