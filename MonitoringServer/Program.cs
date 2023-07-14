@@ -360,7 +360,7 @@ class Program
         {
             var stream = client.GetStream();
             var buffer = new byte[4096];
-            uint[] TCPTempArray = new uint[149];
+            uint[] TCPTempArray = new uint[150];
             Array.Clear(buffer, 0, buffer.Length);
             Array.Clear(TCPTempArray, 0, TCPTempArray.Length); 
 
@@ -437,7 +437,7 @@ class Program
         sqlDataReader = null;
         try
         {
-            sqlCommand = new SQLiteCommand($"SELECT OwnerID FROM Devices WHERE OwnerID={DataArray[2]};", sqlConnection);
+            sqlCommand = new SQLiteCommand($"SELECT P2 FROM Devices WHERE P2={DataArray[2]};", sqlConnection);
             sqlDataReader = sqlCommand.ExecuteReader();
             bool tempState = false;
             while (sqlDataReader.Read())
@@ -452,144 +452,6 @@ class Program
             {
                 Console.WriteLine("UPDATE DEVICE");
                 sqlCommand = new SQLiteCommand($"UPDATE [Devices] SET " +
-                    $"DeviceType=" +
-                    $"@DeviceType, " +
-                    $"Version=" +
-                    $"@Version, " +
-                    $"RFID1=" +
-                    $"@RFID1, " +
-                    $"RFID2=" +
-                    $"@RFID2, " +
-                    $"MoykaID=" +
-                    $"@MoykaID, " +
-                    $"BoxID=" +
-                    $"@BoxID, " +
-                    $"Language=" +
-                    $"@Language, " +
-                    $"WorkingMode=" +
-                    $"@WorkingMode, " +
-                    $"FreeCard=" +
-                    $"@FreeCard, " +
-                    $"CoinNominal=" +
-                    $"@CoinNominal, " +
-                    $"BillNominal=" +
-                    $"@BillNominal, " +
-                    $"CashLessNominal=" +
-                    $"@CashLessNominal, " +
-                    $"CoinCount=" +
-                    $"@CoinCount, " +
-                    $"BillCount=" +
-                    $"@BillCount, " +
-                    $"CashLessCount=" +
-                    $"@CashLessCount, " +
-                    $"CoinCountTotal=" +
-                    $"@CoinCountTotal, " +
-                    $"BillCountTotal=" +
-                    $"@BillCountTotal, " +
-                    $"CashLessCountTotal=" +
-                    $"@CashLessCountTotal, " +
-                    $"RelayOffTime=" +
-                    $"@RelayOffTime, " +
-                    $"F1Nominal=" +
-                    $"@F1Nominal, " +
-                    $"F2Nominal=" +
-                    $"@F2Nominal, " +
-                    $"F3Nominal=" +
-                    $"@F3Nominal, " +
-                    $"F4Nominal=" +
-                    $"@F4Nominal, " +
-                    $"F5Nominal=" +
-                    $"@F5Nominal, " +
-                    $"F6Nominal=" +
-                    $"@F6Nominal, " +
-                    $"F1ModeName=" +
-                    $"@F1ModeName, " +
-                    $"F2ModeName=" +
-                    $"@F2ModeName, " +
-                    $"F3ModeName=" +
-                    $"@F3ModeName, " +
-                    $"F4ModeName=" +
-                    $"@F4ModeName, " +
-                    $"F5ModeName=" +
-                    $"@F5ModeName, " +
-                    $"F6ModeName=" +
-                    $"@F6ModeName, " +
-                    $"F1Color=" +
-                    $"@F1Color, " +
-                    $"F2Color=" +
-                    $"@F2Color, " +
-                    $"F3Color=" +
-                    $"@F3Color, " +
-                    $"F4Color=" +
-                    $"@F4Color, " +
-                    $"F5Color=" +
-                    $"@F5Color, " +
-                    $"F6Color=" +
-                    $"@F6Color, " +
-                    $"F1Count=" +
-                    $"@F1Count, " +
-                    $"F2Count=" +
-                    $"@F2Count, " +
-                    $"F3Count=" +
-                    $"@F3Count, " +
-                    $"F4Count=" +
-                    $"@F4Count, " +
-                    $"F5Count=" +
-                    $"@F5Count, " +
-                    $"F6Count=" +
-                    $"@F6Count, " +
-                    $"F1CountTotal=" +
-                    $"@F1CountTotal, " +
-                    $"F2CountTotal=" +
-                    $"@F2CountTotal, " +
-                    $"F3CountTotal=" +
-                    $"@F3CountTotal, " +
-                    $"F4CountTotal=" +
-                    $"@F4CountTotal, " +
-                    $"F5CountTotal=" +
-                    $"@F5CountTotal, " +
-                    $"F6CountTotal=" +
-                    $"@F6CountTotal, " +
-                    $"B1Nominal=" +
-                    $"@B1Nominal, " +
-                    $"B2Nominal=" +
-                    $"@B2Nominal, " +
-                    $"B3Nominal=" +
-                    $"@B3Nominal, " +
-                    $"B4Nominal=" +
-                    $"@B4Nominal, " +
-                    $"B5Nominal=" +
-                    $"@B5Nominal, " +
-                    $"B6Nominal=" +
-                    $"@B6Nominal, " +
-                    $"SleepCount=" +
-                    $"@SleepCount, " +
-                    $"RollTime=" +
-                    $"@RollTime, " +
-                    $"Sleep1ptr=" +
-                    $"@Sleep1ptr, " +
-                    $"Sleep2ptr=" +
-                    $"@Sleep2ptr, " +
-                    $"Sleep3ptr=" +
-                    $"@Sleep3ptr, " +
-                    $"Sleep4ptr=" +
-                    $"@Sleep4ptr, " +
-                    $"Sleep5ptr=" +
-                    $"@Sleep5ptr, " +
-                    $"Sleep6ptr=" +
-                    $"@Sleep6ptr, " +
-                    $"Sleep1Color=" +
-                    $"@Sleep1Color, " +
-                    $"Sleep2Color=" +
-                    $"@Sleep2Color, " +
-                    $"Sleep3Color=" +
-                    $"@Sleep3Color, " +
-                    $"Sleep4Color=" +
-                    $"@Sleep4Color, " +
-                    $"Sleep5Color=" +
-                    $"@Sleep5Color, " +
-                    $"Sleep6Color=" +
-                    $"@Sleep6Color, " +
                     $"DataTime=" +
                     $"@DataTime, " +
                     $"P0=" +
@@ -749,161 +611,304 @@ class Program
                     $"P77=" +
                     $"@P77, " +
                     $"P78=" +
-                    $"@P78 " +
-                    $"WHERE OwnerID={DataArray[2]}",
+                    $"@P78, " +
+                    $"P79=" +
+                    $"@P79, " +
+                    $"P80=" +
+                    $"@P80, " +
+                    $"P81=" +
+                    $"@P81, " +
+                    $"P82=" +
+                    $"@P82, " +
+                    $"P83=" +
+                    $"@P83, " +
+                    $"P84=" +
+                    $"@P84, " +
+                    $"P85=" +
+                    $"@P85, " +
+                    $"P86=" +
+                    $"@P86, " +
+                    $"P87=" +
+                    $"@P87, " +
+                    $"P88=" +
+                    $"@P88, " +
+                    $"P89=" +
+                    $"@P89, " +
+                    $"P90=" +
+                    $"@P90, " +
+                    $"P91=" +
+                    $"@P91, " +
+                    $"P92=" +
+                    $"@P92, " +
+                    $"P93=" +
+                    $"@P93, " +
+                    $"P94=" +
+                    $"@P94, " +
+                    $"P95=" +
+                    $"@P95, " +
+                    $"P96=" +
+                    $"@P96, " +
+                    $"P97=" +
+                    $"@P97, " +
+                    $"P98=" +
+                    $"@P98, " +
+                    $"P99=" +
+                    $"@P99, " +
+                    $"P100=" +
+                    $"@P100, " +
+                    $"P101=" +
+                    $"@P101, " +
+                    $"P102=" +
+                    $"@P102, " +
+                    $"P103=" +
+                    $"@P103, " +
+                    $"P104=" +
+                    $"@P104, " +
+                    $"P105=" +
+                    $"@P105, " +
+                    $"P106=" +
+                    $"@P106, " +
+                    $"P107=" +
+                    $"@P107, " +
+                    $"P108=" +
+                    $"@P108, " +
+                    $"P109=" +
+                    $"@P109, " +
+                    $"P110=" +
+                    $"@P110, " +
+                    $"P111=" +
+                    $"@P111, " +
+                    $"P112=" +
+                    $"@P112, " +
+                    $"P113=" +
+                    $"@P113, " +
+                    $"P114=" +
+                    $"@P114, " +
+                    $"P115=" +
+                    $"@P115, " +
+                    $"P116=" +
+                    $"@P116, " +
+                    $"P117=" +
+                    $"@P117, " +
+                    $"P118=" +
+                    $"@P118, " +
+                    $"P119=" +
+                    $"@P119, " +
+                    $"P120=" +
+                    $"@P120, " +
+                    $"P121=" +
+                    $"@P121, " +
+                    $"P122=" +
+                    $"@P122, " +
+                    $"P123=" +
+                    $"@P123, " +
+                    $"P124=" +
+                    $"@P124, " +
+                    $"P125=" +
+                    $"@P125, " +
+                    $"P126=" +
+                    $"@P126, " +
+                    $"P127=" +
+                    $"@P127, " +
+                    $"P128=" +
+                    $"@P128, " +
+                    $"P129=" +
+                    $"@P129, " +
+                    $"P130=" +
+                    $"@P130, " +
+                    $"P131=" +
+                    $"@P131, " +
+                    $"P132=" +
+                    $"@P132, " +
+                    $"P133=" +
+                    $"@P133, " +
+                    $"P134=" +
+                    $"@P134, " +
+                    $"P135=" +
+                    $"@P135, " +
+                    $"P136=" +
+                    $"@P136, " +
+                    $"P137=" +
+                    $"@P137, " +
+                    $"P138=" +
+                    $"@P138, " +
+                    $"P139=" +
+                    $"@P139, " +
+                    $"P140=" +
+                    $"@P140, " +
+                    $"P141=" +
+                    $"@P141, " +
+                    $"P142=" +
+                    $"@P142, " +
+                    $"P143=" +
+                    $"@P143, " +
+                    $"P144=" +
+                    $"@P144, " +
+                    $"P145=" +
+                    $"@P145, " +
+                    $"P146=" +
+                    $"@P146, " +
+                    $"P147=" +
+                    $"@P147, " +
+                    $"P148=" +
+                    $"@P148, " +
+                    $"P149=" +
+                    $"@P149 " +
+                    $"WHERE P2={DataArray[2]}",
                     sqlConnection);
-                
-                sqlCommand.Parameters.AddWithValue("OwnerID", (int)DataArray[2]);
-                sqlCommand.Parameters.AddWithValue("DeviceType", (int)DataArray[0]);
-                sqlCommand.Parameters.AddWithValue("Version", (int)DataArray[1]);
-                sqlCommand.Parameters.AddWithValue("RFID1", (int)DataArray[3]);
-                sqlCommand.Parameters.AddWithValue("RFID2", (int)DataArray[4]);
-                sqlCommand.Parameters.AddWithValue("MoykaID", (int)DataArray[5]);
-                sqlCommand.Parameters.AddWithValue("BoxID", (int)DataArray[6]);
-                sqlCommand.Parameters.AddWithValue("Language", (int)DataArray[7]);
-                sqlCommand.Parameters.AddWithValue("WorkingMode", (int)DataArray[8]);
-                sqlCommand.Parameters.AddWithValue("FreeCard", (int)DataArray[9]);
-                sqlCommand.Parameters.AddWithValue("CoinNominal", (int)DataArray[10]);
-                sqlCommand.Parameters.AddWithValue("BillNominal", (int)DataArray[11]);
-                sqlCommand.Parameters.AddWithValue("CashLessNominal", (int)DataArray[12]);
-                sqlCommand.Parameters.AddWithValue("CoinCount", (int)DataArray[13]);
-                sqlCommand.Parameters.AddWithValue("BillCount", (int)DataArray[14]);
-                sqlCommand.Parameters.AddWithValue("CashLessCount", (int)DataArray[15]);
-                sqlCommand.Parameters.AddWithValue("CoinCountTotal", (int)DataArray[16]);
-                sqlCommand.Parameters.AddWithValue("BillCountTotal", (int)DataArray[17]);
-                sqlCommand.Parameters.AddWithValue("CashLessCountTotal", (int)DataArray[18]);
-                sqlCommand.Parameters.AddWithValue("RelayOffTime", (int)DataArray[19]);
-                sqlCommand.Parameters.AddWithValue("F1Nominal", (int)DataArray[20]);
-                sqlCommand.Parameters.AddWithValue("F2Nominal", (int)DataArray[21]);
-                sqlCommand.Parameters.AddWithValue("F3Nominal", (int)DataArray[22]);
-                sqlCommand.Parameters.AddWithValue("F4Nominal", (int)DataArray[23]);
-                sqlCommand.Parameters.AddWithValue("F5Nominal", (int)DataArray[24]);
-                sqlCommand.Parameters.AddWithValue("F6Nominal", (int)DataArray[25]);
-                sqlCommand.Parameters.AddWithValue("F1ModeName", (int)DataArray[26]);
-                sqlCommand.Parameters.AddWithValue("F2ModeName", (int)DataArray[27]);
-                sqlCommand.Parameters.AddWithValue("F3ModeName", (int)DataArray[28]);
-                sqlCommand.Parameters.AddWithValue("F4ModeName", (int)DataArray[29]);
-                sqlCommand.Parameters.AddWithValue("F5ModeName", (int)DataArray[30]);
-                sqlCommand.Parameters.AddWithValue("F6ModeName", (int)DataArray[31]);
-                sqlCommand.Parameters.AddWithValue("F1Color", (int)DataArray[32]);
-                sqlCommand.Parameters.AddWithValue("F2Color", (int)DataArray[33]);
-                sqlCommand.Parameters.AddWithValue("F3Color", (int)DataArray[34]);
-                sqlCommand.Parameters.AddWithValue("F4Color", (int)DataArray[35]);
-                sqlCommand.Parameters.AddWithValue("F5Color", (int)DataArray[36]);
-                sqlCommand.Parameters.AddWithValue("F6Color", (int)DataArray[37]);
-                sqlCommand.Parameters.AddWithValue("F1Count", (int)DataArray[38]);
-                sqlCommand.Parameters.AddWithValue("F2Count", (int)DataArray[39]);
-                sqlCommand.Parameters.AddWithValue("F3Count", (int)DataArray[40]);
-                sqlCommand.Parameters.AddWithValue("F4Count", (int)DataArray[41]);
-                sqlCommand.Parameters.AddWithValue("F5Count", (int)DataArray[42]);
-                sqlCommand.Parameters.AddWithValue("F6Count", (int)DataArray[43]);
-                sqlCommand.Parameters.AddWithValue("F1CountTotal", (int)DataArray[44]);
-                sqlCommand.Parameters.AddWithValue("F2CountTotal", (int)DataArray[45]);
-                sqlCommand.Parameters.AddWithValue("F3CountTotal", (int)DataArray[46]);
-                sqlCommand.Parameters.AddWithValue("F4CountTotal", (int)DataArray[47]);
-                sqlCommand.Parameters.AddWithValue("F5CountTotal", (int)DataArray[48]);
-                sqlCommand.Parameters.AddWithValue("F6CountTotal", (int)DataArray[49]);
-                sqlCommand.Parameters.AddWithValue("B1Nominal", (int)DataArray[50]);
-                sqlCommand.Parameters.AddWithValue("B2Nominal", (int)DataArray[51]);
-                sqlCommand.Parameters.AddWithValue("B3Nominal", (int)DataArray[52]);
-                sqlCommand.Parameters.AddWithValue("B4Nominal", (int)DataArray[53]);
-                sqlCommand.Parameters.AddWithValue("B5Nominal", (int)DataArray[54]);
-                sqlCommand.Parameters.AddWithValue("B6Nominal", (int)DataArray[55]);
-                sqlCommand.Parameters.AddWithValue("SleepCount", (int)DataArray[56]);
-                sqlCommand.Parameters.AddWithValue("RollTime", (int)DataArray[57]);
-                sqlCommand.Parameters.AddWithValue("Sleep1ptr", (int)DataArray[58]);
-                sqlCommand.Parameters.AddWithValue("Sleep2ptr", (int)DataArray[59]);
-                sqlCommand.Parameters.AddWithValue("Sleep3ptr", (int)DataArray[60]);
-                sqlCommand.Parameters.AddWithValue("Sleep4ptr", (int)DataArray[61]);
-                sqlCommand.Parameters.AddWithValue("Sleep5ptr", (int)DataArray[62]);
-                sqlCommand.Parameters.AddWithValue("Sleep6ptr", (int)DataArray[63]);
-                sqlCommand.Parameters.AddWithValue("Sleep1Color", (int)DataArray[64]);
-                sqlCommand.Parameters.AddWithValue("Sleep2Color", (int)DataArray[65]);
-                sqlCommand.Parameters.AddWithValue("Sleep3Color", (int)DataArray[66]);
-                sqlCommand.Parameters.AddWithValue("Sleep4Color", (int)DataArray[67]);
-                sqlCommand.Parameters.AddWithValue("Sleep5Color", (int)DataArray[68]);
-                sqlCommand.Parameters.AddWithValue("Sleep6Color", (int)DataArray[69]);
+    
                 string sqlFormattedDate = localDate.ToString("yyyy-MM-dd  HH:mm:ss");
                 sqlCommand.Parameters.AddWithValue("DataTime", sqlFormattedDate);
-                sqlCommand.Parameters.AddWithValue("P0", (int)DataArray[70]);
-                sqlCommand.Parameters.AddWithValue("P1", (int)DataArray[71]);
-                sqlCommand.Parameters.AddWithValue("P2", (int)DataArray[72]);
-                sqlCommand.Parameters.AddWithValue("P3", (int)DataArray[73]);
-                sqlCommand.Parameters.AddWithValue("P4", (int)DataArray[74]);
-                sqlCommand.Parameters.AddWithValue("P5", (int)DataArray[75]);
-                sqlCommand.Parameters.AddWithValue("P6", (int)DataArray[76]);
-                sqlCommand.Parameters.AddWithValue("P7", (int)DataArray[77]);
-                sqlCommand.Parameters.AddWithValue("P8", (int)DataArray[78]);
-                sqlCommand.Parameters.AddWithValue("P9", (int)DataArray[79]);
-                sqlCommand.Parameters.AddWithValue("P10", (int)DataArray[80]);
-                sqlCommand.Parameters.AddWithValue("P11", (int)DataArray[81]);
-                sqlCommand.Parameters.AddWithValue("P12", (int)DataArray[82]);
-                sqlCommand.Parameters.AddWithValue("P13", (int)DataArray[83]);
-                sqlCommand.Parameters.AddWithValue("P14", (int)DataArray[84]);
-                sqlCommand.Parameters.AddWithValue("P15", (int)DataArray[85]);
-                sqlCommand.Parameters.AddWithValue("P16", (int)DataArray[86]);
-                sqlCommand.Parameters.AddWithValue("P17", (int)DataArray[87]);
-                sqlCommand.Parameters.AddWithValue("P18", (int)DataArray[88]);
-                sqlCommand.Parameters.AddWithValue("P19", (int)DataArray[89]);
-                sqlCommand.Parameters.AddWithValue("P20", (int)DataArray[90]);
-                sqlCommand.Parameters.AddWithValue("P21", (int)DataArray[91]);
-                sqlCommand.Parameters.AddWithValue("P22", (int)DataArray[92]);
-                sqlCommand.Parameters.AddWithValue("P23", (int)DataArray[93]);
-                sqlCommand.Parameters.AddWithValue("P24", (int)DataArray[94]);
-                sqlCommand.Parameters.AddWithValue("P25", (int)DataArray[95]);
-                sqlCommand.Parameters.AddWithValue("P26", (int)DataArray[96]);
-                sqlCommand.Parameters.AddWithValue("P27", (int)DataArray[97]);
-                sqlCommand.Parameters.AddWithValue("P28", (int)DataArray[98]);
-                sqlCommand.Parameters.AddWithValue("P29", (int)DataArray[99]);
-                sqlCommand.Parameters.AddWithValue("P30", (int)DataArray[100]);
-                sqlCommand.Parameters.AddWithValue("P31", (int)DataArray[101]);
-                sqlCommand.Parameters.AddWithValue("P32", (int)DataArray[102]);
-                sqlCommand.Parameters.AddWithValue("P33", (int)DataArray[103]);
-                sqlCommand.Parameters.AddWithValue("P34", (int)DataArray[104]);
-                sqlCommand.Parameters.AddWithValue("P35", (int)DataArray[105]);
-                sqlCommand.Parameters.AddWithValue("P36", (int)DataArray[106]);
-                sqlCommand.Parameters.AddWithValue("P37", (int)DataArray[107]);
-                sqlCommand.Parameters.AddWithValue("P38", (int)DataArray[108]);
-                sqlCommand.Parameters.AddWithValue("P39", (int)DataArray[109]);
-                sqlCommand.Parameters.AddWithValue("P40", (int)DataArray[110]);
-                sqlCommand.Parameters.AddWithValue("P41", (int)DataArray[111]);
-                sqlCommand.Parameters.AddWithValue("P42", (int)DataArray[112]);
-                sqlCommand.Parameters.AddWithValue("P43", (int)DataArray[113]);
-                sqlCommand.Parameters.AddWithValue("P44", (int)DataArray[114]);
-                sqlCommand.Parameters.AddWithValue("P45", (int)DataArray[115]);
-                sqlCommand.Parameters.AddWithValue("P46", (int)DataArray[116]);
-                sqlCommand.Parameters.AddWithValue("P47", (int)DataArray[117]);
-                sqlCommand.Parameters.AddWithValue("P48", (int)DataArray[118]);
-                sqlCommand.Parameters.AddWithValue("P49", (int)DataArray[119]);
-                sqlCommand.Parameters.AddWithValue("P50", (int)DataArray[120]);
-                sqlCommand.Parameters.AddWithValue("P51", (int)DataArray[121]);
-                sqlCommand.Parameters.AddWithValue("P52", (int)DataArray[122]);
-                sqlCommand.Parameters.AddWithValue("P53", (int)DataArray[123]);
-                sqlCommand.Parameters.AddWithValue("P54", (int)DataArray[124]);
-                sqlCommand.Parameters.AddWithValue("P55", (int)DataArray[125]);
-                sqlCommand.Parameters.AddWithValue("P56", (int)DataArray[126]);
-                sqlCommand.Parameters.AddWithValue("P57", (int)DataArray[127]);
-                sqlCommand.Parameters.AddWithValue("P58", (int)DataArray[128]);
-                sqlCommand.Parameters.AddWithValue("P59", (int)DataArray[129]);
-                sqlCommand.Parameters.AddWithValue("P60", (int)DataArray[130]);
-                sqlCommand.Parameters.AddWithValue("P61", (int)DataArray[131]);
-                sqlCommand.Parameters.AddWithValue("P62", (int)DataArray[132]);
-                sqlCommand.Parameters.AddWithValue("P63", (int)DataArray[133]);
-                sqlCommand.Parameters.AddWithValue("P64", (int)DataArray[134]);
-                sqlCommand.Parameters.AddWithValue("P65", (int)DataArray[135]);
-                sqlCommand.Parameters.AddWithValue("P66", (int)DataArray[136]);
-                sqlCommand.Parameters.AddWithValue("P67", (int)DataArray[137]);
-                sqlCommand.Parameters.AddWithValue("P68", (int)DataArray[138]);
-                sqlCommand.Parameters.AddWithValue("P69", (int)DataArray[139]);
-                sqlCommand.Parameters.AddWithValue("P70", (int)DataArray[140]);
-                sqlCommand.Parameters.AddWithValue("P71", (int)DataArray[141]);
-                sqlCommand.Parameters.AddWithValue("P72", (int)DataArray[142]);
-                sqlCommand.Parameters.AddWithValue("P73", (int)DataArray[143]);
-                sqlCommand.Parameters.AddWithValue("P74", (int)DataArray[144]);
-                sqlCommand.Parameters.AddWithValue("P75", (int)DataArray[145]);
-                sqlCommand.Parameters.AddWithValue("P76", (int)DataArray[146]);
-                sqlCommand.Parameters.AddWithValue("P77", (int)DataArray[147]);
-                sqlCommand.Parameters.AddWithValue("P78", (int)DataArray[148]);
+                sqlCommand.Parameters.AddWithValue("P0", (int)DataArray[0]);
+                sqlCommand.Parameters.AddWithValue("P1", (int)DataArray[1]);
+                sqlCommand.Parameters.AddWithValue("P2", (int)DataArray[2]);
+                sqlCommand.Parameters.AddWithValue("P3", (int)DataArray[3]);
+                sqlCommand.Parameters.AddWithValue("P4", (int)DataArray[4]);
+                sqlCommand.Parameters.AddWithValue("P5", (int)DataArray[5]);
+                sqlCommand.Parameters.AddWithValue("P6", (int)DataArray[6]);
+                sqlCommand.Parameters.AddWithValue("P7", (int)DataArray[7]);
+                sqlCommand.Parameters.AddWithValue("P8", (int)DataArray[8]);
+                sqlCommand.Parameters.AddWithValue("P9", (int)DataArray[9]);
+                sqlCommand.Parameters.AddWithValue("P10", (int)DataArray[10]);
+                sqlCommand.Parameters.AddWithValue("P11", (int)DataArray[11]);
+                sqlCommand.Parameters.AddWithValue("P12", (int)DataArray[12]);
+                sqlCommand.Parameters.AddWithValue("P13", (int)DataArray[13]);
+                sqlCommand.Parameters.AddWithValue("P14", (int)DataArray[14]);
+                sqlCommand.Parameters.AddWithValue("P15", (int)DataArray[15]);
+                sqlCommand.Parameters.AddWithValue("P16", (int)DataArray[16]);
+                sqlCommand.Parameters.AddWithValue("P17", (int)DataArray[17]);
+                sqlCommand.Parameters.AddWithValue("P18", (int)DataArray[18]);
+                sqlCommand.Parameters.AddWithValue("P19", (int)DataArray[19]);
+                sqlCommand.Parameters.AddWithValue("P20", (int)DataArray[20]);
+                sqlCommand.Parameters.AddWithValue("P21", (int)DataArray[21]);
+                sqlCommand.Parameters.AddWithValue("P22", (int)DataArray[22]);
+                sqlCommand.Parameters.AddWithValue("P23", (int)DataArray[23]);
+                sqlCommand.Parameters.AddWithValue("P24", (int)DataArray[24]);
+                sqlCommand.Parameters.AddWithValue("P25", (int)DataArray[25]);
+                sqlCommand.Parameters.AddWithValue("P26", (int)DataArray[26]);
+                sqlCommand.Parameters.AddWithValue("P27", (int)DataArray[27]);
+                sqlCommand.Parameters.AddWithValue("P28", (int)DataArray[28]);
+                sqlCommand.Parameters.AddWithValue("P29", (int)DataArray[29]);
+                sqlCommand.Parameters.AddWithValue("P30", (int)DataArray[30]);
+                sqlCommand.Parameters.AddWithValue("P31", (int)DataArray[31]);
+                sqlCommand.Parameters.AddWithValue("P32", (int)DataArray[32]);
+                sqlCommand.Parameters.AddWithValue("P33", (int)DataArray[33]);
+                sqlCommand.Parameters.AddWithValue("P34", (int)DataArray[34]);
+                sqlCommand.Parameters.AddWithValue("P35", (int)DataArray[35]);
+                sqlCommand.Parameters.AddWithValue("P36", (int)DataArray[36]);
+                sqlCommand.Parameters.AddWithValue("P37", (int)DataArray[37]);
+                sqlCommand.Parameters.AddWithValue("P38", (int)DataArray[38]);
+                sqlCommand.Parameters.AddWithValue("P39", (int)DataArray[39]);
+                sqlCommand.Parameters.AddWithValue("P40", (int)DataArray[40]);
+                sqlCommand.Parameters.AddWithValue("P41", (int)DataArray[41]);
+                sqlCommand.Parameters.AddWithValue("P42", (int)DataArray[42]);
+                sqlCommand.Parameters.AddWithValue("P43", (int)DataArray[43]);
+                sqlCommand.Parameters.AddWithValue("P44", (int)DataArray[44]);
+                sqlCommand.Parameters.AddWithValue("P45", (int)DataArray[45]);
+                sqlCommand.Parameters.AddWithValue("P46", (int)DataArray[46]);
+                sqlCommand.Parameters.AddWithValue("P47", (int)DataArray[47]);
+                sqlCommand.Parameters.AddWithValue("P48", (int)DataArray[48]);
+                sqlCommand.Parameters.AddWithValue("P49", (int)DataArray[49]);
+                sqlCommand.Parameters.AddWithValue("P50", (int)DataArray[50]);
+                sqlCommand.Parameters.AddWithValue("P51", (int)DataArray[51]);
+                sqlCommand.Parameters.AddWithValue("P52", (int)DataArray[52]);
+                sqlCommand.Parameters.AddWithValue("P53", (int)DataArray[53]);
+                sqlCommand.Parameters.AddWithValue("P54", (int)DataArray[54]);
+                sqlCommand.Parameters.AddWithValue("P55", (int)DataArray[55]);
+                sqlCommand.Parameters.AddWithValue("P56", (int)DataArray[56]);
+                sqlCommand.Parameters.AddWithValue("P57", (int)DataArray[57]);
+                sqlCommand.Parameters.AddWithValue("P58", (int)DataArray[58]);
+                sqlCommand.Parameters.AddWithValue("P59", (int)DataArray[59]);
+                sqlCommand.Parameters.AddWithValue("P60", (int)DataArray[60]);
+                sqlCommand.Parameters.AddWithValue("P61", (int)DataArray[61]);
+                sqlCommand.Parameters.AddWithValue("P62", (int)DataArray[62]);
+                sqlCommand.Parameters.AddWithValue("P63", (int)DataArray[63]);
+                sqlCommand.Parameters.AddWithValue("P64", (int)DataArray[64]);
+                sqlCommand.Parameters.AddWithValue("P65", (int)DataArray[65]);
+                sqlCommand.Parameters.AddWithValue("P66", (int)DataArray[66]);
+                sqlCommand.Parameters.AddWithValue("P67", (int)DataArray[67]);
+                sqlCommand.Parameters.AddWithValue("P68", (int)DataArray[68]);
+                sqlCommand.Parameters.AddWithValue("P69", (int)DataArray[69]);
+                sqlCommand.Parameters.AddWithValue("P70", (int)DataArray[70]);
+                sqlCommand.Parameters.AddWithValue("P71", (int)DataArray[71]);
+                sqlCommand.Parameters.AddWithValue("P72", (int)DataArray[72]);
+                sqlCommand.Parameters.AddWithValue("P73", (int)DataArray[73]);
+                sqlCommand.Parameters.AddWithValue("P74", (int)DataArray[74]);
+                sqlCommand.Parameters.AddWithValue("P75", (int)DataArray[75]);
+                sqlCommand.Parameters.AddWithValue("P76", (int)DataArray[76]);
+                sqlCommand.Parameters.AddWithValue("P77", (int)DataArray[77]);
+                sqlCommand.Parameters.AddWithValue("P78", (int)DataArray[78]);
+                sqlCommand.Parameters.AddWithValue("P79", (int)DataArray[79]);
+                sqlCommand.Parameters.AddWithValue("P80", (int)DataArray[80]);
+                sqlCommand.Parameters.AddWithValue("P81", (int)DataArray[81]);
+                sqlCommand.Parameters.AddWithValue("P82", (int)DataArray[82]);
+                sqlCommand.Parameters.AddWithValue("P83", (int)DataArray[83]);
+                sqlCommand.Parameters.AddWithValue("P84", (int)DataArray[84]);
+                sqlCommand.Parameters.AddWithValue("P85", (int)DataArray[85]);
+                sqlCommand.Parameters.AddWithValue("P86", (int)DataArray[86]);
+                sqlCommand.Parameters.AddWithValue("P87", (int)DataArray[87]);
+                sqlCommand.Parameters.AddWithValue("P88", (int)DataArray[88]);
+                sqlCommand.Parameters.AddWithValue("P89", (int)DataArray[89]);
+                sqlCommand.Parameters.AddWithValue("P90", (int)DataArray[90]);
+                sqlCommand.Parameters.AddWithValue("P91", (int)DataArray[91]);
+                sqlCommand.Parameters.AddWithValue("P92", (int)DataArray[92]);
+                sqlCommand.Parameters.AddWithValue("P93", (int)DataArray[93]);
+                sqlCommand.Parameters.AddWithValue("P94", (int)DataArray[94]);
+                sqlCommand.Parameters.AddWithValue("P95", (int)DataArray[95]);
+                sqlCommand.Parameters.AddWithValue("P96", (int)DataArray[96]);
+                sqlCommand.Parameters.AddWithValue("P97", (int)DataArray[97]);
+                sqlCommand.Parameters.AddWithValue("P98", (int)DataArray[98]);
+                sqlCommand.Parameters.AddWithValue("P99", (int)DataArray[99]);
+                sqlCommand.Parameters.AddWithValue("P100", (int)DataArray[100]);
+                sqlCommand.Parameters.AddWithValue("P101", (int)DataArray[101]);
+                sqlCommand.Parameters.AddWithValue("P102", (int)DataArray[102]);
+                sqlCommand.Parameters.AddWithValue("P103", (int)DataArray[103]);
+                sqlCommand.Parameters.AddWithValue("P104", (int)DataArray[104]);
+                sqlCommand.Parameters.AddWithValue("P105", (int)DataArray[105]);
+                sqlCommand.Parameters.AddWithValue("P106", (int)DataArray[106]);
+                sqlCommand.Parameters.AddWithValue("P107", (int)DataArray[107]);
+                sqlCommand.Parameters.AddWithValue("P108", (int)DataArray[108]);
+                sqlCommand.Parameters.AddWithValue("P109", (int)DataArray[109]);
+                sqlCommand.Parameters.AddWithValue("P110", (int)DataArray[110]);
+                sqlCommand.Parameters.AddWithValue("P111", (int)DataArray[111]);
+                sqlCommand.Parameters.AddWithValue("P112", (int)DataArray[112]);
+                sqlCommand.Parameters.AddWithValue("P113", (int)DataArray[113]);
+                sqlCommand.Parameters.AddWithValue("P114", (int)DataArray[114]);
+                sqlCommand.Parameters.AddWithValue("P115", (int)DataArray[115]);
+                sqlCommand.Parameters.AddWithValue("P116", (int)DataArray[116]);
+                sqlCommand.Parameters.AddWithValue("P117", (int)DataArray[117]);
+                sqlCommand.Parameters.AddWithValue("P118", (int)DataArray[118]);
+                sqlCommand.Parameters.AddWithValue("P119", (int)DataArray[119]);
+                sqlCommand.Parameters.AddWithValue("P120", (int)DataArray[120]);
+                sqlCommand.Parameters.AddWithValue("P121", (int)DataArray[121]);
+                sqlCommand.Parameters.AddWithValue("P122", (int)DataArray[122]);
+                sqlCommand.Parameters.AddWithValue("P123", (int)DataArray[123]);
+                sqlCommand.Parameters.AddWithValue("P124", (int)DataArray[124]);
+                sqlCommand.Parameters.AddWithValue("P125", (int)DataArray[125]);
+                sqlCommand.Parameters.AddWithValue("P126", (int)DataArray[126]);
+                sqlCommand.Parameters.AddWithValue("P127", (int)DataArray[127]);
+                sqlCommand.Parameters.AddWithValue("P128", (int)DataArray[128]);
+                sqlCommand.Parameters.AddWithValue("P129", (int)DataArray[129]);
+                sqlCommand.Parameters.AddWithValue("P130", (int)DataArray[130]);
+                sqlCommand.Parameters.AddWithValue("P131", (int)DataArray[131]);
+                sqlCommand.Parameters.AddWithValue("P132", (int)DataArray[132]);
+                sqlCommand.Parameters.AddWithValue("P133", (int)DataArray[133]);
+                sqlCommand.Parameters.AddWithValue("P134", (int)DataArray[134]);
+                sqlCommand.Parameters.AddWithValue("P135", (int)DataArray[135]);
+                sqlCommand.Parameters.AddWithValue("P136", (int)DataArray[136]);
+                sqlCommand.Parameters.AddWithValue("P137", (int)DataArray[137]);
+                sqlCommand.Parameters.AddWithValue("P138", (int)DataArray[138]);
+                sqlCommand.Parameters.AddWithValue("P139", (int)DataArray[139]);
+                sqlCommand.Parameters.AddWithValue("P140", (int)DataArray[140]);
+                sqlCommand.Parameters.AddWithValue("P141", (int)DataArray[141]);
+                sqlCommand.Parameters.AddWithValue("P142", (int)DataArray[142]);
+                sqlCommand.Parameters.AddWithValue("P143", (int)DataArray[143]);
+                sqlCommand.Parameters.AddWithValue("P144", (int)DataArray[144]);
+                sqlCommand.Parameters.AddWithValue("P145", (int)DataArray[145]);
+                sqlCommand.Parameters.AddWithValue("P146", (int)DataArray[146]);
+                sqlCommand.Parameters.AddWithValue("P147", (int)DataArray[147]);
+                sqlCommand.Parameters.AddWithValue("P148", (int)DataArray[148]);
+                sqlCommand.Parameters.AddWithValue("P149", (int)DataArray[149]);
                 sqlCommand.ExecuteNonQuery();
             }
             else
@@ -912,76 +917,6 @@ class Program
                 sqlCommand.Parameters.Clear();
                 sqlCommand = new SQLiteCommand(
                     $"INSERT INTO [Devices] (" +
-                    $"OwnerID, " +
-                    $"DeviceType, " +
-                    $"Version, " +
-                    $"RFID1, " +
-                    $"RFID2, " +
-                    $"MoykaID, " +
-                    $"BoxID, " +
-                    $"Language, " +
-                    $"WorkingMode, " +
-                    $"FreeCard, " +
-                    $"CoinNominal, " +
-                    $"BillNominal, " +
-                    $"CashLessNominal, " +
-                    $"CoinCount, " +
-                    $"BillCount, " +
-                    $"CashLessCount, " +
-                    $"CoinCountTotal, " +
-                    $"BillCountTotal," +
-                    $"CashLessCountTotal, " +
-                    $"RelayOffTime, " +
-                    $"F1Nominal, " +
-                    $"F2Nominal, " +
-                    $"F3Nominal, " +
-                    $"F4Nominal, " +
-                    $"F5Nominal, " +
-                    $"F6Nominal, " +
-                    $"F1ModeName, " +
-                    $"F2ModeName, " +
-                    $"F3ModeName, " +
-                    $"F4ModeName, " +
-                    $"F5ModeName, " +
-                    $"F6ModeName, " +
-                    $"F1Color, " +
-                    $"F2Color, " +
-                    $"F3Color, " +
-                    $"F4Color, " +
-                    $"F5Color, " +
-                    $"F6Color, " +
-                    $"F1Count, " +
-                    $"F2Count, " +
-                    $"F3Count, " +
-                    $"F4Count, " +
-                    $"F5Count, " +
-                    $"F6Count, " +
-                    $"F1CountTotal, " +
-                    $"F2CountTotal, " +
-                    $"F3CountTotal, " +
-                    $"F4CountTotal," +
-                    $"F5CountTotal, " +
-                    $"F6CountTotal, " +
-                    $"B1Nominal, " +
-                    $"B2Nominal, " +
-                    $"B3Nominal, " +
-                    $"B4Nominal, " +
-                    $"B5Nominal, " +
-                    $"B6Nominal, " +
-                    $"SleepCount, " +
-                    $"RollTime, " +
-                    $"Sleep1ptr, " +
-                    $"Sleep2ptr, " +
-                    $"Sleep3ptr, " +
-                    $"Sleep4ptr, " +
-                    $"Sleep5ptr, " +
-                    $"Sleep6ptr, " +
-                    $"Sleep1Color, " +
-                    $"Sleep2Color, " +
-                    $"Sleep3Color, " +
-                    $"Sleep4Color, " +
-                    $"Sleep5Color, " +
-                    $"Sleep6Color," +
                     $"DataTime," +
                     $"P0," +
                     $"P1," +
@@ -1061,78 +996,79 @@ class Program
                     $"P75," +
                     $"P76," +
                     $"P77," +
-                    $"P78" +
+                    $"P78," +
+                    $"P79," +
+                    $"P80," +
+                    $"P81," +
+                    $"P82," +
+                    $"P83," +
+                    $"P84," +
+                    $"P85," +
+                    $"P86," +
+                    $"P87," +
+                    $"P88," +
+                    $"P89," +
+                    $"P90," +
+                    $"P91," +
+                    $"P92," +
+                    $"P93," +
+                    $"P94," +
+                    $"P95," +
+                    $"P96," +
+                    $"P97," +
+                    $"P98," +
+                    $"P99," +
+                    $"P100," +
+                    $"P101," +
+                    $"P102," +
+                    $"P103," +
+                    $"P104," +
+                    $"P105," +
+                    $"P106," +
+                    $"P107," +
+                    $"P108," +
+                    $"P109," +
+                    $"P110," +
+                    $"P111," +
+                    $"P112," +
+                    $"P113," +
+                    $"P114," +
+                    $"P115," +
+                    $"P116," +
+                    $"P117," +
+                    $"P118," +
+                    $"P119," +
+                    $"P120," +
+                    $"P121," +
+                    $"P122," +
+                    $"P123," +
+                    $"P124," +
+                    $"P125," +
+                    $"P126," +
+                    $"P127," +
+                    $"P128," +
+                    $"P129," +
+                    $"P130," +
+                    $"P131," +
+                    $"P132," +
+                    $"P133," +
+                    $"P134," +
+                    $"P135," +
+                    $"P136," +
+                    $"P137," +
+                    $"P138," +
+                    $"P139," +
+                    $"P140," +
+                    $"P141," +
+                    $"P142," +
+                    $"P143," +
+                    $"P144," +
+                    $"P145," +
+                    $"P146," +
+                    $"P147," +
+                    $"P148," +
+                    $"P149 " +
                     $") VALUES (" +
-                    $"@OwnerID, " +
-                    $"@DeviceType, " +
-                    $"@Version, " +
-                    $"@RFID1, " +
-                    $"@RFID2, " +
-                    $"@MoykaID, " +
-                    $"@BoxID, " +
-                    $"@Language, " +
-                    $"@WorkingMode, " +
-                    $"@FreeCard, " +
-                    $"@CoinNominal, " +
-                    $"@BillNominal, " +
-                    $"@CashLessNominal, " +
-                    $"@CoinCount, " +
-                    $"@BillCount, " +
-                    $"@CashLessCount, " +
-                    $"@CoinCountTotal, " +
-                    $"@BillCountTotal," +
-                    $"@CashLessCountTotal, " +
-                    $"@RelayOffTime, " +
-                    $"@F1Nominal, " +
-                    $"@F2Nominal, " +
-                    $"@F3Nominal, " +
-                    $"@F4Nominal, " +
-                    $"@F5Nominal, " +
-                    $"@F6Nominal, " +
-                    $"@F1ModeName, " +
-                    $"@F2ModeName, " +
-                    $"@F3ModeName, " +
-                    $"@F4ModeName, " +
-                    $"@F5ModeName, " +
-                    $"@F6ModeName, " +
-                    $"@F1Color, " +
-                    $"@F2Color, " +
-                    $"@F3Color, " +
-                    $"@F4Color, " +
-                    $"@F5Color, " +
-                    $"@F6Color, " +
-                    $"@F1Count, " +
-                    $"@F2Count, " +
-                    $"@F3Count, " +
-                    $"@F4Count, " +
-                    $"@F5Count, " +
-                    $"@F6Count, " +
-                    $"@F1CountTotal, " +
-                    $"@F2CountTotal, " +
-                    $"@F3CountTotal, " +
-                    $"@F4CountTotal," +
-                    $"@F5CountTotal, " +
-                    $"@F6CountTotal, " +
-                    $"@B1Nominal, " +
-                    $"@B2Nominal, " +
-                    $"@B3Nominal, " +
-                    $"@B4Nominal, " +
-                    $"@B5Nominal, " +
-                    $"@B6Nominal, " +
-                    $"@SleepCount, " +
-                    $"@RollTime, " +
-                    $"@Sleep1ptr, " +
-                    $"@Sleep2ptr, " +
-                    $"@Sleep3ptr, " +
-                    $"@Sleep4ptr, " +
-                    $"@Sleep5ptr, " +
-                    $"@Sleep6ptr, " +
-                    $"@Sleep1Color, " +
-                    $"@Sleep2Color, " +
-                    $"@Sleep3Color, " +
-                    $"@Sleep4Color, " +
-                    $"@Sleep5Color, " +
-                    $"@Sleep6Color," +
                     $"@DataTime," +
                     $"@P0," +
                     $"@P1," +
@@ -1212,161 +1148,233 @@ class Program
                     $"@P75," +
                     $"@P76," +
                     $"@P77," +
-                    $"@P78" +
+                    $"@P78," +
+                    $"@P79," +
+                    $"@P80," +
+                    $"@P81," +
+                    $"@P82," +
+                    $"@P83," +
+                    $"@P84," +
+                    $"@P85," +
+                    $"@P86," +
+                    $"@P87," +
+                    $"@P88," +
+                    $"@P89," +
+                    $"@P90," +
+                    $"@P91," +
+                    $"@P92," +
+                    $"@P93," +
+                    $"@P94," +
+                    $"@P95," +
+                    $"@P96," +
+                    $"@P97," +
+                    $"@P98," +
+                    $"@P99," +
+                    $"@P100," +
+                    $"@P101," +
+                    $"@P102," +
+                    $"@P103," +
+                    $"@P104," +
+                    $"@P105," +
+                    $"@P106," +
+                    $"@P107," +
+                    $"@P108," +
+                    $"@P109," +
+                    $"@P110," +
+                    $"@P111," +
+                    $"@P112," +
+                    $"@P113," +
+                    $"@P114," +
+                    $"@P115," +
+                    $"@P116," +
+                    $"@P117," +
+                    $"@P118," +
+                    $"@P119," +
+                    $"@P120," +
+                    $"@P121," +
+                    $"@P122," +
+                    $"@P123," +
+                    $"@P124," +
+                    $"@P125," +
+                    $"@P126," +
+                    $"@P127," +
+                    $"@P128," +
+                    $"@P129," +
+                    $"@P130," +
+                    $"@P131," +
+                    $"@P132," +
+                    $"@P133," +
+                    $"@P134," +
+                    $"@P135," +
+                    $"@P136," +
+                    $"@P137," +
+                    $"@P138," +
+                    $"@P139," +
+                    $"@P140," +
+                    $"@P141," +
+                    $"@P142," +
+                    $"@P143," +
+                    $"@P144," +
+                    $"@P145," +
+                    $"@P146," +
+                    $"@P147," +
+                    $"@P148," +
+                    $"@P149 " +
                     $") " ,
                     sqlConnection);
 
-                sqlCommand.Parameters.AddWithValue("OwnerID", (int)DataArray[2]);
-                sqlCommand.Parameters.AddWithValue("DeviceType", (int)DataArray[0]);
-                sqlCommand.Parameters.AddWithValue("Version", (int)DataArray[1]);
-                sqlCommand.Parameters.AddWithValue("RFID1", (int)DataArray[3]);
-                sqlCommand.Parameters.AddWithValue("RFID2", (int)DataArray[4]);
-                sqlCommand.Parameters.AddWithValue("MoykaID", (int)DataArray[5]);
-                sqlCommand.Parameters.AddWithValue("BoxID", (int)DataArray[6]);
-                sqlCommand.Parameters.AddWithValue("Language", (int)DataArray[7]);
-                sqlCommand.Parameters.AddWithValue("WorkingMode", (int)DataArray[8]);
-                sqlCommand.Parameters.AddWithValue("FreeCard", (int)DataArray[9]);
-                sqlCommand.Parameters.AddWithValue("CoinNominal", (int)DataArray[10]);
-                sqlCommand.Parameters.AddWithValue("BillNominal", (int)DataArray[11]);
-                sqlCommand.Parameters.AddWithValue("CashLessNominal", (int)DataArray[12]);
-                sqlCommand.Parameters.AddWithValue("CoinCount", (int)DataArray[13]);
-                sqlCommand.Parameters.AddWithValue("BillCount", (int)DataArray[14]);
-                sqlCommand.Parameters.AddWithValue("CashLessCount", (int)DataArray[15]);
-                sqlCommand.Parameters.AddWithValue("CoinCountTotal", (int)DataArray[16]);
-                sqlCommand.Parameters.AddWithValue("BillCountTotal", (int)DataArray[17]);
-                sqlCommand.Parameters.AddWithValue("CashLessCountTotal", (int)DataArray[18]);
-                sqlCommand.Parameters.AddWithValue("RelayOffTime", (int)DataArray[19]);
-                sqlCommand.Parameters.AddWithValue("F1Nominal", (int)DataArray[20]);
-                sqlCommand.Parameters.AddWithValue("F2Nominal", (int)DataArray[21]);
-                sqlCommand.Parameters.AddWithValue("F3Nominal", (int)DataArray[22]);
-                sqlCommand.Parameters.AddWithValue("F4Nominal", (int)DataArray[23]);
-                sqlCommand.Parameters.AddWithValue("F5Nominal", (int)DataArray[24]);
-                sqlCommand.Parameters.AddWithValue("F6Nominal", (int)DataArray[25]);
-                sqlCommand.Parameters.AddWithValue("F1ModeName", (int)DataArray[26]);
-                sqlCommand.Parameters.AddWithValue("F2ModeName", (int)DataArray[27]);
-                sqlCommand.Parameters.AddWithValue("F3ModeName", (int)DataArray[28]);
-                sqlCommand.Parameters.AddWithValue("F4ModeName", (int)DataArray[29]);
-                sqlCommand.Parameters.AddWithValue("F5ModeName", (int)DataArray[30]);
-                sqlCommand.Parameters.AddWithValue("F6ModeName", (int)DataArray[31]);
-                sqlCommand.Parameters.AddWithValue("F1Color", (int)DataArray[32]);
-                sqlCommand.Parameters.AddWithValue("F2Color", (int)DataArray[33]);
-                sqlCommand.Parameters.AddWithValue("F3Color", (int)DataArray[34]);
-                sqlCommand.Parameters.AddWithValue("F4Color", (int)DataArray[35]);
-                sqlCommand.Parameters.AddWithValue("F5Color", (int)DataArray[36]);
-                sqlCommand.Parameters.AddWithValue("F6Color", (int)DataArray[37]);
-                sqlCommand.Parameters.AddWithValue("F1Count", (int)DataArray[38]);
-                sqlCommand.Parameters.AddWithValue("F2Count", (int)DataArray[39]);
-                sqlCommand.Parameters.AddWithValue("F3Count", (int)DataArray[40]);
-                sqlCommand.Parameters.AddWithValue("F4Count", (int)DataArray[41]);
-                sqlCommand.Parameters.AddWithValue("F5Count", (int)DataArray[42]);
-                sqlCommand.Parameters.AddWithValue("F6Count", (int)DataArray[43]);
-                sqlCommand.Parameters.AddWithValue("F1CountTotal", (int)DataArray[44]);
-                sqlCommand.Parameters.AddWithValue("F2CountTotal", (int)DataArray[45]);
-                sqlCommand.Parameters.AddWithValue("F3CountTotal", (int)DataArray[46]);
-                sqlCommand.Parameters.AddWithValue("F4CountTotal", (int)DataArray[47]);
-                sqlCommand.Parameters.AddWithValue("F5CountTotal", (int)DataArray[48]);
-                sqlCommand.Parameters.AddWithValue("F6CountTotal", (int)DataArray[49]);
-                sqlCommand.Parameters.AddWithValue("B1Nominal", (int)DataArray[50]);
-                sqlCommand.Parameters.AddWithValue("B2Nominal", (int)DataArray[51]);
-                sqlCommand.Parameters.AddWithValue("B3Nominal", (int)DataArray[52]);
-                sqlCommand.Parameters.AddWithValue("B4Nominal", (int)DataArray[53]);
-                sqlCommand.Parameters.AddWithValue("B5Nominal", (int)DataArray[54]);
-                sqlCommand.Parameters.AddWithValue("B6Nominal", (int)DataArray[55]);
-                sqlCommand.Parameters.AddWithValue("SleepCount", (int)DataArray[56]);
-                sqlCommand.Parameters.AddWithValue("RollTime", (int)DataArray[57]);
-                sqlCommand.Parameters.AddWithValue("Sleep1ptr", (int)DataArray[58]);
-                sqlCommand.Parameters.AddWithValue("Sleep2ptr", (int)DataArray[59]);
-                sqlCommand.Parameters.AddWithValue("Sleep3ptr", (int)DataArray[60]);
-                sqlCommand.Parameters.AddWithValue("Sleep4ptr", (int)DataArray[61]);
-                sqlCommand.Parameters.AddWithValue("Sleep5ptr", (int)DataArray[62]);
-                sqlCommand.Parameters.AddWithValue("Sleep6ptr", (int)DataArray[63]);
-                sqlCommand.Parameters.AddWithValue("Sleep1Color", (int)DataArray[64]);
-                sqlCommand.Parameters.AddWithValue("Sleep2Color", (int)DataArray[65]);
-                sqlCommand.Parameters.AddWithValue("Sleep3Color", (int)DataArray[66]);
-                sqlCommand.Parameters.AddWithValue("Sleep4Color", (int)DataArray[67]);
-                sqlCommand.Parameters.AddWithValue("Sleep5Color", (int)DataArray[68]);
-                sqlCommand.Parameters.AddWithValue("Sleep6Color", (int)DataArray[69]);
                 string sqlFormattedDate = localDate.ToString("yyyy-MM-dd  HH:mm:ss");
                 sqlCommand.Parameters.AddWithValue("DataTime", sqlFormattedDate);
-                sqlCommand.Parameters.AddWithValue("P0", (int)DataArray[70]);
-                sqlCommand.Parameters.AddWithValue("P1", (int)DataArray[71]);
-                sqlCommand.Parameters.AddWithValue("P2", (int)DataArray[72]);
-                sqlCommand.Parameters.AddWithValue("P3", (int)DataArray[73]);
-                sqlCommand.Parameters.AddWithValue("P4", (int)DataArray[74]);
-                sqlCommand.Parameters.AddWithValue("P5", (int)DataArray[75]);
-                sqlCommand.Parameters.AddWithValue("P6", (int)DataArray[76]);
-                sqlCommand.Parameters.AddWithValue("P7", (int)DataArray[77]);
-                sqlCommand.Parameters.AddWithValue("P8", (int)DataArray[78]);
-                sqlCommand.Parameters.AddWithValue("P9", (int)DataArray[79]);
-                sqlCommand.Parameters.AddWithValue("P10", (int)DataArray[80]);
-                sqlCommand.Parameters.AddWithValue("P11", (int)DataArray[81]);
-                sqlCommand.Parameters.AddWithValue("P12", (int)DataArray[82]);
-                sqlCommand.Parameters.AddWithValue("P13", (int)DataArray[83]);
-                sqlCommand.Parameters.AddWithValue("P14", (int)DataArray[84]);
-                sqlCommand.Parameters.AddWithValue("P15", (int)DataArray[85]);
-                sqlCommand.Parameters.AddWithValue("P16", (int)DataArray[86]);
-                sqlCommand.Parameters.AddWithValue("P17", (int)DataArray[87]);
-                sqlCommand.Parameters.AddWithValue("P18", (int)DataArray[88]);
-                sqlCommand.Parameters.AddWithValue("P19", (int)DataArray[89]);
-                sqlCommand.Parameters.AddWithValue("P20", (int)DataArray[90]);
-                sqlCommand.Parameters.AddWithValue("P21", (int)DataArray[91]);
-                sqlCommand.Parameters.AddWithValue("P22", (int)DataArray[92]);
-                sqlCommand.Parameters.AddWithValue("P23", (int)DataArray[93]);
-                sqlCommand.Parameters.AddWithValue("P24", (int)DataArray[94]);
-                sqlCommand.Parameters.AddWithValue("P25", (int)DataArray[95]);
-                sqlCommand.Parameters.AddWithValue("P26", (int)DataArray[96]);
-                sqlCommand.Parameters.AddWithValue("P27", (int)DataArray[97]);
-                sqlCommand.Parameters.AddWithValue("P28", (int)DataArray[98]);
-                sqlCommand.Parameters.AddWithValue("P29", (int)DataArray[99]);
-                sqlCommand.Parameters.AddWithValue("P30", (int)DataArray[100]);
-                sqlCommand.Parameters.AddWithValue("P31", (int)DataArray[101]);
-                sqlCommand.Parameters.AddWithValue("P32", (int)DataArray[102]);
-                sqlCommand.Parameters.AddWithValue("P33", (int)DataArray[103]);
-                sqlCommand.Parameters.AddWithValue("P34", (int)DataArray[104]);
-                sqlCommand.Parameters.AddWithValue("P35", (int)DataArray[105]);
-                sqlCommand.Parameters.AddWithValue("P36", (int)DataArray[106]);
-                sqlCommand.Parameters.AddWithValue("P37", (int)DataArray[107]);
-                sqlCommand.Parameters.AddWithValue("P38", (int)DataArray[108]);
-                sqlCommand.Parameters.AddWithValue("P39", (int)DataArray[109]);
-                sqlCommand.Parameters.AddWithValue("P40", (int)DataArray[110]);
-                sqlCommand.Parameters.AddWithValue("P41", (int)DataArray[111]);
-                sqlCommand.Parameters.AddWithValue("P42", (int)DataArray[112]);
-                sqlCommand.Parameters.AddWithValue("P43", (int)DataArray[113]);
-                sqlCommand.Parameters.AddWithValue("P44", (int)DataArray[114]);
-                sqlCommand.Parameters.AddWithValue("P45", (int)DataArray[115]);
-                sqlCommand.Parameters.AddWithValue("P46", (int)DataArray[116]);
-                sqlCommand.Parameters.AddWithValue("P47", (int)DataArray[117]);
-                sqlCommand.Parameters.AddWithValue("P48", (int)DataArray[118]);
-                sqlCommand.Parameters.AddWithValue("P49", (int)DataArray[119]);
-                sqlCommand.Parameters.AddWithValue("P50", (int)DataArray[120]);
-                sqlCommand.Parameters.AddWithValue("P51", (int)DataArray[121]);
-                sqlCommand.Parameters.AddWithValue("P52", (int)DataArray[122]);
-                sqlCommand.Parameters.AddWithValue("P53", (int)DataArray[123]);
-                sqlCommand.Parameters.AddWithValue("P54", (int)DataArray[124]);
-                sqlCommand.Parameters.AddWithValue("P55", (int)DataArray[125]);
-                sqlCommand.Parameters.AddWithValue("P56", (int)DataArray[126]);
-                sqlCommand.Parameters.AddWithValue("P57", (int)DataArray[127]);
-                sqlCommand.Parameters.AddWithValue("P58", (int)DataArray[128]);
-                sqlCommand.Parameters.AddWithValue("P59", (int)DataArray[129]);
-                sqlCommand.Parameters.AddWithValue("P60", (int)DataArray[130]);
-                sqlCommand.Parameters.AddWithValue("P61", (int)DataArray[131]);
-                sqlCommand.Parameters.AddWithValue("P62", (int)DataArray[132]);
-                sqlCommand.Parameters.AddWithValue("P63", (int)DataArray[133]);
-                sqlCommand.Parameters.AddWithValue("P64", (int)DataArray[134]);
-                sqlCommand.Parameters.AddWithValue("P65", (int)DataArray[135]);
-                sqlCommand.Parameters.AddWithValue("P66", (int)DataArray[136]);
-                sqlCommand.Parameters.AddWithValue("P67", (int)DataArray[137]);
-                sqlCommand.Parameters.AddWithValue("P68", (int)DataArray[138]);
-                sqlCommand.Parameters.AddWithValue("P69", (int)DataArray[139]);
-                sqlCommand.Parameters.AddWithValue("P70", (int)DataArray[140]);
-                sqlCommand.Parameters.AddWithValue("P71", (int)DataArray[141]);
-                sqlCommand.Parameters.AddWithValue("P72", (int)DataArray[142]);
-                sqlCommand.Parameters.AddWithValue("P73", (int)DataArray[143]);
-                sqlCommand.Parameters.AddWithValue("P74", (int)DataArray[144]);
-                sqlCommand.Parameters.AddWithValue("P75", (int)DataArray[145]);
-                sqlCommand.Parameters.AddWithValue("P76", (int)DataArray[146]);
-                sqlCommand.Parameters.AddWithValue("P77", (int)DataArray[147]);
-                sqlCommand.Parameters.AddWithValue("P78", (int)DataArray[148]);
+                sqlCommand.Parameters.AddWithValue("P0", (int)DataArray[0]);
+                sqlCommand.Parameters.AddWithValue("P1", (int)DataArray[1]);
+                sqlCommand.Parameters.AddWithValue("P2", (int)DataArray[2]);
+                sqlCommand.Parameters.AddWithValue("P3", (int)DataArray[3]);
+                sqlCommand.Parameters.AddWithValue("P4", (int)DataArray[4]);
+                sqlCommand.Parameters.AddWithValue("P5", (int)DataArray[5]);
+                sqlCommand.Parameters.AddWithValue("P6", (int)DataArray[6]);
+                sqlCommand.Parameters.AddWithValue("P7", (int)DataArray[7]);
+                sqlCommand.Parameters.AddWithValue("P8", (int)DataArray[8]);
+                sqlCommand.Parameters.AddWithValue("P9", (int)DataArray[9]);
+                sqlCommand.Parameters.AddWithValue("P10", (int)DataArray[10]);
+                sqlCommand.Parameters.AddWithValue("P11", (int)DataArray[11]);
+                sqlCommand.Parameters.AddWithValue("P12", (int)DataArray[12]);
+                sqlCommand.Parameters.AddWithValue("P13", (int)DataArray[13]);
+                sqlCommand.Parameters.AddWithValue("P14", (int)DataArray[14]);
+                sqlCommand.Parameters.AddWithValue("P15", (int)DataArray[15]);
+                sqlCommand.Parameters.AddWithValue("P16", (int)DataArray[16]);
+                sqlCommand.Parameters.AddWithValue("P17", (int)DataArray[17]);
+                sqlCommand.Parameters.AddWithValue("P18", (int)DataArray[18]);
+                sqlCommand.Parameters.AddWithValue("P19", (int)DataArray[19]);
+                sqlCommand.Parameters.AddWithValue("P20", (int)DataArray[20]);
+                sqlCommand.Parameters.AddWithValue("P21", (int)DataArray[21]);
+                sqlCommand.Parameters.AddWithValue("P22", (int)DataArray[22]);
+                sqlCommand.Parameters.AddWithValue("P23", (int)DataArray[23]);
+                sqlCommand.Parameters.AddWithValue("P24", (int)DataArray[24]);
+                sqlCommand.Parameters.AddWithValue("P25", (int)DataArray[25]);
+                sqlCommand.Parameters.AddWithValue("P26", (int)DataArray[26]);
+                sqlCommand.Parameters.AddWithValue("P27", (int)DataArray[27]);
+                sqlCommand.Parameters.AddWithValue("P28", (int)DataArray[28]);
+                sqlCommand.Parameters.AddWithValue("P29", (int)DataArray[29]);
+                sqlCommand.Parameters.AddWithValue("P30", (int)DataArray[30]);
+                sqlCommand.Parameters.AddWithValue("P31", (int)DataArray[31]);
+                sqlCommand.Parameters.AddWithValue("P32", (int)DataArray[32]);
+                sqlCommand.Parameters.AddWithValue("P33", (int)DataArray[33]);
+                sqlCommand.Parameters.AddWithValue("P34", (int)DataArray[34]);
+                sqlCommand.Parameters.AddWithValue("P35", (int)DataArray[35]);
+                sqlCommand.Parameters.AddWithValue("P36", (int)DataArray[36]);
+                sqlCommand.Parameters.AddWithValue("P37", (int)DataArray[37]);
+                sqlCommand.Parameters.AddWithValue("P38", (int)DataArray[38]);
+                sqlCommand.Parameters.AddWithValue("P39", (int)DataArray[39]);
+                sqlCommand.Parameters.AddWithValue("P40", (int)DataArray[40]);
+                sqlCommand.Parameters.AddWithValue("P41", (int)DataArray[41]);
+                sqlCommand.Parameters.AddWithValue("P42", (int)DataArray[42]);
+                sqlCommand.Parameters.AddWithValue("P43", (int)DataArray[43]);
+                sqlCommand.Parameters.AddWithValue("P44", (int)DataArray[44]);
+                sqlCommand.Parameters.AddWithValue("P45", (int)DataArray[45]);
+                sqlCommand.Parameters.AddWithValue("P46", (int)DataArray[46]);
+                sqlCommand.Parameters.AddWithValue("P47", (int)DataArray[47]);
+                sqlCommand.Parameters.AddWithValue("P48", (int)DataArray[48]);
+                sqlCommand.Parameters.AddWithValue("P49", (int)DataArray[49]);
+                sqlCommand.Parameters.AddWithValue("P50", (int)DataArray[50]);
+                sqlCommand.Parameters.AddWithValue("P51", (int)DataArray[51]);
+                sqlCommand.Parameters.AddWithValue("P52", (int)DataArray[52]);
+                sqlCommand.Parameters.AddWithValue("P53", (int)DataArray[53]);
+                sqlCommand.Parameters.AddWithValue("P54", (int)DataArray[54]);
+                sqlCommand.Parameters.AddWithValue("P55", (int)DataArray[55]);
+                sqlCommand.Parameters.AddWithValue("P56", (int)DataArray[56]);
+                sqlCommand.Parameters.AddWithValue("P57", (int)DataArray[57]);
+                sqlCommand.Parameters.AddWithValue("P58", (int)DataArray[58]);
+                sqlCommand.Parameters.AddWithValue("P59", (int)DataArray[59]);
+                sqlCommand.Parameters.AddWithValue("P60", (int)DataArray[60]);
+                sqlCommand.Parameters.AddWithValue("P61", (int)DataArray[61]);
+                sqlCommand.Parameters.AddWithValue("P62", (int)DataArray[62]);
+                sqlCommand.Parameters.AddWithValue("P63", (int)DataArray[63]);
+                sqlCommand.Parameters.AddWithValue("P64", (int)DataArray[64]);
+                sqlCommand.Parameters.AddWithValue("P65", (int)DataArray[65]);
+                sqlCommand.Parameters.AddWithValue("P66", (int)DataArray[66]);
+                sqlCommand.Parameters.AddWithValue("P67", (int)DataArray[67]);
+                sqlCommand.Parameters.AddWithValue("P68", (int)DataArray[68]);
+                sqlCommand.Parameters.AddWithValue("P69", (int)DataArray[69]);
+                sqlCommand.Parameters.AddWithValue("P70", (int)DataArray[70]);
+                sqlCommand.Parameters.AddWithValue("P71", (int)DataArray[71]);
+                sqlCommand.Parameters.AddWithValue("P72", (int)DataArray[72]);
+                sqlCommand.Parameters.AddWithValue("P73", (int)DataArray[73]);
+                sqlCommand.Parameters.AddWithValue("P74", (int)DataArray[74]);
+                sqlCommand.Parameters.AddWithValue("P75", (int)DataArray[75]);
+                sqlCommand.Parameters.AddWithValue("P76", (int)DataArray[76]);
+                sqlCommand.Parameters.AddWithValue("P77", (int)DataArray[77]);
+                sqlCommand.Parameters.AddWithValue("P78", (int)DataArray[78]);
+                sqlCommand.Parameters.AddWithValue("P79", (int)DataArray[79]);
+                sqlCommand.Parameters.AddWithValue("P80", (int)DataArray[80]);
+                sqlCommand.Parameters.AddWithValue("P81", (int)DataArray[81]);
+                sqlCommand.Parameters.AddWithValue("P82", (int)DataArray[82]);
+                sqlCommand.Parameters.AddWithValue("P83", (int)DataArray[83]);
+                sqlCommand.Parameters.AddWithValue("P84", (int)DataArray[84]);
+                sqlCommand.Parameters.AddWithValue("P85", (int)DataArray[85]);
+                sqlCommand.Parameters.AddWithValue("P86", (int)DataArray[86]);
+                sqlCommand.Parameters.AddWithValue("P87", (int)DataArray[87]);
+                sqlCommand.Parameters.AddWithValue("P88", (int)DataArray[88]);
+                sqlCommand.Parameters.AddWithValue("P89", (int)DataArray[89]);
+                sqlCommand.Parameters.AddWithValue("P90", (int)DataArray[90]);
+                sqlCommand.Parameters.AddWithValue("P91", (int)DataArray[91]);
+                sqlCommand.Parameters.AddWithValue("P92", (int)DataArray[92]);
+                sqlCommand.Parameters.AddWithValue("P93", (int)DataArray[93]);
+                sqlCommand.Parameters.AddWithValue("P94", (int)DataArray[94]);
+                sqlCommand.Parameters.AddWithValue("P95", (int)DataArray[95]);
+                sqlCommand.Parameters.AddWithValue("P96", (int)DataArray[96]);
+                sqlCommand.Parameters.AddWithValue("P97", (int)DataArray[97]);
+                sqlCommand.Parameters.AddWithValue("P98", (int)DataArray[98]);
+                sqlCommand.Parameters.AddWithValue("P99", (int)DataArray[99]);
+                sqlCommand.Parameters.AddWithValue("P100", (int)DataArray[100]);
+                sqlCommand.Parameters.AddWithValue("P101", (int)DataArray[101]);
+                sqlCommand.Parameters.AddWithValue("P102", (int)DataArray[102]);
+                sqlCommand.Parameters.AddWithValue("P103", (int)DataArray[103]);
+                sqlCommand.Parameters.AddWithValue("P104", (int)DataArray[104]);
+                sqlCommand.Parameters.AddWithValue("P105", (int)DataArray[105]);
+                sqlCommand.Parameters.AddWithValue("P106", (int)DataArray[106]);
+                sqlCommand.Parameters.AddWithValue("P107", (int)DataArray[107]);
+                sqlCommand.Parameters.AddWithValue("P108", (int)DataArray[108]);
+                sqlCommand.Parameters.AddWithValue("P109", (int)DataArray[109]);
+                sqlCommand.Parameters.AddWithValue("P110", (int)DataArray[110]);
+                sqlCommand.Parameters.AddWithValue("P111", (int)DataArray[111]);
+                sqlCommand.Parameters.AddWithValue("P112", (int)DataArray[112]);
+                sqlCommand.Parameters.AddWithValue("P113", (int)DataArray[113]);
+                sqlCommand.Parameters.AddWithValue("P114", (int)DataArray[114]);
+                sqlCommand.Parameters.AddWithValue("P115", (int)DataArray[115]);
+                sqlCommand.Parameters.AddWithValue("P116", (int)DataArray[116]);
+                sqlCommand.Parameters.AddWithValue("P117", (int)DataArray[117]);
+                sqlCommand.Parameters.AddWithValue("P118", (int)DataArray[118]);
+                sqlCommand.Parameters.AddWithValue("P119", (int)DataArray[119]);
+                sqlCommand.Parameters.AddWithValue("P120", (int)DataArray[120]);
+                sqlCommand.Parameters.AddWithValue("P121", (int)DataArray[121]);
+                sqlCommand.Parameters.AddWithValue("P122", (int)DataArray[122]);
+                sqlCommand.Parameters.AddWithValue("P123", (int)DataArray[123]);
+                sqlCommand.Parameters.AddWithValue("P124", (int)DataArray[124]);
+                sqlCommand.Parameters.AddWithValue("P125", (int)DataArray[125]);
+                sqlCommand.Parameters.AddWithValue("P126", (int)DataArray[126]);
+                sqlCommand.Parameters.AddWithValue("P127", (int)DataArray[127]);
+                sqlCommand.Parameters.AddWithValue("P128", (int)DataArray[128]);
+                sqlCommand.Parameters.AddWithValue("P129", (int)DataArray[129]);
+                sqlCommand.Parameters.AddWithValue("P130", (int)DataArray[130]);
+                sqlCommand.Parameters.AddWithValue("P131", (int)DataArray[131]);
+                sqlCommand.Parameters.AddWithValue("P132", (int)DataArray[132]);
+                sqlCommand.Parameters.AddWithValue("P133", (int)DataArray[133]);
+                sqlCommand.Parameters.AddWithValue("P134", (int)DataArray[134]);
+                sqlCommand.Parameters.AddWithValue("P135", (int)DataArray[135]);
+                sqlCommand.Parameters.AddWithValue("P136", (int)DataArray[136]);
+                sqlCommand.Parameters.AddWithValue("P137", (int)DataArray[137]);
+                sqlCommand.Parameters.AddWithValue("P138", (int)DataArray[138]);
+                sqlCommand.Parameters.AddWithValue("P139", (int)DataArray[139]);
+                sqlCommand.Parameters.AddWithValue("P140", (int)DataArray[140]);
+                sqlCommand.Parameters.AddWithValue("P141", (int)DataArray[141]);
+                sqlCommand.Parameters.AddWithValue("P142", (int)DataArray[142]);
+                sqlCommand.Parameters.AddWithValue("P143", (int)DataArray[143]);
+                sqlCommand.Parameters.AddWithValue("P144", (int)DataArray[144]);
+                sqlCommand.Parameters.AddWithValue("P145", (int)DataArray[145]);
+                sqlCommand.Parameters.AddWithValue("P146", (int)DataArray[146]);
+                sqlCommand.Parameters.AddWithValue("P147", (int)DataArray[147]);
+                sqlCommand.Parameters.AddWithValue("P148", (int)DataArray[148]);
+                sqlCommand.Parameters.AddWithValue("P149", (int)DataArray[149]);
                 sqlCommand.ExecuteNonQuery();
             }
         }
@@ -1445,7 +1453,7 @@ class Program
         sqlDataReader = null;
         try
         {
-            sqlCommand = new SQLiteCommand($"SELECT * FROM Devices WHERE OwnerID={MyOwnerID}", sqlConnection);
+            sqlCommand = new SQLiteCommand($"SELECT * FROM Devices WHERE P2={MyOwnerID}", sqlConnection);
             DataTable dataTable = new DataTable();
             sqlDataReader = sqlCommand.ExecuteReader();
             dataTable.Load(sqlDataReader);
@@ -1631,7 +1639,7 @@ class Program
         {
             for (int i = 0; i < deletDevices.Length; i++)
             {
-                sqlCommand = new SQLiteCommand($"DELETE FROM Devices WHERE OwnerID={deletDevices[i].OwnerID};", sqlConnection);
+                sqlCommand = new SQLiteCommand($"DELETE FROM Devices WHERE P2={deletDevices[i].OwnerID};", sqlConnection);
                 sqlCommand.ExecuteNonQuery();
             }
         }
