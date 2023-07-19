@@ -115,11 +115,14 @@ class Program
     static void StartHttpListener()
     {
         // Set HTTP listener IP and port
-        string ipAddress = "127.0.0.1";
+        /*string ipAddress = "127.0.0.1";*/
+        //string ipAddress = ;
         int port = 8080;
 
         HttpListener httpListener = new HttpListener();
-        httpListener.Prefixes.Add($"http://{ipAddress}:{port}/");
+        //httpListener.Prefixes.Add($"http://{ipAddress}:{port}/");
+        httpListener.Prefixes.Add($"http://+:{port}/");
+        httpListener.Prefixes.Add($"http://*:{port}/");
         httpListener.Start();
 
         Console.WriteLine("HTTP listener started. Waiting for requests...");
@@ -147,7 +150,47 @@ class Program
         if (context.Request.HttpMethod == "GET")
         {
             //Console.WriteLine(context.Request.QueryString.AllKeys + "-----");
+            if (requestUrl.EndsWith("/"))
+            {
+                try
+                {
+                    string defoultData = $"<!doctype html>" +
+                                        $"< html >" +
+                                        $"< head >" +
+                                        $"< title > This is the title of the webpage! </ title >" +
+                                        $"</ head >" +
+                                        $"< body >" +
+                                        $"< p > This is an example paragraph.Anything in the<strong> body</ strong > tag will appear on the page, just like this < strong > p </ strong > tag and its contents.</ p >" +
+                                        $"</ body >" +
+                                        $"</ html > "; 
+                    Console.WriteLine(requestUrl);
+                    string jsonResponse = SendCommandAll();
+                    byte[] responseJsonData = Encoding.UTF8.GetBytes(defoultData);
+                    
+                    context.Response.StatusCode = 200;
+                    context.Response.ContentType = "text/html";
+                    context.Response.ContentLength64 = responseJsonData.Length;
+                    context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                }
+                catch (Exception ex)
+                {
+                    string errorMessage = ex.Message;
+                    var errorObject = new
+                    {
+                        error = errorMessage
+                    };
 
+                    string errorResponse = JsonConvert.SerializeObject(errorObject);
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                }
+                finally
+                {
+                    context.Response.OutputStream.Close();
+                }
+            }
             if (requestUrl.EndsWith("/api/v1/devices"))
             {
                 try
