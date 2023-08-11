@@ -122,11 +122,14 @@ class Program
         HttpListener httpListener = new HttpListener();
         //httpListener.Prefixes.Add($"http://{ipAddress}:{port}/");
        /* httpListener.Prefixes.Add($"http://+:{port}/");*/
+
         httpListener.Prefixes.Add($"http://*:{port}/");
       /*  httpListener.Prefixes.Add($"
     //  https ://hard-server-0e43d0480fed.herokuapp.com");*/
     
         httpListener.Start();
+        //httpListener.Prefixes.Add($"http://192.168.1.106:8181/");
+       // DisplayPrefixesAndState(httpListener);
 
         Console.WriteLine("HTTP listener started. Waiting for requests...");
 
@@ -134,6 +137,24 @@ class Program
         {
             HttpListenerContext context = httpListener.GetContext();
             ProcessHttpRequest(context);
+        }
+    }
+    public static void DisplayPrefixesAndState(HttpListener listener)
+    {
+        // List the prefixes to which the server listens.
+        HttpListenerPrefixCollection prefixes = listener.Prefixes;
+        if (prefixes.Count == 0)
+        {
+            Console.WriteLine("There are no prefixes.");
+        }
+        foreach (string prefix in prefixes)
+        {
+            Console.WriteLine(prefix);
+        }
+        // Show the listening state.
+        if (listener.IsListening)
+        {
+            Console.WriteLine("The server is listening.");
         }
     }
     static void ProcessHttpRequest(HttpListenerContext context)
@@ -158,14 +179,14 @@ class Program
                 try
                 {
                     string defoultData = $"<!doctype html>" +
-                                        $"< html >" +
-                                        $"< head >" +
-                                        $"< title > This is the title of the webpage! </ title >" +
-                                        $"</ head >" +
-                                        $"< body >" +
-                                        $"< p > This is an example paragraph.Anything in the<strong> body</ strong > tag will appear on the page, just like this < strong > p </ strong > tag and its contents.</ p >" +
-                                        $"</ body >" +
-                                        $"</ html > "; 
+                                        $"<html>" +
+                                        $"<head>" +
+                                        $"<title> This is the title of the webpage! </title>" +
+                                        $"</head>" +
+                                        $"<body>" +
+                                        $"<p> This is an example paragraph.Anything in the<strong> body</strong> tag will appear on the page, just like this <strong> p </strong> tag and its contents.</p>" +
+                                        $"</body>" +
+                                        $"</html> "; 
                     Console.WriteLine(requestUrl);
                     string jsonResponse = SendCommandAll();
                     byte[] responseJsonData = Encoding.UTF8.GetBytes(defoultData);
@@ -1615,7 +1636,7 @@ class Program
                 {
                     Console.WriteLine("UPDATE Config paradeters");
                     /*sqlCommand = new SQLiteCommand($"UPDATE [Config] SET " +*/
-                    sqlCommand = new NpgsqlCommand($"UPDATE [Config] SET " +
+                    sqlCommand = new NpgsqlCommand($"UPDATE Config SET " +
                         $"NewData=" +
                         $"@NewData " +
                         $"WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};",
@@ -1630,7 +1651,7 @@ class Program
                     sqlCommand.Parameters.Clear();
                     /* sqlCommand = new SQLiteCommand(*/
                     sqlCommand = new NpgsqlCommand(
-                        $"INSERT INTO [Config] (" +
+                        $"INSERT INTO Config (" +
                         $"OwnerID," +
                         $"ParamNO," +
                         $"NewData) " +
