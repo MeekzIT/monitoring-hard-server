@@ -42,16 +42,16 @@ class Program
     }
 
     //public static SQLiteConnection sqlConnection = null;
-    public static NpgsqlConnection sqlConnection = null;
+    public static NpgsqlConnection? sqlConnection = null;
     //string cS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\MoikaData.mdf;Integrated Security=True";
     // string cS = @"";
 
     /*public static SQLiteCommand sqlCommand = null;*/
-    public static NpgsqlCommand sqlCommand = null;
+    public static NpgsqlCommand? sqlCommand = null;
 
     /*public static SQLiteDataReader sqlDataReader = null;*/
-    public static NpgsqlDataReader sqlDataReader = null;
-    static async Task Main(string[] args)
+    public static NpgsqlDataReader? sqlDataReader = null;
+    static void Main(string[] args)
     {
 
         using IHost host = Host.CreateApplicationBuilder(args).Build();
@@ -60,25 +60,25 @@ class Program
         IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
 
         // Get values from the config given their key and their target type.
-/*        int keyOneValue = config.GetValue<int>("KeyOne");
-        bool keyTwoValue = config.GetValue<bool>("KeyTwo");
-        string? keyThreeNestedValue = config.GetValue<string>("KeyThree:Message");
+        /*        int keyOneValue = config.GetValue<int>("KeyOne");
+                bool keyTwoValue = config.GetValue<bool>("KeyTwo");
+                string? keyThreeNestedValue = config.GetValue<string>("KeyThree:Message");
 
-        // Write the values to the console.
-        Console.WriteLine($"KeyOne = {keyOneValue}");
-        Console.WriteLine($"KeyTwo = {keyTwoValue}");
-        Console.WriteLine($"KeyThree:Message = {keyThreeNestedValue}");*/
+                // Write the values to the console.
+                Console.WriteLine($"KeyOne = {keyOneValue}");
+                Console.WriteLine($"KeyTwo = {keyTwoValue}");
+                Console.WriteLine($"KeyThree:Message = {keyThreeNestedValue}");*/
 
         // Start TCP listener
-/*        if (File.Exists("MoikaData.db"))
-        {
-            Console.WriteLine("Database is success");
-        }
-        else
-        {
-            Console.WriteLine("Database is not success");
-            Environment.Exit(0);
-        }*/
+        /*        if (File.Exists("MoikaData.db"))
+                {
+                    Console.WriteLine("Database is success");
+                }
+                else
+                {
+                    Console.WriteLine("Database is not success");
+                    Environment.Exit(0);
+                }*/
         //sqlConnection = new SQLiteConnection("Data Source=MoikaData.db; Version = 3;");
         string? connString = config.GetValue<string>("ConnectionStrings:PgDbConnection");
         Console.WriteLine(connString);
@@ -92,7 +92,14 @@ class Program
         _ = Task.Run(() => StartHttpListener());
 
         Console.WriteLine("Press Enter to exit.");
-        Console.ReadLine();
+        while(true)
+        {
+            string? tempComm = Console.ReadLine();
+            if (tempComm =="OFF")
+            {
+                break;
+            }
+        }
         sqlConnection.Close();
     }
     static async Task StartTcpListener()
@@ -117,7 +124,7 @@ class Program
         // Set HTTP listener IP and port
         /*string ipAddress = "127.0.0.1";*/
         //string ipAddress = ;
-        int port = 8080;
+        int port = 2000;
 
         HttpListener httpListener = new HttpListener();
         //httpListener.Prefixes.Add($"http://{ipAddress}:{port}/");
@@ -149,7 +156,7 @@ class Program
         }
         foreach (string prefix in prefixes)
         {
-            Console.WriteLine(prefix);
+            Console.WriteLine(prefix); 
         }
         // Show the listening state.
         if (listener.IsListening)
@@ -188,7 +195,7 @@ class Program
                                         $"</body>" +
                                         $"</html> "; 
                     Console.WriteLine(requestUrl);
-                    string jsonResponse = SendCommandAll();
+                    string? jsonResponse = SendCommandAll();
                     byte[] responseJsonData = Encoding.UTF8.GetBytes(defoultData);
                     
                     context.Response.StatusCode = 200;
@@ -220,12 +227,20 @@ class Program
                 try
                 {
                     Console.WriteLine(requestUrl);
-                    string jsonResponse = SendCommandAll();
-                    byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                    context.Response.StatusCode = 200;
-                    context.Response.ContentType = "application/json";
-                    context.Response.ContentLength64 = responseJsonData.Length;
-                    context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                    string? jsonResponse = SendCommandAll();
+                    if(jsonResponse != null)
+                    {
+                        byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                        context.Response.StatusCode = 200;
+                        context.Response.ContentType = "application/json";
+                        context.Response.ContentLength64 = responseJsonData.Length;
+                        context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 200;
+                        context.Response.ContentType = "application/json";
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -251,12 +266,20 @@ class Program
                 try
                 {
                     Console.WriteLine(requestUrl);
-                    string jsonResponse = SendConfigTable();
-                    byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                    context.Response.StatusCode = 200;
-                    context.Response.ContentType = "application/json";
-                    context.Response.ContentLength64 = responseJsonData.Length;
-                    context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                    string? jsonResponse = SendConfigTable();
+                    if (jsonResponse != null)
+                    {
+                        byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                        context.Response.StatusCode = 200;
+                        context.Response.ContentType = "application/json";
+                        context.Response.ContentLength64 = responseJsonData.Length;
+                        context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 200;
+                        context.Response.ContentType = "application/json";
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -279,18 +302,30 @@ class Program
             }
             else if (requestPath == ("/api/v1/devices/"))
             {
-                string id = context.Request.QueryString["id"];
+                string? id = context.Request.QueryString["id"];
                 try
                 {
-                    uint SendOwnerID = uint.Parse(id);
+                    uint SendOwnerID = 0;
+                    if (id != null)
+                    {
+                        SendOwnerID = uint.Parse(id);
+                    }
 
                     Console.WriteLine(requestUrl);
-                    string jsonResponse = SendOunerData(SendOwnerID);
-                    byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                    context.Response.StatusCode = 200;
-                    context.Response.ContentType = "application/json";
-                    context.Response.ContentLength64 = responseJsonData.Length;
-                    context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                    string? jsonResponse = SendOunerData(SendOwnerID);
+                    if(jsonResponse != null)
+                    {
+                        byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                        context.Response.StatusCode = 200;
+                        context.Response.ContentType = "application/json";
+                        context.Response.ContentLength64 = responseJsonData.Length;
+                        context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 200;
+                        context.Response.ContentType = "application/json";
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -313,18 +348,31 @@ class Program
             }
             else if (requestPath == ("/api/v1/config/"))
             {
-                string id = context.Request.QueryString["id"];
+                string? id = context.Request.QueryString["id"];
                 try
                 {
-                    uint SendOwnerID = uint.Parse(id);
+                    uint SendOwnerID = 0;
+                    if (id != null)
+                    {
+                        SendOwnerID = uint.Parse(id);
+                    }
 
                     Console.WriteLine(requestUrl);
-                    string jsonResponse = SendOunerConfig(SendOwnerID);
-                    byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                    context.Response.StatusCode = 200;
-                    context.Response.ContentType = "application/json";
-                    context.Response.ContentLength64 = responseJsonData.Length;
-                    context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                    string? jsonResponse = SendOunerConfig(SendOwnerID);
+                    if (jsonResponse != null)
+                    {
+                        byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                        context.Response.StatusCode = 200;
+                        context.Response.ContentType = "application/json";
+                        context.Response.ContentLength64 = responseJsonData.Length;
+                        context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 200;
+                        context.Response.ContentType = "application/json";
+                    }
+                    
                 }
                 catch (Exception ex)
                 {
@@ -347,18 +395,30 @@ class Program
             }
             else if (requestPath == ("/api/v1/Owner/"))
             {
-                string id = context.Request.QueryString["id"];
+                string? id = context.Request.QueryString["id"];
                 try
                 {
-                    uint SendOwnerID = uint.Parse(id);
+                    uint SendOwnerID=0;
+                    if (id!=null)
+                    {
+                        SendOwnerID = uint.Parse(id);
+                    }
 
                     Console.WriteLine(requestUrl);
-                    string jsonResponse = SendAllOuners(SendOwnerID);
-                    byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                    context.Response.StatusCode = 200;
-                    context.Response.ContentType = "application/json";
-                    context.Response.ContentLength64 = responseJsonData.Length;
-                    context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                    string? jsonResponse = SendAllOuners(SendOwnerID);
+                    if (jsonResponse != null)
+                    {
+                        byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                        context.Response.StatusCode = 200;
+                        context.Response.ContentType = "application/json";
+                        context.Response.ContentLength64 = responseJsonData.Length;
+                        context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 200;
+                        context.Response.ContentType = "application/json";
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -401,9 +461,11 @@ class Program
 
                     var configDevice = JsonConvert.DeserializeObject<ConfigDevice>(requestBody);
 
-                    string SaveConfigParamState = null;
-                    SaveConfigParamState = SaveConfigParam(configDevice);
-
+                    string? SaveConfigParamState = null;
+                    if (configDevice != null)
+                    {
+                        SaveConfigParamState = SaveConfigParam(configDevice);
+                    }
                     if (SaveConfigParamState == "OK")
                     {
                         context.Response.ContentType = "text/plain";
@@ -411,7 +473,7 @@ class Program
                         context.Response.OutputStream.Write(responseData, 0, responseData.Length);
                         context.Response.StatusCode = (int)HttpStatusCode.OK;
                     }
-                    else
+                    else if(SaveConfigParamState !=null)
                     {
                         context.Response.ContentType = "text/plain";
                         byte[] responseData = Encoding.UTF8.GetBytes(SaveConfigParamState);
@@ -449,10 +511,12 @@ class Program
                         requestBody = reader.ReadToEnd();
                     }
 
-                    DeletDevice[] deletDevices = JsonConvert.DeserializeObject<DeletDevice[]>(requestBody);
-
-                    Deleting(deletDevices);
-
+                    DeletDevice[]? deletDevices = JsonConvert.DeserializeObject<DeletDevice[]>(requestBody);
+                    if(deletDevices != null)
+                    {   
+                        Deleting(deletDevices);
+                    }
+                    
                     context.Response.StatusCode = (int)HttpStatusCode.OK;
                 }
                 catch (Exception ex)
@@ -542,9 +606,9 @@ class Program
                 if (StartUncoding)
                 {
                     SQLWriteForTCP(TCPTempArray);
-                    string SendTCPMassage = CheckConfigDevice(TCPTempArray);
+                    string? SendTCPMassage = CheckConfigDevice(TCPTempArray);
                     Console.WriteLine(SendTCPMassage);
-                    if (SendTCPMassage != "NO1" && SendTCPMassage != "NO2" && SendTCPMassage != "ERROR")
+                    if (SendTCPMassage != "NO1" && SendTCPMassage != "NO2" && SendTCPMassage != "ERROR" && SendTCPMassage != null)
                     {
                         byte[] sendClientData = Encoding.ASCII.GetBytes(SendTCPMassage);
                         stream.Write(sendClientData, 0, sendClientData.Length);
@@ -1521,16 +1585,15 @@ class Program
         finally
         {
             //Array.Clear(DataArray,0, DataArray.Length);
-            if (sqlDataReader != null && !sqlDataReader.IsClosed)
+           if (sqlDataReader != null && !sqlDataReader.IsClosed)
             {
                 sqlDataReader.Close();
             }
         }
-        //sqlConnection.Close();
     }
-    static string SendCommandAll()
+    static string? SendCommandAll()
     {
-        string SendMassages = null;
+        string? SendMassages = null;
         Console.WriteLine("ALL");
         sqlDataReader = null;
         try
@@ -1556,9 +1619,9 @@ class Program
         //sqlConnection.Close();
         return SendMassages;
     }
-    static string SendConfigTable()
+    static string? SendConfigTable()
     {
-        string SendMassages = null;
+        string? SendMassages = null;
         Console.WriteLine("Config");
         sqlDataReader = null;
         try
@@ -1584,9 +1647,9 @@ class Program
         //sqlConnection.Close();
         return SendMassages;
     }
-    static string SendOunerData(uint MyOwnerID)
+    static string? SendOunerData(uint MyOwnerID)
     {
-        string SendMassages = null;
+        string? SendMassages = null;
         Console.WriteLine("Owner ID");
         sqlDataReader = null;
         try
@@ -1613,9 +1676,9 @@ class Program
         //Console.WriteLine(SendMassages);
         return SendMassages;
     }
-    static string SaveConfigParam(ConfigDevice config)
+    static string? SaveConfigParam(ConfigDevice config)
     {
-        string returnState = null;
+        string? returnState = null;
         Console.WriteLine("Save Config");
         sqlDataReader = null;
         try
@@ -1687,9 +1750,9 @@ class Program
         }
         return returnState;
     }
-    static string CheckConfigDevice(uint[] DataArray)
+    static string? CheckConfigDevice(uint[] DataArray)
     {
-        string SendMassage = null;
+        string? SendMassage = null;
         sqlDataReader = null;
         try
         {
@@ -1703,21 +1766,24 @@ class Program
             {
                 string TempJSON = JsonConvert.SerializeObject(dataTable);
                 //Console.WriteLine(TempJSON);
-                ConfigDevice[] configDevices = JsonConvert.DeserializeObject<ConfigDevice[]>(TempJSON);
+                ConfigDevice[]? configDevices = JsonConvert.DeserializeObject<ConfigDevice[]>(TempJSON);
                 bool noChang = true;
-                for (int i = 0; i < configDevices.Length; i++)
+                if(configDevices!=null)
                 {
-                    //Console.WriteLine(configDevices[i].ToString());
-                    if (DataArray[configDevices[i].ParamNO] != configDevices[i].NewData)
+                    for (int i = 0; i < configDevices.Length; i++)
                     {
-                        noChang = false;
-                        SendMassage = SendMassage + "P" + configDevices[i].ParamNO.ToString() + "-" + configDevices[i].NewData + ",";
-                    }
-                    else if (DataArray[configDevices[i].ParamNO] == configDevices[i].NewData)
-                    {
-                        /* sqlCommand = new SQLiteCommand($"DELETE FROM Config WHERE OwnerID={DataArray[2]} AND ParamNO={configDevices[i].ParamNO};", sqlConnection);*/
-                        sqlCommand = new NpgsqlCommand($"DELETE FROM Config WHERE OwnerID={DataArray[2]} AND ParamNO={configDevices[i].ParamNO};", sqlConnection);
-                        sqlCommand.ExecuteNonQuery();
+                        //Console.WriteLine(configDevices[i].ToString());
+                        if (DataArray[configDevices[i].ParamNO] != configDevices[i].NewData)
+                        {
+                            noChang = false;
+                            SendMassage = SendMassage + "P" + configDevices[i].ParamNO.ToString() + "-" + configDevices[i].NewData + ",";
+                        }
+                        else if (DataArray[configDevices[i].ParamNO] == configDevices[i].NewData)
+                        {
+                            /* sqlCommand = new SQLiteCommand($"DELETE FROM Config WHERE OwnerID={DataArray[2]} AND ParamNO={configDevices[i].ParamNO};", sqlConnection);*/
+                            sqlCommand = new NpgsqlCommand($"DELETE FROM Config WHERE OwnerID={DataArray[2]} AND ParamNO={configDevices[i].ParamNO};", sqlConnection);
+                            sqlCommand.ExecuteNonQuery();
+                        }
                     }
                 }
                 if (noChang)
@@ -1749,9 +1815,9 @@ class Program
         }
         return SendMassage;
     }
-    static string SendOunerConfig(uint MyOwnerID)
+    static string? SendOunerConfig(uint MyOwnerID)
     {
-        string SendMassages = null;
+        string? SendMassages = null;
         Console.WriteLine("Owner ID");
         sqlDataReader = null;
         try
@@ -1801,9 +1867,9 @@ class Program
             }
         }
     }
-    static string SendAllOuners(uint MyOwnerID)
+    static string? SendAllOuners(uint MyOwnerID)
     {
-        string SendMassages = null;
+        string? SendMassages = null;
         Console.WriteLine("All Owner ID");
         sqlDataReader = null;
         try
