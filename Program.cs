@@ -168,274 +168,390 @@ class Program
     {
         // Handle HTTP request here
         // Example: Get the request URL and send a response
-        string requestUrl = context.Request.Url.ToString();
+
+        string? requestUrl = null;
+        char[]? UrlArray = null;
+        string? requestPath = null;
+        if (context.Request.Url != null)
+        {
+            requestUrl = context.Request.Url.ToString();
+            UrlArray = context.Request.Url.PathAndQuery.ToArray();
+            requestPath = context.Request.Url.AbsolutePath;
+        }
         /*Console.WriteLine($"Received HTTP request: {requestUrl}");*/
-        char[] UrlArray = context.Request.Url.PathAndQuery.ToArray();
-        string requestPath = context.Request.Url.AbsolutePath;
+        
         //string[] temp = context.Request.QueryString.AllKeys.GetValue();
         /*      for (int i = 0; i < temp.Length; i++)
               {
                   Console.WriteLine(temp[i]);
               }*/
 
-        if (context.Request.HttpMethod == "GET")
+
+        if (requestUrl != null && context.Request.Url != null)
         {
-            //Console.WriteLine(context.Request.QueryString.AllKeys + "-----");
-            if (requestUrl.EndsWith("/"))
+            if (context.Request.HttpMethod == "GET")
             {
-                try
+                //Console.WriteLine(context.Request.QueryString.AllKeys + "-----");
+                if (requestUrl.EndsWith("/"))
                 {
-                    string defoultData = $"<!doctype html>" +
-                                        $"<html>" +
-                                        $"<head>" +
-                                        $"<title> This is the title of the webpage! </title>" +
-                                        $"</head>" +
-                                        $"<body>" +
-                                        $"<p> This is an example paragraph.Anything in the<strong> body</strong> tag will appear on the page, just like this <strong> p </strong> tag and its contents.</p>" +
-                                        $"</body>" +
-                                        $"</html> "; 
-                    Console.WriteLine(requestUrl);
-                    string? jsonResponse = SendCommandAll();
-                    byte[] responseJsonData = Encoding.UTF8.GetBytes(defoultData);
-                    
-                    context.Response.StatusCode = 200;
-                    context.Response.ContentType = "text/html";
-                    context.Response.ContentLength64 = responseJsonData.Length;
-                    context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                }
-                catch (Exception ex)
-                {
-                    string errorMessage = ex.Message;
-                    var errorObject = new
+                    try
                     {
-                        error = errorMessage
-                    };
+                        string defoultData = $"<!doctype html>" +
+                                            $"<html>" +
+                                            $"<head>" +
+                                            $"<title> This is the title of the webpage! </title>" +
+                                            $"</head>" +
+                                            $"<body>" +
+                                            $"<p> This is an example paragraph.Anything in the<strong> body</strong> tag will appear on the page, just like this <strong> p </strong> tag and its contents.</p>" +
+                                            $"</body>" +
+                                            $"</html> ";
+                        Console.WriteLine(requestUrl);
+                        string? jsonResponse = SendCommandAll();
+                        byte[] responseJsonData = Encoding.UTF8.GetBytes(defoultData);
 
-                    string errorResponse = JsonConvert.SerializeObject(errorObject);
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
-                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
-                }
-                finally
-                {
-                    context.Response.OutputStream.Close();
-                }
-            }
-            if (requestUrl.EndsWith("/api/v1/devices"))
-            {
-                try
-                {
-                    Console.WriteLine(requestUrl);
-                    string? jsonResponse = SendCommandAll();
-                    if(jsonResponse != null)
-                    {
-                        byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
                         context.Response.StatusCode = 200;
-                        context.Response.ContentType = "application/json";
+                        context.Response.ContentType = "text/html";
                         context.Response.ContentLength64 = responseJsonData.Length;
                         context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        context.Response.StatusCode = 200;
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                    }
+                    finally
+                    {
+                        context.Response.OutputStream.Close();
                     }
                 }
-                catch (Exception ex)
+                if (requestUrl.EndsWith("/api/v1/devices"))
                 {
-                    string errorMessage = ex.Message;
-                    var errorObject = new
+                    try
                     {
-                        error = errorMessage
-                    };
+                        Console.WriteLine(requestUrl);
+                        string? jsonResponse = SendCommandAll();
+                        if (jsonResponse != null)
+                        {
+                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                            context.Response.ContentLength64 = responseJsonData.Length;
+                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
 
-                    string errorResponse = JsonConvert.SerializeObject(errorObject);
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
-                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                    }
+                    finally
+                    {
+                        context.Response.OutputStream.Close();
+                    }
                 }
-                finally
+                else if (requestUrl.EndsWith("/api/v1/config"))
                 {
+                    try
+                    {
+                        Console.WriteLine(requestUrl);
+                        string? jsonResponse = SendConfigTable();
+                        if (jsonResponse != null)
+                        {
+                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                            context.Response.ContentLength64 = responseJsonData.Length;
+                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                    }
+                    finally
+                    {
+                        context.Response.OutputStream.Close();
+                    }
+                }
+                else if (requestPath == ("/api/v1/devices/"))
+                {
+                    string? id = context.Request.QueryString["id"];
+                    try
+                    {
+                        uint SendOwnerID = 0;
+                        if (id != null)
+                        {
+                            SendOwnerID = uint.Parse(id);
+                        }
+
+                        Console.WriteLine(requestUrl);
+                        string? jsonResponse = SendOunerData(SendOwnerID);
+                        if (jsonResponse != null)
+                        {
+                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                            context.Response.ContentLength64 = responseJsonData.Length;
+                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                    }
+                    finally
+                    {
+                        context.Response.OutputStream.Close();
+                    }
+                }
+                else if (requestPath == ("/api/v1/config/"))
+                {
+                    string? id = context.Request.QueryString["id"];
+                    try
+                    {
+                        uint SendOwnerID = 0;
+                        if (id != null)
+                        {
+                            SendOwnerID = uint.Parse(id);
+                        }
+
+                        Console.WriteLine(requestUrl);
+                        string? jsonResponse = SendOunerConfig(SendOwnerID);
+                        if (jsonResponse != null)
+                        {
+                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                            context.Response.ContentLength64 = responseJsonData.Length;
+                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                    }
+                    finally
+                    {
+                        context.Response.OutputStream.Close();
+                    }
+                }
+                else if (requestPath == ("/api/v1/Owner/"))
+                {
+                    string? id = context.Request.QueryString["id"];
+                    try
+                    {
+                        uint SendOwnerID = 0;
+                        if (id != null)
+                        {
+                            SendOwnerID = uint.Parse(id);
+                        }
+
+                        Console.WriteLine(requestUrl);
+                        string? jsonResponse = SendAllOuners(SendOwnerID);
+                        if (jsonResponse != null)
+                        {
+                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                            context.Response.ContentLength64 = responseJsonData.Length;
+                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                    }
+                    finally
+                    {
+                        context.Response.OutputStream.Close();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(context.Request.Url.PathAndQuery.ToString());
+                    context.Response.StatusCode = 404;
                     context.Response.OutputStream.Close();
                 }
             }
-            else if (requestUrl.EndsWith("/api/v1/config"))
+            else if (context.Request.HttpMethod == "POST")
             {
-                try
+                if (requestUrl.EndsWith("/api/v1/devie/edit"))
                 {
-                    Console.WriteLine(requestUrl);
-                    string? jsonResponse = SendConfigTable();
-                    if (jsonResponse != null)
+                    try
                     {
-                        byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                        context.Response.StatusCode = 200;
-                        context.Response.ContentType = "application/json";
-                        context.Response.ContentLength64 = responseJsonData.Length;
-                        context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                    }
-                    else
-                    {
-                        context.Response.StatusCode = 200;
-                        context.Response.ContentType = "application/json";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    string errorMessage = ex.Message;
-                    var errorObject = new
-                    {
-                        error = errorMessage
-                    };
+                        // Read the request body
+                        string requestBody;
+                        using (StreamReader reader = new StreamReader(context.Request.InputStream))
+                        {
+                            requestBody = reader.ReadToEnd();
+                        }
 
-                    string errorResponse = JsonConvert.SerializeObject(errorObject);
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
-                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
-                }
-                finally
-                {
-                    context.Response.OutputStream.Close();
-                }
-            }
-            else if (requestPath == ("/api/v1/devices/"))
-            {
-                string? id = context.Request.QueryString["id"];
-                try
-                {
-                    uint SendOwnerID = 0;
-                    if (id != null)
-                    {
-                        SendOwnerID = uint.Parse(id);
-                    }
+                        var configDevice = JsonConvert.DeserializeObject<ConfigDevice>(requestBody);
 
-                    Console.WriteLine(requestUrl);
-                    string? jsonResponse = SendOunerData(SendOwnerID);
-                    if(jsonResponse != null)
-                    {
-                        byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                        context.Response.StatusCode = 200;
-                        context.Response.ContentType = "application/json";
-                        context.Response.ContentLength64 = responseJsonData.Length;
-                        context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                    }
-                    else
-                    {
-                        context.Response.StatusCode = 200;
-                        context.Response.ContentType = "application/json";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    string errorMessage = ex.Message;
-                    var errorObject = new
-                    {
-                        error = errorMessage
-                    };
+                        string? SaveConfigParamState = null;
+                        if (configDevice != null)
+                        {
+                            SaveConfigParamState = SaveConfigParam(configDevice);
+                        }
+                        if (SaveConfigParamState == "OK")
+                        {
+                            context.Response.ContentType = "text/plain";
+                            byte[] responseData = Encoding.UTF8.GetBytes("Confirmed");
+                            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
+                            context.Response.StatusCode = (int)HttpStatusCode.OK;
+                        }
+                        else if (SaveConfigParamState != null)
+                        {
+                            context.Response.ContentType = "text/plain";
+                            byte[] responseData = Encoding.UTF8.GetBytes(SaveConfigParamState);
+                            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
+                            context.Response.StatusCode = (int)HttpStatusCode.OK;
+                        }
 
-                    string errorResponse = JsonConvert.SerializeObject(errorObject);
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
-                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
-                }
-                finally
-                {
-                    context.Response.OutputStream.Close();
-                }
-            }
-            else if (requestPath == ("/api/v1/config/"))
-            {
-                string? id = context.Request.QueryString["id"];
-                try
-                {
-                    uint SendOwnerID = 0;
-                    if (id != null)
-                    {
-                        SendOwnerID = uint.Parse(id);
                     }
-
-                    Console.WriteLine(requestUrl);
-                    string? jsonResponse = SendOunerConfig(SendOwnerID);
-                    if (jsonResponse != null)
+                    catch (Exception ex)
                     {
-                        byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                        context.Response.StatusCode = 200;
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         context.Response.ContentType = "application/json";
-                        context.Response.ContentLength64 = responseJsonData.Length;
-                        context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
                     }
-                    else
+                    finally
                     {
-                        context.Response.StatusCode = 200;
-                        context.Response.ContentType = "application/json";
+                        context.Response.Close();
                     }
-                    
                 }
-                catch (Exception ex)
+                else if (requestUrl.EndsWith("/api/v1/device/destroy"))
                 {
-                    string errorMessage = ex.Message;
-                    var errorObject = new
+                    try
                     {
-                        error = errorMessage
-                    };
+                        // Read the request body
+                        string requestBody;
+                        using (StreamReader reader = new StreamReader(context.Request.InputStream))
+                        {
+                            requestBody = reader.ReadToEnd();
+                        }
 
-                    string errorResponse = JsonConvert.SerializeObject(errorObject);
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
-                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
-                }
-                finally
-                {
-                    context.Response.OutputStream.Close();
-                }
-            }
-            else if (requestPath == ("/api/v1/Owner/"))
-            {
-                string? id = context.Request.QueryString["id"];
-                try
-                {
-                    uint SendOwnerID=0;
-                    if (id!=null)
-                    {
-                        SendOwnerID = uint.Parse(id);
-                    }
+                        DeletDevice[]? deletDevices = JsonConvert.DeserializeObject<DeletDevice[]>(requestBody);
+                        if (deletDevices != null)
+                        {
+                            Deleting(deletDevices);
+                        }
 
-                    Console.WriteLine(requestUrl);
-                    string? jsonResponse = SendAllOuners(SendOwnerID);
-                    if (jsonResponse != null)
-                    {
-                        byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                        context.Response.StatusCode = 200;
-                        context.Response.ContentType = "application/json";
-                        context.Response.ContentLength64 = responseJsonData.Length;
-                        context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                        context.Response.StatusCode = (int)HttpStatusCode.OK;
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        context.Response.StatusCode = 200;
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                    }
+                    finally
+                    {
+                        context.Response.Close();
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    string errorMessage = ex.Message;
-                    var errorObject = new
-                    {
-                        error = errorMessage
-                    };
-
-                    string errorResponse = JsonConvert.SerializeObject(errorObject);
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
-                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
-                }
-                finally
-                {
+                    Console.WriteLine(context.Request.Url.PathAndQuery.ToString());
+                    context.Response.StatusCode = 404;
                     context.Response.OutputStream.Close();
                 }
             }
@@ -445,110 +561,6 @@ class Program
                 context.Response.StatusCode = 404;
                 context.Response.OutputStream.Close();
             }
-        }
-        else if (context.Request.HttpMethod == "POST")
-        {
-            if (requestUrl.EndsWith("/api/v1/devie/edit"))
-            {
-                try
-                {
-                    // Read the request body
-                    string requestBody;
-                    using (StreamReader reader = new StreamReader(context.Request.InputStream))
-                    {
-                        requestBody = reader.ReadToEnd();
-                    }
-
-                    var configDevice = JsonConvert.DeserializeObject<ConfigDevice>(requestBody);
-
-                    string? SaveConfigParamState = null;
-                    if (configDevice != null)
-                    {
-                        SaveConfigParamState = SaveConfigParam(configDevice);
-                    }
-                    if (SaveConfigParamState == "OK")
-                    {
-                        context.Response.ContentType = "text/plain";
-                        byte[] responseData = Encoding.UTF8.GetBytes("Confirmed");
-                        context.Response.OutputStream.Write(responseData, 0, responseData.Length);
-                        context.Response.StatusCode = (int)HttpStatusCode.OK;
-                    }
-                    else if(SaveConfigParamState !=null)
-                    {
-                        context.Response.ContentType = "text/plain";
-                        byte[] responseData = Encoding.UTF8.GetBytes(SaveConfigParamState);
-                        context.Response.OutputStream.Write(responseData, 0, responseData.Length);
-                        context.Response.StatusCode = (int)HttpStatusCode.OK;
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    string errorMessage = ex.Message;
-                    var errorObject = new
-                    {
-                        error = errorMessage
-                    };
-                    string errorResponse = JsonConvert.SerializeObject(errorObject);
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
-                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
-                }
-                finally
-                {
-                    context.Response.Close();
-                }
-            }
-            else if (requestUrl.EndsWith("/api/v1/device/destroy"))
-            {
-                try
-                {
-                    // Read the request body
-                    string requestBody;
-                    using (StreamReader reader = new StreamReader(context.Request.InputStream))
-                    {
-                        requestBody = reader.ReadToEnd();
-                    }
-
-                    DeletDevice[]? deletDevices = JsonConvert.DeserializeObject<DeletDevice[]>(requestBody);
-                    if(deletDevices != null)
-                    {   
-                        Deleting(deletDevices);
-                    }
-                    
-                    context.Response.StatusCode = (int)HttpStatusCode.OK;
-                }
-                catch (Exception ex)
-                {
-                    string errorMessage = ex.Message;
-                    var errorObject = new
-                    {
-                        error = errorMessage
-                    };
-                    string errorResponse = JsonConvert.SerializeObject(errorObject);
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
-                    byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                    context.Response.OutputStream.Write(errorData, 0, errorData.Length);
-                }
-                finally
-                {
-                    context.Response.Close();
-                }
-            }
-            else
-            {
-                Console.WriteLine(context.Request.Url.PathAndQuery.ToString());
-                context.Response.StatusCode = 404;
-                context.Response.OutputStream.Close();
-            }
-        }
-        else
-        {
-            Console.WriteLine(context.Request.Url.PathAndQuery.ToString());
-            context.Response.StatusCode = 404;
-            context.Response.OutputStream.Close();
         }
     }
     static async Task HandleClientAsync(TcpClient client)
