@@ -1,23 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Configuration;
-using System.Data;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 /*using System.Data.Sqlite;*/
 //using System.Data.SQLite;
 using Npgsql;
+using System.Data;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 //using System.Data.SqlClient;
 
 // git add .
@@ -92,10 +84,10 @@ class Program
         _ = Task.Run(() => StartHttpListener());
 
         Console.WriteLine("Press Enter to exit.");
-        while(true)
+        while (true)
         {
             string? tempComm = Console.ReadLine();
-            if (tempComm =="OFF")
+            if (tempComm == "OFF")
             {
                 break;
             }
@@ -128,15 +120,15 @@ class Program
 
         HttpListener httpListener = new HttpListener();
         //httpListener.Prefixes.Add($"http://{ipAddress}:{port}/");
-       /* httpListener.Prefixes.Add($"http://+:{port}/");*/
+        /* httpListener.Prefixes.Add($"http://+:{port}/");*/
 
         httpListener.Prefixes.Add($"http://*:{port}/");
-      /*  httpListener.Prefixes.Add($"
-    //  https ://hard-server-0e43d0480fed.herokuapp.com");*/
-    
+        /*  httpListener.Prefixes.Add($"
+      //  https ://hard-server-0e43d0480fed.herokuapp.com");*/
+
         httpListener.Start();
         //httpListener.Prefixes.Add($"http://192.168.1.106:8181/");
-       // DisplayPrefixesAndState(httpListener);
+        // DisplayPrefixesAndState(httpListener);
 
         Console.WriteLine("HTTP listener started. Waiting for requests...");
 
@@ -156,7 +148,7 @@ class Program
         }
         foreach (string prefix in prefixes)
         {
-            Console.WriteLine(prefix); 
+            Console.WriteLine(prefix);
         }
         // Show the listening state.
         if (listener.IsListening)
@@ -170,16 +162,16 @@ class Program
         // Example: Get the request URL and send a response
 
         string? requestUrl = null;
-        char[]? UrlArray = null;
+        //char[]? UrlArray = null;
         string? requestPath = null;
         if (context.Request.Url != null)
         {
             requestUrl = context.Request.Url.ToString();
-            UrlArray = context.Request.Url.PathAndQuery.ToArray();
+            //UrlArray = context.Request.Url.PathAndQuery.ToArray();
             requestPath = context.Request.Url.AbsolutePath;
         }
         /*Console.WriteLine($"Received HTTP request: {requestUrl}");*/
-        
+
         //string[] temp = context.Request.QueryString.AllKeys.GetValue();
         /*      for (int i = 0; i < temp.Length; i++)
               {
@@ -192,47 +184,6 @@ class Program
             if (context.Request.HttpMethod == "GET")
             {
                 //Console.WriteLine(context.Request.QueryString.AllKeys + "-----");
-                if (requestUrl.EndsWith("/"))
-                {
-                    try
-                    {
-                        string defoultData = $"<!doctype html>" +
-                                            $"<html>" +
-                                            $"<head>" +
-                                            $"<title> This is the title of the webpage! </title>" +
-                                            $"</head>" +
-                                            $"<body>" +
-                                            $"<p> This is an example paragraph.Anything in the<strong> body</strong> tag will appear on the page, just like this <strong> p </strong> tag and its contents.</p>" +
-                                            $"</body>" +
-                                            $"</html> ";
-                        Console.WriteLine(requestUrl);
-                        string? jsonResponse = SendCommandAll();
-                        byte[] responseJsonData = Encoding.UTF8.GetBytes(defoultData);
-
-                        context.Response.StatusCode = 200;
-                        context.Response.ContentType = "text/html";
-                        context.Response.ContentLength64 = responseJsonData.Length;
-                        context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                    }
-                    catch (Exception ex)
-                    {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
-                    }
-                    finally
-                    {
-                        context.Response.OutputStream.Close();
-                    }
-                }
                 if (requestUrl.EndsWith("/api/v1/devices"))
                 {
                     try
@@ -1597,7 +1548,7 @@ class Program
         finally
         {
             //Array.Clear(DataArray,0, DataArray.Length);
-           if (sqlDataReader != null && !sqlDataReader.IsClosed)
+            if (sqlDataReader != null && !sqlDataReader.IsClosed)
             {
                 sqlDataReader.Close();
             }
@@ -1780,7 +1731,7 @@ class Program
                 //Console.WriteLine(TempJSON);
                 ConfigDevice[]? configDevices = JsonConvert.DeserializeObject<ConfigDevice[]>(TempJSON);
                 bool noChang = true;
-                if(configDevices!=null)
+                if (configDevices != null)
                 {
                     for (int i = 0; i < configDevices.Length; i++)
                     {
@@ -2089,7 +2040,7 @@ class Program
                 }
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -2120,7 +2071,7 @@ class Program
                 }
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -2135,216 +2086,216 @@ class Program
 
 
         ///////Devices dell
-/*        try
-        {
- *//*           sqlCommand = new NpgsqlCommand($"SHOW TABLE Devices;", sqlConnection);
-            sqlDataReader = sqlCommand.ExecuteReader();*//*
+        /*        try
+                {
+         *//*           sqlCommand = new NpgsqlCommand($"SHOW TABLE Devices;", sqlConnection);
+                    sqlDataReader = sqlCommand.ExecuteReader();*//*
 
-            sqlCommand = new NpgsqlCommand($"DROP TABLE Devices;", sqlConnection);
-            sqlCommand.ExecuteNonQuery();
+                    sqlCommand = new NpgsqlCommand($"DROP TABLE Devices;", sqlConnection);
+                    sqlCommand.ExecuteNonQuery();
 
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-        ///////Config dell
-        try
-        {
-            sqlCommand = new NpgsqlCommand($"DROP TABLE Config;", sqlConnection);
-            sqlCommand.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                ///////Config dell
+                try
+                {
+                    sqlCommand = new NpgsqlCommand($"DROP TABLE Config;", sqlConnection);
+                    sqlCommand.ExecuteNonQuery();
 
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-        ///////Devices add 
-        try
-        {
-            sqlCommand = new NpgsqlCommand($"CREATE TABLE Devices(" +
-                $"DataTime CHAR(25)," +
-                $"P0 INT," +
-                $"P1 INT," +
-                $"P2 INT NOT NULL PRIMARY KEY," +
-                $"P3 INT," +
-                $"P4 INT," +
-                $"P5 INT," +
-                $"P6 INT," +
-                $"P7 INT," +
-                $"P8 INT," +
-                $"P9 INT," +
-                $"P10 INT," +
-                $"P11 INT," +
-                $"P12 INT," +
-                $"P13 INT," +
-                $"P14 INT," +
-                $"P15 INT," +
-                $"P16 INT," +
-                $"P17 INT," +
-                $"P18 INT," +
-                $"P19 INT," +
-                $"P20 INT," +
-                $"P21 INT," +
-                $"P22 INT," +
-                $"P23 INT," +
-                $"P24 INT," +
-                $"P25 INT," +
-                $"P26 INT," +
-                $"P27 INT," +
-                $"P28 INT," +
-                $"P29 INT," +
-                $"P30 INT," +
-                $"P31 INT," +
-                $"P32 INT," +
-                $"P33 INT," +
-                $"P34 INT," +
-                $"P35 INT," +
-                $"P36 INT," +
-                $"P37 INT," +
-                $"P38 INT," +
-                $"P39 INT," +
-                $"P40 INT," +
-                $"P41 INT," +
-                $"P42 INT," +
-                $"P43 INT," +
-                $"P44 INT," +
-                $"P45 INT," +
-                $"P46 INT," +
-                $"P47 INT," +
-                $"P48 INT," +
-                $"P49 INT," +
-                $"P50 INT," +
-                $"P51 INT," +
-                $"P52 INT," +
-                $"P53 INT," +
-                $"P54 INT," +
-                $"P55 INT," +
-                $"P56 INT," +
-                $"P57 INT," +
-                $"P58 INT," +
-                $"P59 INT," +
-                $"P60 INT," +
-                $"P61 INT," +
-                $"P62 INT," +
-                $"P63 INT," +
-                $"P64 INT," +
-                $"P65 INT," +
-                $"P66 INT," +
-                $"P67 INT," +
-                $"P68 INT," +
-                $"P69 INT," +
-                $"P70 INT," +
-                $"P71 INT," +
-                $"P72 INT," +
-                $"P73 INT," +
-                $"P74 INT," +
-                $"P75 INT," +
-                $"P76 INT," +
-                $"P77 INT," +
-                $"P78 INT," +
-                $"P79 INT," +
-                $"P80 INT," +
-                $"P81 INT," +
-                $"P82 INT," +
-                $"P83 INT," +
-                $"P84 INT," +
-                $"P85 INT," +
-                $"P86 INT," +
-                $"P87 INT," +
-                $"P88 INT," +
-                $"P89 INT," +
-                $"P90 INT," +
-                $"P91 INT," +
-                $"P92 INT," +
-                $"P93 INT," +
-                $"P94 INT," +
-                $"P95 INT," +
-                $"P96 INT," +
-                $"P97 INT," +
-                $"P98 INT," +
-                $"P99 INT," +
-                $"P100 INT," +
-                $"P101 INT," +
-                $"P102 INT," +
-                $"P103 INT," +
-                $"P104 INT," +
-                $"P105 INT," +
-                $"P106 INT," +
-                $"P107 INT," +
-                $"P108 INT," +
-                $"P109 INT," +
-                $"P110 INT," +
-                $"P111 INT," +
-                $"P112 INT," +
-                $"P113 INT," +
-                $"P114 INT," +
-                $"P115 INT," +
-                $"P116 INT," +
-                $"P117 INT," +
-                $"P118 INT," +
-                $"P119 INT," +
-                $"P120 INT," +
-                $"P121 INT," +
-                $"P122 INT," +
-                $"P123 INT," +
-                $"P124 INT," +
-                $"P125 INT," +
-                $"P126 INT," +
-                $"P127 INT," +
-                $"P128 INT," +
-                $"P129 INT," +
-                $"P130 INT," +
-                $"P131 INT," +
-                $"P132 INT," +
-                $"P133 INT," +
-                $"P134 INT," +
-                $"P135 INT," +
-                $"P136 INT," +
-                $"P137 INT," +
-                $"P138 INT," +
-                $"P139 INT," +
-                $"P140 INT," +
-                $"P141 INT," +
-                $"P142 INT," +
-                $"P143 INT," +
-                $"P144 INT," +
-                $"P145 INT," +
-                $"P146 INT," +
-                $"P147 INT," +
-                $"P148 INT," +
-                $"P149 INT" +
-                $");", sqlConnection);
-            sqlCommand.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                ///////Devices add 
+                try
+                {
+                    sqlCommand = new NpgsqlCommand($"CREATE TABLE Devices(" +
+                        $"DataTime CHAR(25)," +
+                        $"P0 INT," +
+                        $"P1 INT," +
+                        $"P2 INT NOT NULL PRIMARY KEY," +
+                        $"P3 INT," +
+                        $"P4 INT," +
+                        $"P5 INT," +
+                        $"P6 INT," +
+                        $"P7 INT," +
+                        $"P8 INT," +
+                        $"P9 INT," +
+                        $"P10 INT," +
+                        $"P11 INT," +
+                        $"P12 INT," +
+                        $"P13 INT," +
+                        $"P14 INT," +
+                        $"P15 INT," +
+                        $"P16 INT," +
+                        $"P17 INT," +
+                        $"P18 INT," +
+                        $"P19 INT," +
+                        $"P20 INT," +
+                        $"P21 INT," +
+                        $"P22 INT," +
+                        $"P23 INT," +
+                        $"P24 INT," +
+                        $"P25 INT," +
+                        $"P26 INT," +
+                        $"P27 INT," +
+                        $"P28 INT," +
+                        $"P29 INT," +
+                        $"P30 INT," +
+                        $"P31 INT," +
+                        $"P32 INT," +
+                        $"P33 INT," +
+                        $"P34 INT," +
+                        $"P35 INT," +
+                        $"P36 INT," +
+                        $"P37 INT," +
+                        $"P38 INT," +
+                        $"P39 INT," +
+                        $"P40 INT," +
+                        $"P41 INT," +
+                        $"P42 INT," +
+                        $"P43 INT," +
+                        $"P44 INT," +
+                        $"P45 INT," +
+                        $"P46 INT," +
+                        $"P47 INT," +
+                        $"P48 INT," +
+                        $"P49 INT," +
+                        $"P50 INT," +
+                        $"P51 INT," +
+                        $"P52 INT," +
+                        $"P53 INT," +
+                        $"P54 INT," +
+                        $"P55 INT," +
+                        $"P56 INT," +
+                        $"P57 INT," +
+                        $"P58 INT," +
+                        $"P59 INT," +
+                        $"P60 INT," +
+                        $"P61 INT," +
+                        $"P62 INT," +
+                        $"P63 INT," +
+                        $"P64 INT," +
+                        $"P65 INT," +
+                        $"P66 INT," +
+                        $"P67 INT," +
+                        $"P68 INT," +
+                        $"P69 INT," +
+                        $"P70 INT," +
+                        $"P71 INT," +
+                        $"P72 INT," +
+                        $"P73 INT," +
+                        $"P74 INT," +
+                        $"P75 INT," +
+                        $"P76 INT," +
+                        $"P77 INT," +
+                        $"P78 INT," +
+                        $"P79 INT," +
+                        $"P80 INT," +
+                        $"P81 INT," +
+                        $"P82 INT," +
+                        $"P83 INT," +
+                        $"P84 INT," +
+                        $"P85 INT," +
+                        $"P86 INT," +
+                        $"P87 INT," +
+                        $"P88 INT," +
+                        $"P89 INT," +
+                        $"P90 INT," +
+                        $"P91 INT," +
+                        $"P92 INT," +
+                        $"P93 INT," +
+                        $"P94 INT," +
+                        $"P95 INT," +
+                        $"P96 INT," +
+                        $"P97 INT," +
+                        $"P98 INT," +
+                        $"P99 INT," +
+                        $"P100 INT," +
+                        $"P101 INT," +
+                        $"P102 INT," +
+                        $"P103 INT," +
+                        $"P104 INT," +
+                        $"P105 INT," +
+                        $"P106 INT," +
+                        $"P107 INT," +
+                        $"P108 INT," +
+                        $"P109 INT," +
+                        $"P110 INT," +
+                        $"P111 INT," +
+                        $"P112 INT," +
+                        $"P113 INT," +
+                        $"P114 INT," +
+                        $"P115 INT," +
+                        $"P116 INT," +
+                        $"P117 INT," +
+                        $"P118 INT," +
+                        $"P119 INT," +
+                        $"P120 INT," +
+                        $"P121 INT," +
+                        $"P122 INT," +
+                        $"P123 INT," +
+                        $"P124 INT," +
+                        $"P125 INT," +
+                        $"P126 INT," +
+                        $"P127 INT," +
+                        $"P128 INT," +
+                        $"P129 INT," +
+                        $"P130 INT," +
+                        $"P131 INT," +
+                        $"P132 INT," +
+                        $"P133 INT," +
+                        $"P134 INT," +
+                        $"P135 INT," +
+                        $"P136 INT," +
+                        $"P137 INT," +
+                        $"P138 INT," +
+                        $"P139 INT," +
+                        $"P140 INT," +
+                        $"P141 INT," +
+                        $"P142 INT," +
+                        $"P143 INT," +
+                        $"P144 INT," +
+                        $"P145 INT," +
+                        $"P146 INT," +
+                        $"P147 INT," +
+                        $"P148 INT," +
+                        $"P149 INT" +
+                        $");", sqlConnection);
+                    sqlCommand.ExecuteNonQuery();
 
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-        ///////Config add
-        try
-        {
-            sqlCommand = new NpgsqlCommand($"CREATE TABLE Config(" +
-                $"OwnerID INT," +
-                $"ParamNO INT," +
-                $"NewData INT" +
-                $");", sqlConnection);
-            sqlCommand.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                ///////Config add
+                try
+                {
+                    sqlCommand = new NpgsqlCommand($"CREATE TABLE Config(" +
+                        $"OwnerID INT," +
+                        $"ParamNO INT," +
+                        $"NewData INT" +
+                        $");", sqlConnection);
+                    sqlCommand.ExecuteNonQuery();
 
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-        finally
-        {
-            if (sqlDataReader != null && !sqlDataReader.IsClosed)
-            {
-                sqlDataReader.Close();
-            }
-            Console.WriteLine("DB is ready");
-        }
-        */
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    if (sqlDataReader != null && !sqlDataReader.IsClosed)
+                    {
+                        sqlDataReader.Close();
+                    }
+                    Console.WriteLine("DB is ready");
+                }
+                */
     }
 }
