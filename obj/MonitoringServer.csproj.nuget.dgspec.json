@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Hayk\\Desktop\\MonitoringServer\\MonitoringServer\\MonitoringServer.csproj": {}
+    "C:\\Users\\Hayk\\Desktop\\Monitoring\\monitoring-hard-server-main\\monitoring-hard-server-main\\MonitoringServer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Hayk\\Desktop\\MonitoringServer\\MonitoringServer\\MonitoringServer.csproj": {
+    "C:\\Users\\Hayk\\Desktop\\Monitoring\\monitoring-hard-server-main\\monitoring-hard-server-main\\MonitoringServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Hayk\\Desktop\\MonitoringServer\\MonitoringServer\\MonitoringServer.csproj",
+        "projectUniqueName": "C:\\Users\\Hayk\\Desktop\\Monitoring\\monitoring-hard-server-main\\monitoring-hard-server-main\\MonitoringServer.csproj",
         "projectName": "MonitoringServer",
-        "projectPath": "C:\\Users\\Hayk\\Desktop\\MonitoringServer\\MonitoringServer\\MonitoringServer.csproj",
+        "projectPath": "C:\\Users\\Hayk\\Desktop\\Monitoring\\monitoring-hard-server-main\\monitoring-hard-server-main\\MonitoringServer.csproj",
         "packagesPath": "C:\\Users\\Hayk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Hayk\\Desktop\\MonitoringServer\\MonitoringServer\\obj\\",
+        "outputPath": "C:\\Users\\Hayk\\Desktop\\Monitoring\\monitoring-hard-server-main\\monitoring-hard-server-main\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Hayk\\AppData\\Roaming\\NuGet\\NuGet.Config",

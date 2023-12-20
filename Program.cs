@@ -569,7 +569,7 @@ class Program
                 if (StartUncoding)
                 {
                     SQLWriteForTCP(TCPTempArray);
-                    string? SendTCPMassage = CheckConfigDevice(TCPTempArray);
+                    string? SendTCPMassage = CheckConfigDevice(TCPTempArray, j);
                     Console.WriteLine(SendTCPMassage);
                     if (SendTCPMassage != "NO1" && SendTCPMassage != "NO2" && SendTCPMassage != "ERROR" && SendTCPMassage != null)
                     {
@@ -1713,7 +1713,7 @@ class Program
         }
         return returnState;
     }
-    static string? CheckConfigDevice(uint[] DataArray)
+    static string? CheckConfigDevice(uint[] DataArray, int LastParam)
     {
         string? SendMassage = null;
         sqlDataReader = null;
@@ -1736,12 +1736,12 @@ class Program
                     for (int i = 0; i < configDevices.Length; i++)
                     {
                         //Console.WriteLine(configDevices[i].ToString());
-                        if (DataArray[configDevices[i].ParamNO] != configDevices[i].NewData)
+                        if (DataArray[configDevices[i].ParamNO] != configDevices[i].NewData && configDevices[i].ParamNO <= LastParam - 1)
                         {
                             noChang = false;
                             SendMassage = SendMassage + "P" + configDevices[i].ParamNO.ToString() + "-" + configDevices[i].NewData + ",";
                         }
-                        else if (DataArray[configDevices[i].ParamNO] == configDevices[i].NewData)
+                        else if (DataArray[configDevices[i].ParamNO] == configDevices[i].NewData || configDevices[i].ParamNO > LastParam - 1)
                         {
                             /* sqlCommand = new SQLiteCommand($"DELETE FROM Config WHERE OwnerID={DataArray[2]} AND ParamNO={configDevices[i].ParamNO};", sqlConnection);*/
                             sqlCommand = new NpgsqlCommand($"DELETE FROM Config WHERE OwnerID={DataArray[2]} AND ParamNO={configDevices[i].ParamNO};", sqlConnection);

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zK0AgyeaQHmSXq+HUzKWQ4Oo3vhp8N+xaxbCWWKHSp7wpvOQrUWliTj2P60+s/lIk8Wzbdue8GYTCtvpuRuGXA==",
+  "dgSpecHash": "jPry5NhgWHBaOARBkockGpbunwuHY68DMjn7uClewkwhD5+N9KrO8ZedFxxjRYxttRiy3ahk5nqOkm5l2snYRA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Hayk\\Desktop\\MonitoringServer\\MonitoringServer\\MonitoringServer.csproj",
+  "projectFilePath": "C:\\Users\\Hayk\\Desktop\\Monitoring\\monitoring-hard-server-main\\monitoring-hard-server-main\\MonitoringServer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Hayk\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\Hayk\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
