@@ -197,33 +197,11 @@ class Program
                     {
                         //Console.WriteLine(requestUrl);
                         string? jsonResponse = SendCommandAll();
-                        if (jsonResponse != null)
-                        {
-                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                            context.Response.ContentLength64 = responseJsonData.Length;
-                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                        }
-                        else
-                        {
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                        }
+                        URL_JsonResponse200(context, jsonResponse);
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        URL_GET_ErrorCatch(context: context, ex: ex);
                     }
                     finally
                     {
@@ -236,33 +214,11 @@ class Program
                     {
                         //Console.WriteLine(requestUrl);
                         string? jsonResponse = SendConfigTable();
-                        if (jsonResponse != null)
-                        {
-                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                            context.Response.ContentLength64 = responseJsonData.Length;
-                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                        }
-                        else
-                        {
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                        }
+                        URL_JsonResponse200(context, jsonResponse);
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        URL_GET_ErrorCatch(context: context, ex: ex);
                     }
                     finally
                     {
@@ -282,33 +238,11 @@ class Program
 
                         //Console.WriteLine(requestUrl);
                         string? jsonResponse = SendOunerData(SendOwnerID);
-                        if (jsonResponse != null)
-                        {
-                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                            context.Response.ContentLength64 = responseJsonData.Length;
-                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                        }
-                        else
-                        {
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                        }
+                        URL_JsonResponse200(context, jsonResponse);
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        URL_GET_ErrorCatch(context: context, ex: ex);
                     }
                     finally
                     {
@@ -328,34 +262,11 @@ class Program
 
                         //Console.WriteLine(requestUrl);
                         string? jsonResponse = SendOunerConfig(SendOwnerID);
-                        if (jsonResponse != null)
-                        {
-                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                            context.Response.ContentLength64 = responseJsonData.Length;
-                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                        }
-                        else
-                        {
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                        }
-
+                        URL_JsonResponse200(context, jsonResponse);
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        URL_GET_ErrorCatch(context: context, ex: ex);  
                     }
                     finally
                     {
@@ -375,33 +286,11 @@ class Program
 
                         //Console.WriteLine(requestUrl);
                         string? jsonResponse = SendAllOuners(SendOwnerID);
-                        if (jsonResponse != null)
-                        {
-                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                            context.Response.ContentLength64 = responseJsonData.Length;
-                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                        }
-                        else
-                        {
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                        }
+                        URL_JsonResponse200(context, jsonResponse);
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        URL_GET_ErrorCatch(context: context, ex: ex);
                     }
                     finally
                     {
@@ -414,33 +303,11 @@ class Program
                     {
                         //Console.WriteLine(requestUrl);
                         string? jsonResponse = SendCommandAllMoney();
-                        if (jsonResponse != null)
-                        {
-                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                            context.Response.ContentLength64 = responseJsonData.Length;
-                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                        }
-                        else
-                        {
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                        }
+                        URL_JsonResponse200(context, jsonResponse);
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        URL_GET_ErrorCatch(context: context, ex: ex);
                     }
                     finally
                     {
@@ -460,34 +327,11 @@ class Program
 
                         //Console.WriteLine(requestUrl);
                         string? jsonResponse = SendDeviceMoney(SendOwnerID);
-                        if (jsonResponse != null)
-                        {
-                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                            context.Response.ContentLength64 = responseJsonData.Length;
-                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                        }
-                        else
-                        {
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                        }
-
+                        URL_JsonResponse200(context, jsonResponse);
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        URL_GET_ErrorCatch(context: context, ex: ex);   
                     }
                     finally
                     {
@@ -500,33 +344,11 @@ class Program
                     {
                         //Console.WriteLine(requestUrl);
                         string? jsonResponse = SendCommandAllReserv();
-                        if (jsonResponse != null)
-                        {
-                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                            context.Response.ContentLength64 = responseJsonData.Length;
-                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                        }
-                        else
-                        {
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                        }
+                        URL_JsonResponse200(context, jsonResponse);
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        URL_GET_ErrorCatch(context: context, ex: ex);
                     }
                     finally
                     {
@@ -546,34 +368,11 @@ class Program
 
                         //Console.WriteLine(requestUrl);
                         string? jsonResponse = SendDeviceReserv(SendOwnerID);
-                        if (jsonResponse != null)
-                        {
-                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                            context.Response.ContentLength64 = responseJsonData.Length;
-                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-                        }
-                        else
-                        {
-                            context.Response.StatusCode = 200;
-                            context.Response.ContentType = "application/json";
-                        }
-
+                        URL_JsonResponse200(context, jsonResponse);
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        URL_GET_ErrorCatch(context: context, ex: ex);
                     }
                     finally
                     {
@@ -607,33 +406,12 @@ class Program
                         {
                             SaveConfigParamState = SaveConfigParam(configDevice);
                         }
-                        if (SaveConfigParamState == "OK")
-                        {
-                            context.Response.ContentType = "text/plain";
-                            byte[] responseData = Encoding.UTF8.GetBytes("Confirmed");
-                            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
-                            context.Response.StatusCode = (int)HttpStatusCode.OK;
-                        }
-                        else if (SaveConfigParamState != null)
-                        {
-                            context.Response.ContentType = "text/plain";
-                            byte[] responseData = Encoding.UTF8.GetBytes(SaveConfigParamState);
-                            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
-                            context.Response.StatusCode = (int)HttpStatusCode.OK;
-                        }
+
+                        URL_PostResponse200(context, SaveConfigParamState);
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        URL_GET_ErrorCatch(context: context, ex: ex); 
                     }
                     finally
                     {
@@ -661,16 +439,7 @@ class Program
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        URL_GET_ErrorCatch(context: context, ex: ex);
                     }
                     finally
                     {
@@ -695,33 +464,12 @@ class Program
                         {
                             SaveReservParamState = SaveReservParam(SetDeviceMoney);
                         }
-                        if (SaveReservParamState == "OK")
-                        {
-                            context.Response.ContentType = "text/plain";
-                            byte[] responseData = Encoding.UTF8.GetBytes("Confirmed");
-                            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
-                            context.Response.StatusCode = (int)HttpStatusCode.OK;
-                        }
-                        else if (SaveReservParamState != null)
-                        {
-                            context.Response.ContentType = "text/plain";
-                            byte[] responseData = Encoding.UTF8.GetBytes(SaveReservParamState);
-                            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
-                            context.Response.StatusCode = (int)HttpStatusCode.OK;
-                        }
+
+                        URL_PostResponse200(context, SaveReservParamState);
                     }
                     catch (Exception ex)
                     {
-                        string errorMessage = ex.Message;
-                        var errorObject = new
-                        {
-                            error = errorMessage
-                        };
-                        string errorResponse = JsonConvert.SerializeObject(errorObject);
-                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                        context.Response.ContentType = "application/json";
-                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+                        URL_GET_ErrorCatch(context: context, ex: ex);
                     }
                     finally
                     {
@@ -2793,6 +2541,60 @@ class Program
             {
                 sqlDataReader.Close();
             }
+        }
+    }
+
+    static void URL_GET_ErrorCatch(HttpListenerContext context, Exception ex)
+    {
+        string errorMessage = ex.Message;
+        var errorObject = new
+        {
+            error = errorMessage
+        };
+        string errorResponse = JsonConvert.SerializeObject(errorObject);
+        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        context.Response.ContentType = "application/json";
+        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
+    }
+    static void URL_JsonResponse200(HttpListenerContext context ,string? jsonResponse)
+    {
+        if (jsonResponse != null)
+        {
+            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+            context.Response.StatusCode = 200;
+            context.Response.ContentType = "application/json";
+            context.Response.ContentLength64 = responseJsonData.Length;
+            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+        }
+        else
+        {
+            context.Response.StatusCode = 200;
+            context.Response.ContentType = "application/json";
+        }
+    }
+    static void URL_PostResponse200(HttpListenerContext context, string? FuncStatus)
+    {
+        if (FuncStatus == "OK")
+        {
+            context.Response.ContentType = "text/plain";
+            byte[] responseData = Encoding.UTF8.GetBytes("Confirmed");
+            context.Response.StatusCode = (int)HttpStatusCode.OK;
+            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
+        }
+        else if (FuncStatus != null)
+        {
+            context.Response.ContentType = "text/plain";
+            byte[] responseData = Encoding.UTF8.GetBytes(FuncStatus);
+            context.Response.StatusCode = (int)HttpStatusCode.OK;
+            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
+        }
+        else
+        {
+            context.Response.ContentType = "text/plain";
+            byte[] responseData = Encoding.UTF8.GetBytes("Json file is missing");
+            context.Response.StatusCode = 400;
+            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
         }
     }
 }
