@@ -591,8 +591,15 @@ class Program
                     Console.WriteLine(SendTCPMassage);
                     if (SendTCPMassage != "NO1" && SendTCPMassage != "NO2" && SendTCPMassage != "ERROR" && SendTCPMassage != null)
                     {
-                        byte[] sendClientData = Encoding.ASCII.GetBytes(SendTCPMassage);
-                        stream.Write(sendClientData, 0, sendClientData.Length);
+                        if(stream.CanWrite==true)
+                        {
+                            byte[] sendClientData = Encoding.ASCII.GetBytes(SendTCPMassage);
+                            stream.Write(sendClientData, 0, sendClientData.Length);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Monitoring data: Stream is not open");
+                        }
                     }
                 }
                 if (StartUncodingMoney)
@@ -611,8 +618,15 @@ class Program
                         Console.WriteLine(SendTCPReservMasage);
                         if (SendTCPReservMasage != "NO1" && SendTCPReservMasage != "NO2" && SendTCPReservMasage != "ERROR" && SendTCPReservMasage != null)
                         {
-                            byte[] sendClientData = Encoding.ASCII.GetBytes(SendTCPReservMasage);
-                            stream.Write(sendClientData, 0, sendClientData.Length);
+                            if(stream.CanWrite==true)
+                            {
+                                byte[] sendClientData = Encoding.ASCII.GetBytes(SendTCPReservMasage);
+                                stream.Write(sendClientData, 0, sendClientData.Length);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Money data: Stream is not open");
+                            }
                         }
                     }
                 }
@@ -651,6 +665,7 @@ class Program
             if (tempState)
             {
                 Console.WriteLine("UPDATE DEVICE");
+                sqlCommand.Parameters.Clear();
                 //sqlCommand = new SQLiteCommand($"UPDATE [Devices] SET " +
                 sqlCommand = new NpgsqlCommand($"UPDATE Devices SET " +
                     $"DataTime=" +
@@ -1700,6 +1715,7 @@ class Program
                 if (tempState)
                 {
                     Console.WriteLine("UPDATE Config paradeters");
+                    sqlCommand.Parameters.Clear();
                     /*sqlCommand = new SQLiteCommand($"UPDATE [Config] SET " +*/
                     sqlCommand = new NpgsqlCommand($"UPDATE Config SET " +
                         $"NewData=" +
@@ -1924,6 +1940,7 @@ class Program
             if (tempState)
             {
                 Console.WriteLine("Update DM");
+                sqlCommand.Parameters.Clear();
                 sqlCommand = new NpgsqlCommand($"UPDATE Money SET " +
                     $"DataTime=" +
                     $"@DataTime, " +
@@ -2059,6 +2076,7 @@ class Program
             if (tempState)
             {
                 Console.WriteLine("Update Reserv paradeters");
+                sqlCommand.Parameters.Clear();
                 /*sqlCommand = new SQLiteCommand($"UPDATE [Config] SET " +*/
                 sqlCommand = new NpgsqlCommand($"UPDATE Reserv SET " +
                     $"Money=" +
