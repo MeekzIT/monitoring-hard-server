@@ -15,4 +15,4 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = MonitoringServer
-build_property.ProjectDir = C:\Users\Hayk\Desktop\Monitoring\monitoring-hard-server-main\monitoring-hard-server-main\
+build_property.ProjectDir = C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\

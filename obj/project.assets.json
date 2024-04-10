@@ -5038,11 +5038,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Hayk\\Desktop\\Monitoring\\monitoring-hard-server-main\\monitoring-hard-server-main\\MonitoringServer.csproj",
+      "projectUniqueName": "C:\\Users\\Hayk\\Desktop\\monitoring-hard-server\\MonitoringServer.csproj",
       "projectName": "MonitoringServer",
-      "projectPath": "C:\\Users\\Hayk\\Desktop\\Monitoring\\monitoring-hard-server-main\\monitoring-hard-server-main\\MonitoringServer.csproj",
+      "projectPath": "C:\\Users\\Hayk\\Desktop\\monitoring-hard-server\\MonitoringServer.csproj",
       "packagesPath": "C:\\Users\\Hayk\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Hayk\\Desktop\\Monitoring\\monitoring-hard-server-main\\monitoring-hard-server-main\\obj\\",
+      "outputPath": "C:\\Users\\Hayk\\Desktop\\monitoring-hard-server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Hayk\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -33,13 +33,6 @@ class Program
         public int OwnerID { get; set; }
     }
 
-    public class SetMoney
-    {
-        public int OwnerID { get; set; }
-        public int Money { get; set; }  
-        public int Reserv { get; set; }
-    }
-
     //public static SQLiteConnection sqlConnection = null;
     public static NpgsqlConnection? sqlConnection = null;
     //string cS = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Hayk\Desktop\MonitoringServer\MonitoringServer\MoikaData.mdf;Integrated Security=True";
@@ -195,13 +188,35 @@ class Program
                 {
                     try
                     {
-                        //Console.WriteLine(requestUrl);
+                        Console.WriteLine(requestUrl);
                         string? jsonResponse = SendCommandAll();
-                        URL_JsonResponse200(context, jsonResponse);
+                        if (jsonResponse != null)
+                        {
+                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                            context.Response.ContentLength64 = responseJsonData.Length;
+                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                        }
                     }
                     catch (Exception ex)
                     {
-                        URL_GET_ErrorCatch(context: context, ex: ex);
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
                     }
                     finally
                     {
@@ -212,13 +227,35 @@ class Program
                 {
                     try
                     {
-                        //Console.WriteLine(requestUrl);
+                        Console.WriteLine(requestUrl);
                         string? jsonResponse = SendConfigTable();
-                        URL_JsonResponse200(context, jsonResponse);
+                        if (jsonResponse != null)
+                        {
+                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                            context.Response.ContentLength64 = responseJsonData.Length;
+                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                        }
                     }
                     catch (Exception ex)
                     {
-                        URL_GET_ErrorCatch(context: context, ex: ex);
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
                     }
                     finally
                     {
@@ -236,13 +273,35 @@ class Program
                             SendOwnerID = uint.Parse(id);
                         }
 
-                        //Console.WriteLine(requestUrl);
+                        Console.WriteLine(requestUrl);
                         string? jsonResponse = SendOunerData(SendOwnerID);
-                        URL_JsonResponse200(context, jsonResponse);
+                        if (jsonResponse != null)
+                        {
+                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                            context.Response.ContentLength64 = responseJsonData.Length;
+                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                        }
                     }
                     catch (Exception ex)
                     {
-                        URL_GET_ErrorCatch(context: context, ex: ex);
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
                     }
                     finally
                     {
@@ -260,13 +319,36 @@ class Program
                             SendOwnerID = uint.Parse(id);
                         }
 
-                        //Console.WriteLine(requestUrl);
+                        Console.WriteLine(requestUrl);
                         string? jsonResponse = SendOunerConfig(SendOwnerID);
-                        URL_JsonResponse200(context, jsonResponse);
+                        if (jsonResponse != null)
+                        {
+                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                            context.Response.ContentLength64 = responseJsonData.Length;
+                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                        }
+
                     }
                     catch (Exception ex)
                     {
-                        URL_GET_ErrorCatch(context: context, ex: ex);  
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
                     }
                     finally
                     {
@@ -284,95 +366,35 @@ class Program
                             SendOwnerID = uint.Parse(id);
                         }
 
-                        //Console.WriteLine(requestUrl);
+                        Console.WriteLine(requestUrl);
                         string? jsonResponse = SendAllOuners(SendOwnerID);
-                        URL_JsonResponse200(context, jsonResponse);
-                    }
-                    catch (Exception ex)
-                    {
-                        URL_GET_ErrorCatch(context: context, ex: ex);
-                    }
-                    finally
-                    {
-                        context.Response.OutputStream.Close();
-                    }
-                }
-                else if (requestUrl.EndsWith("/api/v1/money"))
-                {
-                    try
-                    {
-                        //Console.WriteLine(requestUrl);
-                        string? jsonResponse = SendCommandAllMoney();
-                        URL_JsonResponse200(context, jsonResponse);
-                    }
-                    catch (Exception ex)
-                    {
-                        URL_GET_ErrorCatch(context: context, ex: ex);
-                    }
-                    finally
-                    {
-                        context.Response.OutputStream.Close();
-                    }
-                }
-                else if (requestPath == ("/api/v1/money/"))
-                {
-                    string? id = context.Request.QueryString["id"];
-                    try
-                    {
-                        uint SendOwnerID = 0;
-                        if (id != null)
+                        if (jsonResponse != null)
                         {
-                            SendOwnerID = uint.Parse(id);
+                            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+                            context.Response.ContentLength64 = responseJsonData.Length;
+                            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
                         }
-
-                        //Console.WriteLine(requestUrl);
-                        string? jsonResponse = SendDeviceMoney(SendOwnerID);
-                        URL_JsonResponse200(context, jsonResponse);
-                    }
-                    catch (Exception ex)
-                    {
-                        URL_GET_ErrorCatch(context: context, ex: ex);   
-                    }
-                    finally
-                    {
-                        context.Response.OutputStream.Close();
-                    }
-                }
-                else if (requestUrl.EndsWith("/api/v1/reserv"))
-                {
-                    try
-                    {
-                        //Console.WriteLine(requestUrl);
-                        string? jsonResponse = SendCommandAllReserv();
-                        URL_JsonResponse200(context, jsonResponse);
-                    }
-                    catch (Exception ex)
-                    {
-                        URL_GET_ErrorCatch(context: context, ex: ex);
-                    }
-                    finally
-                    {
-                        context.Response.OutputStream.Close();
-                    }
-                }
-                else if (requestPath == ("/api/v1/reserv/"))
-                {
-                    string? id = context.Request.QueryString["id"];
-                    try
-                    {
-                        uint SendOwnerID = 0;
-                        if (id != null)
+                        else
                         {
-                            SendOwnerID = uint.Parse(id);
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
                         }
-
-                        //Console.WriteLine(requestUrl);
-                        string? jsonResponse = SendDeviceReserv(SendOwnerID);
-                        URL_JsonResponse200(context, jsonResponse);
                     }
                     catch (Exception ex)
                     {
-                        URL_GET_ErrorCatch(context: context, ex: ex);
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
                     }
                     finally
                     {
@@ -406,12 +428,34 @@ class Program
                         {
                             SaveConfigParamState = SaveConfigParam(configDevice);
                         }
+                        if (SaveConfigParamState == "OK")
+                        {
+                            context.Response.ContentType = "text/plain";
+                            byte[] responseData = Encoding.UTF8.GetBytes("Confirmed");
+                            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
+                            context.Response.StatusCode = (int)HttpStatusCode.OK;
+                        }
+                        else if (SaveConfigParamState != null)
+                        {
+                            context.Response.ContentType = "text/plain";
+                            byte[] responseData = Encoding.UTF8.GetBytes(SaveConfigParamState);
+                            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
+                            context.Response.StatusCode = (int)HttpStatusCode.OK;
+                        }
 
-                        URL_PostResponse200(context, SaveConfigParamState);
                     }
                     catch (Exception ex)
                     {
-                        URL_GET_ErrorCatch(context: context, ex: ex); 
+                        string errorMessage = ex.Message;
+                        var errorObject = new
+                        {
+                            error = errorMessage
+                        };
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
                     }
                     finally
                     {
@@ -439,37 +483,16 @@ class Program
                     }
                     catch (Exception ex)
                     {
-                        URL_GET_ErrorCatch(context: context, ex: ex);
-                    }
-                    finally
-                    {
-                        context.Response.Close();
-                    }
-                }
-                else if (requestUrl.EndsWith("/api/v1/device/reserv"))
-                {
-                    try
-                    {
-                        // Read the request body
-                        string requestBody;
-                        using (StreamReader reader = new StreamReader(context.Request.InputStream))
+                        string errorMessage = ex.Message;
+                        var errorObject = new
                         {
-                            requestBody = reader.ReadToEnd();
-                        }
-
-                        var SetDeviceMoney = JsonConvert.DeserializeObject<SetMoney>(requestBody);
-
-                        string? SaveReservParamState = null;
-                        if (SetDeviceMoney != null)
-                        {
-                            SaveReservParamState = SaveReservParam(SetDeviceMoney);
-                        }
-
-                        URL_PostResponse200(context, SaveReservParamState);
-                    }
-                    catch (Exception ex)
-                    {
-                        URL_GET_ErrorCatch(context: context, ex: ex);
+                            error = errorMessage
+                        };
+                        string errorResponse = JsonConvert.SerializeObject(errorObject);
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.ContentType = "application/json";
+                        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
+                        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
                     }
                     finally
                     {
@@ -498,28 +521,14 @@ class Program
             var stream = client.GetStream();
             var buffer = new byte[4096];
             uint[] TCPTempArray = new uint[150];
-
-            uint[] ActualMoney = new uint[2];
-
             Array.Clear(buffer, 0, buffer.Length);
-
-            //Array.Clear(buffer, 0, buffer.Length);
-            //Array.Clear(TCPTempArray, 0, TCPTempArray.Length);
-            //Array.Clear(ActualMoney, 0, ActualMoney.Length);
-            //Console.WriteLine(ActualMoney[0]);
-            //Console.WriteLine(ActualMoney[1]);
-
+            Array.Clear(TCPTempArray, 0, TCPTempArray.Length);
 
             while (true)
             {
                 // Read data from the client
                 var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
                 //var bytesRead = stream.Read(buffer, 0, buffer.Length);
-                
-                Array.Clear(TCPTempArray, 0, TCPTempArray.Length);
-                Array.Clear(ActualMoney, 0, ActualMoney.Length);
-                //Console.WriteLine(ActualMoney[0]);
-                //Console.WriteLine(ActualMoney[1]);
 
                 if (bytesRead == 0)
                 {
@@ -532,11 +541,7 @@ class Program
 
 
                 bool StartUncoding = false;
-                bool StartUncodingMoney = false;
-                bool DeletReserv = false;
-
                 int j = 0;
-                int k = 0;
                 for (int i = 0; i < message.Length; i++)
                 {
                     if (message[i] == 13)
@@ -554,80 +559,22 @@ class Program
 
                         TCPTempArray[j] = TCPTempArray[j] * 10 + (uint)Char.GetNumericValue(tempChar);
                     }
-                    else if (StartUncodingMoney == true)
-                    {
-                        if (message[i] == ',')
-                        {
-                            k++;
-                            continue;
-                        }
-                        Char tempChar = message[i];
-
-                        ActualMoney[k] = ActualMoney[k] * 10 + (uint)Char.GetNumericValue(tempChar);
-                    }
                     else if (message[i + 1] == ' ' && message[i] == ':' && message[i - 1] == 'e' && message[i - 2] == 'v' && message[i - 3] == 'a' && message[i - 4] == 'l' && message[i - 5] == 'S')
                     {
                         i++;
                         StartUncoding = true;
                     }
-                    else if (message[i + 1] == ' ' && message[i] == ':' && message[i - 1] == 'y' && message[i - 2] == 'e' && message[i - 3] == 'n' && message[i - 4] == 'o' && message[i - 5] == 'M')
-                    {
-                        i++;
-                        StartUncodingMoney = true;
-                    }
-                    else if (message[i + 1] == ' ' && message[i] == ':' && message[i - 1] == 'r' && message[i - 2] == 'e' && message[i - 3] == 's' && message[i - 4] == 'e' && message[i - 5] == 'R')
-                    {
-                        i++;
-                        StartUncodingMoney = true;
-                        DeletReserv = true;
-                    }
                 }
-                //Console.WriteLine(message);
-
+                Console.WriteLine(message);
                 if (StartUncoding)
                 {
                     SQLWriteForTCP(TCPTempArray);
-                    string? SendTCPMassage = CheckConfigDevice(TCPTempArray, j);
+                    string? SendTCPMassage = CheckConfigDevice(TCPTempArray);
                     Console.WriteLine(SendTCPMassage);
                     if (SendTCPMassage != "NO1" && SendTCPMassage != "NO2" && SendTCPMassage != "ERROR" && SendTCPMassage != null)
                     {
-                        if(stream.CanWrite==true)
-                        {
-                            byte[] sendClientData = Encoding.ASCII.GetBytes(SendTCPMassage);
-                            stream.Write(sendClientData, 0, sendClientData.Length);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Monitoring data: Stream is not open");
-                        }
-                    }
-                }
-                if (StartUncodingMoney)
-                {
-                    if (DeletReserv == true)
-                    {
-                        DeletingReserv(ActualMoney[0]);
-                    }
-                    else
-                    {
-                        string? MoneyState = SaveActualMoney(ActualMoney);
-                        string? SendTCPReservMasage = CheckReservDevice(ActualMoney);
-
-
-                        //Console.WriteLine(MoneyState);
-                        Console.WriteLine(SendTCPReservMasage);
-                        if (SendTCPReservMasage != "NO1" && SendTCPReservMasage != "NO2" && SendTCPReservMasage != "ERROR" && SendTCPReservMasage != null)
-                        {
-                            if(stream.CanWrite==true)
-                            {
-                                byte[] sendClientData = Encoding.ASCII.GetBytes(SendTCPReservMasage);
-                                stream.Write(sendClientData, 0, sendClientData.Length);
-                            }
-                            else
-                            {
-                                Console.WriteLine("Money data: Stream is not open");
-                            }
-                        }
+                        byte[] sendClientData = Encoding.ASCII.GetBytes(SendTCPMassage);
+                        stream.Write(sendClientData, 0, sendClientData.Length);
                     }
                 }
             }
@@ -665,7 +612,6 @@ class Program
             if (tempState)
             {
                 Console.WriteLine("UPDATE DEVICE");
-                sqlCommand.Parameters.Clear();
                 //sqlCommand = new SQLiteCommand($"UPDATE [Devices] SET " +
                 sqlCommand = new NpgsqlCommand($"UPDATE Devices SET " +
                     $"DataTime=" +
@@ -1715,7 +1661,6 @@ class Program
                 if (tempState)
                 {
                     Console.WriteLine("UPDATE Config paradeters");
-                    sqlCommand.Parameters.Clear();
                     /*sqlCommand = new SQLiteCommand($"UPDATE [Config] SET " +*/
                     sqlCommand = new NpgsqlCommand($"UPDATE Config SET " +
                         $"NewData=" +
@@ -1768,7 +1713,7 @@ class Program
         }
         return returnState;
     }
-    static string? CheckConfigDevice(uint[] DataArray, int LastParam)
+    static string? CheckConfigDevice(uint[] DataArray)
     {
         string? SendMassage = null;
         sqlDataReader = null;
@@ -1791,12 +1736,12 @@ class Program
                     for (int i = 0; i < configDevices.Length; i++)
                     {
                         //Console.WriteLine(configDevices[i].ToString());
-                        if (DataArray[configDevices[i].ParamNO] != configDevices[i].NewData && configDevices[i].ParamNO <= LastParam - 1)
+                        if (DataArray[configDevices[i].ParamNO] != configDevices[i].NewData)
                         {
                             noChang = false;
                             SendMassage = SendMassage + "P" + configDevices[i].ParamNO.ToString() + "-" + configDevices[i].NewData + ",";
                         }
-                        else if (DataArray[configDevices[i].ParamNO] == configDevices[i].NewData || configDevices[i].ParamNO > LastParam - 1)
+                        else if (DataArray[configDevices[i].ParamNO] == configDevices[i].NewData)
                         {
                             /* sqlCommand = new SQLiteCommand($"DELETE FROM Config WHERE OwnerID={DataArray[2]} AND ParamNO={configDevices[i].ParamNO};", sqlConnection);*/
                             sqlCommand = new NpgsqlCommand($"DELETE FROM Config WHERE OwnerID={DataArray[2]} AND ParamNO={configDevices[i].ParamNO};", sqlConnection);
@@ -1914,362 +1859,11 @@ class Program
         //Console.WriteLine(SendMassages);
         return SendMassages;
     }
-
-    static string? SaveActualMoney(uint[] DataArray)
-    {
-        string? StateReturn=null;
-        Console.WriteLine("Save Money");
-        DateTime localDate = new DateTime();
-        localDate = DateTime.UtcNow;
-        Console.WriteLine(localDate.ToString());
-        sqlDataReader = null;  
-
-        try
-        {
-            sqlCommand = new NpgsqlCommand($"SELECT OwnerID FROM Money WHERE OwnerID={DataArray[0]};", sqlConnection);
-            sqlDataReader = sqlCommand.ExecuteReader();
-            bool tempState = false;
-            while (sqlDataReader.Read())
-            {
-                //sqlDataReader.NextResult();
-                int tempSql = sqlDataReader.GetInt32(0);
-                // Console.WriteLine(tempSql);
-                tempState = true;
-            }
-            sqlDataReader.Close();
-            if (tempState)
-            {
-                Console.WriteLine("Update DM");
-                sqlCommand.Parameters.Clear();
-                sqlCommand = new NpgsqlCommand($"UPDATE Money SET " +
-                    $"DataTime=" +
-                    $"@DataTime, " +
-                    $"OwnerID=" +
-                    $"@OwnerID, " +
-                    $"Money=" +
-                    $"@Money " +
-                    $"WHERE OwnerID={DataArray[0]}",
-                    sqlConnection);
-
-                string sqlFormattedDate = localDate.ToString("yyyy-MM-dd  HH:mm:ss");
-                sqlCommand.Parameters.AddWithValue("DataTime", sqlFormattedDate);
-                sqlCommand.Parameters.AddWithValue("OwnerID", (int)DataArray[0]);
-                sqlCommand.Parameters.AddWithValue("Money", (int)DataArray[1]);
-                //Console.WriteLine(DataArray[1]);
-                sqlCommand.ExecuteNonQuery();
-            }
-            else
-            {
-                Console.WriteLine("New DM");
-                sqlCommand.Parameters.Clear();
-                /*sqlCommand = new SQLiteCommand(*/
-                sqlCommand = new NpgsqlCommand(
-                   $"INSERT INTO Money (" +
-                    $"DataTime," +
-                    $"OwnerID," +
-                    $"Money" +
-                    $") VALUES (" +
-                    $"@DataTime," +
-                    $"@OwnerID," +
-                    $"@Money" +
-                    $") ",
-                    sqlConnection);
-
-                string sqlFormattedDate = localDate.ToString("yyyy-MM-dd  HH:mm:ss");
-                sqlCommand.Parameters.AddWithValue("DataTime", sqlFormattedDate);
-                sqlCommand.Parameters.AddWithValue("OwnerID", (int)DataArray[0]);
-                sqlCommand.Parameters.AddWithValue("Money", (int)DataArray[1]);
-                sqlCommand.ExecuteNonQuery();
-            }
-            StateReturn = "OK";
-        }
-        catch(Exception ex)
-        {
-            Console.Error.WriteLine(ex.Message);
-            StateReturn = "E1";
-        }
-        finally
-        {
-            if (sqlDataReader != null && !sqlDataReader.IsClosed)
-            {
-                sqlDataReader.Close();
-            }
-        }
-        return StateReturn;
-    }
-
-    static string? SendCommandAllMoney()
-    {
-        string? SendMassages = null;
-        Console.WriteLine("ALL DM");
-        sqlDataReader = null;
-        try
-        {
-            //sqlCommand = new SQLiteCommand($"SELECT * FROM Devices", sqlConnection);
-            sqlCommand = new NpgsqlCommand($"SELECT * FROM Money", sqlConnection);
-            DataTable dataTable = new DataTable();
-            sqlDataReader = sqlCommand.ExecuteReader();
-            dataTable.Load(sqlDataReader);
-            SendMassages = JsonConvert.SerializeObject(dataTable);
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex.Message);
-        }
-        finally
-        {
-            if (sqlDataReader != null && !sqlDataReader.IsClosed)
-            {
-                sqlDataReader.Close();
-            }
-        }
-        //sqlConnection.Close();
-        return SendMassages;
-    }
-    static string? SendDeviceMoney(uint MyOwnerID)
-    {
-        string? SendMassages = null;
-        Console.WriteLine("Owner DM");
-        sqlDataReader = null;
-        try
-        {
-            /* sqlCommand = new SQLiteCommand($"SELECT * FROM Config WHERE OwnerID={MyOwnerID}", sqlConnection);*/
-            sqlCommand = new NpgsqlCommand($"SELECT * FROM Money WHERE OwnerID={MyOwnerID}", sqlConnection);
-            DataTable dataTable = new DataTable();
-            sqlDataReader = sqlCommand.ExecuteReader();
-            dataTable.Load(sqlDataReader);
-            SendMassages = JsonConvert.SerializeObject(dataTable);
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex.Message);
-        }
-        finally
-        {
-            if (sqlDataReader != null && !sqlDataReader.IsClosed)
-            {
-                sqlDataReader.Close();
-            }
-        }
-        //sqlConnection.Close();
-        //Console.WriteLine(SendMassages);
-        return SendMassages;
-    }
-    static string? SaveReservParam(SetMoney MyReserv)
-    {
-        string? returnState = null;
-        Console.WriteLine("Save Reserv");
-        sqlDataReader = null;
-        try
-        {
-
-            /*sqlCommand = new SQLiteCommand($"SELECT OwnerID FROM Config WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};", sqlConnection);*/
-            sqlCommand = new NpgsqlCommand($"SELECT OwnerID FROM Reserv WHERE OwnerID={MyReserv.OwnerID};", sqlConnection);
-            sqlDataReader = sqlCommand.ExecuteReader();
-            bool tempState = false;
-            while (sqlDataReader.Read())
-            {
-                int tempSql = sqlDataReader.GetInt32(0);
-                tempState = true;
-            }
-            sqlDataReader.Close();
-            if (tempState)
-            {
-                Console.WriteLine("Update Reserv paradeters");
-                sqlCommand.Parameters.Clear();
-                /*sqlCommand = new SQLiteCommand($"UPDATE [Config] SET " +*/
-                sqlCommand = new NpgsqlCommand($"UPDATE Reserv SET " +
-                    $"Money=" +
-                    $"@Money, " +
-                    $"Reserv=" +
-                    $"@Reserv " +
-                    $"WHERE OwnerID={MyReserv.OwnerID};",
-                    sqlConnection);
-
-                sqlCommand.Parameters.AddWithValue("Money", MyReserv.Money);
-                sqlCommand.Parameters.AddWithValue("Reserv", MyReserv.Reserv);
-                sqlCommand.ExecuteNonQuery();
-            }
-            else
-            {
-                Console.WriteLine("New Reserv");
-                sqlCommand.Parameters.Clear();
-                /* sqlCommand = new SQLiteCommand(*/
-                sqlCommand = new NpgsqlCommand(
-                    $"INSERT INTO Reserv (" +
-                    $"OwnerID," +
-                    $"Money," +
-                    $"Reserv) " +
-                    $"VALUES (" +
-                    $"@OwnerID," +
-                    $"@Money," +
-                    $"@Reserv) ",
-                    sqlConnection);
-
-                sqlCommand.Parameters.AddWithValue("OwnerID", MyReserv.OwnerID);
-                sqlCommand.Parameters.AddWithValue("Money", MyReserv.Money);
-                sqlCommand.Parameters.AddWithValue("Reserv", MyReserv.Reserv);
-                sqlCommand.ExecuteNonQuery();
-            }
-            returnState = "OK";
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex.Message);
-            returnState = ex.Message;
-        }
-        finally
-        {
-            if (sqlDataReader != null && !sqlDataReader.IsClosed)
-            {
-                sqlDataReader.Close();
-            }
-        }
-        return returnState;
-    }
-    static string? SendCommandAllReserv()
-    {
-        string? SendMassages = null;
-        Console.WriteLine("ALL DM");
-        sqlDataReader = null;
-        try
-        {
-            //sqlCommand = new SQLiteCommand($"SELECT * FROM Devices", sqlConnection);
-            sqlCommand = new NpgsqlCommand($"SELECT * FROM Reserv", sqlConnection);
-            DataTable dataTable = new DataTable();
-            sqlDataReader = sqlCommand.ExecuteReader();
-            dataTable.Load(sqlDataReader);
-            SendMassages = JsonConvert.SerializeObject(dataTable);
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex.Message);
-        }
-        finally
-        {
-            if (sqlDataReader != null && !sqlDataReader.IsClosed)
-            {
-                sqlDataReader.Close();
-            }
-        }
-        //sqlConnection.Close();
-        return SendMassages;
-    }
-    static string? SendDeviceReserv(uint MyOwnerID)
-    {
-        string? SendMassages = null;
-        Console.WriteLine("Owner DM");
-        sqlDataReader = null;
-        try
-        {
-            /* sqlCommand = new SQLiteCommand($"SELECT * FROM Config WHERE OwnerID={MyOwnerID}", sqlConnection);*/
-            sqlCommand = new NpgsqlCommand($"SELECT * FROM Reserv WHERE OwnerID={MyOwnerID}", sqlConnection);
-            DataTable dataTable = new DataTable();
-            sqlDataReader = sqlCommand.ExecuteReader();
-            dataTable.Load(sqlDataReader);
-            SendMassages = JsonConvert.SerializeObject(dataTable);
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex.Message);
-        }
-        finally
-        {
-            if (sqlDataReader != null && !sqlDataReader.IsClosed)
-            {
-                sqlDataReader.Close();
-            }
-        }
-        //sqlConnection.Close();
-        //Console.WriteLine(SendMassages);
-        return SendMassages;
-    }
-
-    static string? CheckReservDevice(uint[] DataArray)
-    {
-        string? SendMassage = null;
-        sqlDataReader = null;
-        try
-        {
-            //Console.WriteLine(DataArray[0]);
-            /*sqlCommand = new SQLiteCommand($"SELECT * FROM Config WHERE OwnerID={DataArray[2]}", sqlConnection);*/
-            sqlCommand = new NpgsqlCommand($"SELECT * FROM Reserv WHERE OwnerID={DataArray[0]}", sqlConnection);
-            //Console.WriteLine("SQL OK");
-            DataTable dataTable = new DataTable();
-            sqlDataReader = sqlCommand.ExecuteReader();
-            dataTable.Load(sqlDataReader);
-            if (dataTable != null)
-            {
-                string TempJSON = JsonConvert.SerializeObject(dataTable);
-                //Console.WriteLine(TempJSON);
-                SetMoney[]? reservDevices = JsonConvert.DeserializeObject<SetMoney[]>(TempJSON);
-                bool noChang = true;
-/*                Console.WriteLine(reservDevices[0].OwnerID);
-                Console.WriteLine(reservDevices[0].Money);
-                Console.WriteLine(reservDevices[0].Reserv);*/
-                if (reservDevices != null && reservDevices.Length != 0)
-                {
-                    noChang = false;
-                    SendMassage = "M-" + reservDevices[0].Money + "," + "R-" + reservDevices[0].Reserv + ",";
-                }
-
-                if (noChang)
-                {
-                    SendMassage = "NO2";
-                }
-                else
-                {
-                    SendMassage = "Reserv: " + SendMassage + "#";
-                }
-            }
-            else
-            {
-                SendMassage = "NO1";
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex.Message);
-            SendMassage = "ERROR";
-        }
-        finally
-        {
-            Array.Clear(DataArray, 0, DataArray.Length);
-            if (sqlDataReader != null && !sqlDataReader.IsClosed)
-            {
-                sqlDataReader.Close();
-            }
-        }
-        return SendMassage;
-    }
-
-    static void DeletingReserv(uint deletDevices)
-    {
-        try
-        {
-            /*sqlCommand = new SQLiteCommand($"DELETE FROM Devices WHERE P2={deletDevices[i].OwnerID};", sqlConnection);*/
-            sqlCommand = new NpgsqlCommand($"DELETE FROM Reserv WHERE OwnerID={deletDevices};", sqlConnection);
-            sqlCommand.ExecuteNonQuery();
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine(ex.Message);
-        }
-        finally
-        {
-            if (sqlDataReader != null && !sqlDataReader.IsClosed)
-            {
-                sqlDataReader.Close();
-            }
-        }
-    }
-
-
     static void ConfigDataBasue()
     {
         sqlDataReader = null;
 
-        //////////////////Device/////////////////////
+        ////exists Devices
         try
         {
             /*var tempState;*/
@@ -2278,10 +1872,10 @@ class Program
             //Console.WriteLine(tempState);
             bool tempBool = Convert.ToBoolean(tempState);
             if (tempBool)
-                Console.WriteLine("YES Device");
+                Console.WriteLine("YES");
             else
             {
-                Console.WriteLine("NO Device");
+                Console.WriteLine("NO");
                 try
                 {
                     sqlCommand = new NpgsqlCommand($"CREATE TABLE Devices(" +
@@ -2450,9 +2044,6 @@ class Program
         {
             Console.WriteLine(ex.Message);
         }
-        //////////////////END Device/////////////////////
-
-        //////////////////Config/////////////////////
         try
         {
             sqlCommand = new NpgsqlCommand($"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name  = 'config') AS table_existence;", sqlConnection);
@@ -2460,10 +2051,10 @@ class Program
             //Console.WriteLine(tempState);
             bool tempBool = Convert.ToBoolean(tempState);
             if (tempBool)
-                Console.WriteLine("YES Config");
+                Console.WriteLine("YES");
             else
             {
-                Console.WriteLine("NO Config");
+                Console.WriteLine("NO");
                 try
                 {
                     sqlCommand = new NpgsqlCommand($"CREATE TABLE Config(" +
@@ -2484,75 +2075,7 @@ class Program
         {
             Console.WriteLine(ex.Message);
         }
-        //////////////////END Config/////////////////////
-        
-        //////////////////Money/////////////////////
-        try
-        {
-            sqlCommand = new NpgsqlCommand($"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name  = 'money') AS table_existence;", sqlConnection);
-            var tempState = sqlCommand.ExecuteScalar();
-            //Console.WriteLine(tempState);
-            bool tempBool = Convert.ToBoolean(tempState);
-            if (tempBool)
-                Console.WriteLine("YES Money");
-            else
-            {
-                Console.WriteLine("NO Money");
-                try
-                {
-                    sqlCommand = new NpgsqlCommand($"CREATE TABLE Money(" +
-                        $"DataTime CHAR(25)," +
-                        $"OwnerID INT," +
-                        $"Money INT" +
-                        $");", sqlConnection);
-                    sqlCommand.ExecuteNonQuery();
 
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-        //////////////////END Money/////////////////////
-        
-        //////////////////Set Money/////////////////////
-        try
-        {
-            sqlCommand = new NpgsqlCommand($"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name  = 'reserv') AS table_existence;", sqlConnection);
-            var tempState = sqlCommand.ExecuteScalar();
-            //Console.WriteLine(tempState);
-            bool tempBool = Convert.ToBoolean(tempState);
-            if (tempBool)
-                Console.WriteLine("YES Reserv");
-            else
-            {
-                Console.WriteLine("NO Reserv");
-                try
-                {
-                    sqlCommand = new NpgsqlCommand($"CREATE TABLE Reserv(" +
-                        $"OwnerID INT NOT NULL PRIMARY KEY," +
-                        $"Money INT," +
-                        $"Reserv INT" +
-                        $");", sqlConnection);
-                    sqlCommand.ExecuteNonQuery();
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-        //////////////////END Set Money/////////////////////
         finally
         {
             if (sqlDataReader != null && !sqlDataReader.IsClosed)
@@ -2560,59 +2083,219 @@ class Program
                 sqlDataReader.Close();
             }
         }
-    }
 
-    static void URL_GET_ErrorCatch(HttpListenerContext context, Exception ex)
-    {
-        string errorMessage = ex.Message;
-        var errorObject = new
-        {
-            error = errorMessage
-        };
-        string errorResponse = JsonConvert.SerializeObject(errorObject);
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        context.Response.ContentType = "application/json";
-        byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
-        context.Response.OutputStream.Write(errorData, 0, errorData.Length);
-    }
-    static void URL_JsonResponse200(HttpListenerContext context ,string? jsonResponse)
-    {
-        if (jsonResponse != null)
-        {
-            byte[] responseJsonData = Encoding.UTF8.GetBytes(jsonResponse);
-            context.Response.StatusCode = 200;
-            context.Response.ContentType = "application/json";
-            context.Response.ContentLength64 = responseJsonData.Length;
-            context.Response.OutputStream.Write(responseJsonData, 0, responseJsonData.Length);
-        }
-        else
-        {
-            context.Response.StatusCode = 200;
-            context.Response.ContentType = "application/json";
-        }
-    }
-    static void URL_PostResponse200(HttpListenerContext context, string? FuncStatus)
-    {
-        if (FuncStatus == "OK")
-        {
-            context.Response.ContentType = "text/plain";
-            byte[] responseData = Encoding.UTF8.GetBytes("Confirmed");
-            context.Response.StatusCode = (int)HttpStatusCode.OK;
-            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
-        }
-        else if (FuncStatus != null)
-        {
-            context.Response.ContentType = "text/plain";
-            byte[] responseData = Encoding.UTF8.GetBytes(FuncStatus);
-            context.Response.StatusCode = (int)HttpStatusCode.OK;
-            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
-        }
-        else
-        {
-            context.Response.ContentType = "text/plain";
-            byte[] responseData = Encoding.UTF8.GetBytes("Json file is missing");
-            context.Response.StatusCode = 400;
-            context.Response.OutputStream.Write(responseData, 0, responseData.Length);
-        }
+
+        ///////Devices dell
+        /*        try
+                {
+         *//*           sqlCommand = new NpgsqlCommand($"SHOW TABLE Devices;", sqlConnection);
+                    sqlDataReader = sqlCommand.ExecuteReader();*//*
+
+                    sqlCommand = new NpgsqlCommand($"DROP TABLE Devices;", sqlConnection);
+                    sqlCommand.ExecuteNonQuery();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                ///////Config dell
+                try
+                {
+                    sqlCommand = new NpgsqlCommand($"DROP TABLE Config;", sqlConnection);
+                    sqlCommand.ExecuteNonQuery();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                ///////Devices add 
+                try
+                {
+                    sqlCommand = new NpgsqlCommand($"CREATE TABLE Devices(" +
+                        $"DataTime CHAR(25)," +
+                        $"P0 INT," +
+                        $"P1 INT," +
+                        $"P2 INT NOT NULL PRIMARY KEY," +
+                        $"P3 INT," +
+                        $"P4 INT," +
+                        $"P5 INT," +
+                        $"P6 INT," +
+                        $"P7 INT," +
+                        $"P8 INT," +
+                        $"P9 INT," +
+                        $"P10 INT," +
+                        $"P11 INT," +
+                        $"P12 INT," +
+                        $"P13 INT," +
+                        $"P14 INT," +
+                        $"P15 INT," +
+                        $"P16 INT," +
+                        $"P17 INT," +
+                        $"P18 INT," +
+                        $"P19 INT," +
+                        $"P20 INT," +
+                        $"P21 INT," +
+                        $"P22 INT," +
+                        $"P23 INT," +
+                        $"P24 INT," +
+                        $"P25 INT," +
+                        $"P26 INT," +
+                        $"P27 INT," +
+                        $"P28 INT," +
+                        $"P29 INT," +
+                        $"P30 INT," +
+                        $"P31 INT," +
+                        $"P32 INT," +
+                        $"P33 INT," +
+                        $"P34 INT," +
+                        $"P35 INT," +
+                        $"P36 INT," +
+                        $"P37 INT," +
+                        $"P38 INT," +
+                        $"P39 INT," +
+                        $"P40 INT," +
+                        $"P41 INT," +
+                        $"P42 INT," +
+                        $"P43 INT," +
+                        $"P44 INT," +
+                        $"P45 INT," +
+                        $"P46 INT," +
+                        $"P47 INT," +
+                        $"P48 INT," +
+                        $"P49 INT," +
+                        $"P50 INT," +
+                        $"P51 INT," +
+                        $"P52 INT," +
+                        $"P53 INT," +
+                        $"P54 INT," +
+                        $"P55 INT," +
+                        $"P56 INT," +
+                        $"P57 INT," +
+                        $"P58 INT," +
+                        $"P59 INT," +
+                        $"P60 INT," +
+                        $"P61 INT," +
+                        $"P62 INT," +
+                        $"P63 INT," +
+                        $"P64 INT," +
+                        $"P65 INT," +
+                        $"P66 INT," +
+                        $"P67 INT," +
+                        $"P68 INT," +
+                        $"P69 INT," +
+                        $"P70 INT," +
+                        $"P71 INT," +
+                        $"P72 INT," +
+                        $"P73 INT," +
+                        $"P74 INT," +
+                        $"P75 INT," +
+                        $"P76 INT," +
+                        $"P77 INT," +
+                        $"P78 INT," +
+                        $"P79 INT," +
+                        $"P80 INT," +
+                        $"P81 INT," +
+                        $"P82 INT," +
+                        $"P83 INT," +
+                        $"P84 INT," +
+                        $"P85 INT," +
+                        $"P86 INT," +
+                        $"P87 INT," +
+                        $"P88 INT," +
+                        $"P89 INT," +
+                        $"P90 INT," +
+                        $"P91 INT," +
+                        $"P92 INT," +
+                        $"P93 INT," +
+                        $"P94 INT," +
+                        $"P95 INT," +
+                        $"P96 INT," +
+                        $"P97 INT," +
+                        $"P98 INT," +
+                        $"P99 INT," +
+                        $"P100 INT," +
+                        $"P101 INT," +
+                        $"P102 INT," +
+                        $"P103 INT," +
+                        $"P104 INT," +
+                        $"P105 INT," +
+                        $"P106 INT," +
+                        $"P107 INT," +
+                        $"P108 INT," +
+                        $"P109 INT," +
+                        $"P110 INT," +
+                        $"P111 INT," +
+                        $"P112 INT," +
+                        $"P113 INT," +
+                        $"P114 INT," +
+                        $"P115 INT," +
+                        $"P116 INT," +
+                        $"P117 INT," +
+                        $"P118 INT," +
+                        $"P119 INT," +
+                        $"P120 INT," +
+                        $"P121 INT," +
+                        $"P122 INT," +
+                        $"P123 INT," +
+                        $"P124 INT," +
+                        $"P125 INT," +
+                        $"P126 INT," +
+                        $"P127 INT," +
+                        $"P128 INT," +
+                        $"P129 INT," +
+                        $"P130 INT," +
+                        $"P131 INT," +
+                        $"P132 INT," +
+                        $"P133 INT," +
+                        $"P134 INT," +
+                        $"P135 INT," +
+                        $"P136 INT," +
+                        $"P137 INT," +
+                        $"P138 INT," +
+                        $"P139 INT," +
+                        $"P140 INT," +
+                        $"P141 INT," +
+                        $"P142 INT," +
+                        $"P143 INT," +
+                        $"P144 INT," +
+                        $"P145 INT," +
+                        $"P146 INT," +
+                        $"P147 INT," +
+                        $"P148 INT," +
+                        $"P149 INT" +
+                        $");", sqlConnection);
+                    sqlCommand.ExecuteNonQuery();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                ///////Config add
+                try
+                {
+                    sqlCommand = new NpgsqlCommand($"CREATE TABLE Config(" +
+                        $"OwnerID INT," +
+                        $"ParamNO INT," +
+                        $"NewData INT" +
+                        $");", sqlConnection);
+                    sqlCommand.ExecuteNonQuery();
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    if (sqlDataReader != null && !sqlDataReader.IsClosed)
+                    {
+                        sqlDataReader.Close();
+                    }
+                    Console.WriteLine("DB is ready");
+                }
+                */
     }
 }
