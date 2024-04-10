@@ -42,11 +42,11 @@
           "dependencies": {
             "Microsoft.CodeAnalysis": {
               "target": "Package",
-              "version": "[4.7.0, )"
+              "version": "[4.9.2, )"
             },
             "Microsoft.CodeAnalysis.Common": {
               "target": "Package",
-              "version": "[4.7.0, )"
+              "version": "[4.9.2, )"
             },
             "Microsoft.Data.Sqlite": {
               "target": "Package",
