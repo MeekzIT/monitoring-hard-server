@@ -495,6 +495,8 @@ class Program
     {
         try
         {
+            Console.Clear();
+
             var stream = client.GetStream();
             var buffer = new byte[4096];
             uint[] TCPTempArray = new uint[150];
@@ -584,7 +586,7 @@ class Program
                 }
                 //Console.WriteLine(message);
 
-                if (StartUncoding && TCPTempArray[2]>0)
+                if (StartUncoding && TCPTempArray[2] > 0 && TCPTempArray[2] < 100000000) 
                 {
                     SQLWriteForTCP(TCPTempArray);
                     string? SendTCPMassage = CheckConfigDevice(TCPTempArray, j);
@@ -602,7 +604,7 @@ class Program
                         }
                     }
                 }
-                if (StartUncodingMoney && ActualMoney[0]>0)
+                if (StartUncodingMoney && ActualMoney[0] > 0 && ActualMoney[0] < 100000000) 
                 {
                     if (DeletReserv == true)
                     {
@@ -650,6 +652,7 @@ class Program
         sqlDataReader = null;
         try
         {
+            sqlCommand = null;
             /*sqlCommand = new SQLiteCommand($"SELECT P2 FROM Devices WHERE P2={DataArray[2]};", sqlConnection);*/
             sqlCommand = new NpgsqlCommand($"SELECT P2 FROM Devices WHERE P2={DataArray[2]};", sqlConnection);
             sqlDataReader = sqlCommand.ExecuteReader();
@@ -1615,6 +1618,7 @@ class Program
         sqlDataReader = null;
         try
         {
+            sqlCommand = null;
             //sqlCommand = new SQLiteCommand($"SELECT * FROM Devices", sqlConnection);
             sqlCommand = new NpgsqlCommand($"SELECT * FROM Devices", sqlConnection);
             DataTable dataTable = new DataTable();
@@ -1643,6 +1647,7 @@ class Program
         sqlDataReader = null;
         try
         {
+            sqlCommand = null;
             /*sqlCommand = new SQLiteCommand($"SELECT * FROM Config", sqlConnection);*/
             sqlCommand = new NpgsqlCommand($"SELECT * FROM Config", sqlConnection);
             DataTable dataTable = new DataTable();
@@ -1671,6 +1676,7 @@ class Program
         sqlDataReader = null;
         try
         {
+            sqlCommand = null;
             /*       sqlCommand = new SQLiteCommand($"SELECT * FROM Devices WHERE P2={MyOwnerID}", sqlConnection);*/
             sqlCommand = new NpgsqlCommand($"SELECT * FROM Devices WHERE P2={MyOwnerID}", sqlConnection);
             DataTable dataTable = new DataTable();
@@ -1702,6 +1708,7 @@ class Program
         {
             if (config.ParamNO > 2)
             {
+                sqlCommand = null;
                 /*sqlCommand = new SQLiteCommand($"SELECT OwnerID FROM Config WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};", sqlConnection);*/
                 sqlCommand = new NpgsqlCommand($"SELECT OwnerID FROM Config WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};", sqlConnection);
                 sqlDataReader = sqlCommand.ExecuteReader();
@@ -1775,6 +1782,7 @@ class Program
         try
         {
             Console.WriteLine(DataArray[2]);
+            sqlCommand = null;
             /*sqlCommand = new SQLiteCommand($"SELECT * FROM Config WHERE OwnerID={DataArray[2]}", sqlConnection);*/
             sqlCommand = new NpgsqlCommand($"SELECT * FROM Config WHERE OwnerID={DataArray[2]}", sqlConnection);
             DataTable dataTable = new DataTable();
@@ -1798,6 +1806,7 @@ class Program
                         }
                         else if (DataArray[configDevices[i].ParamNO] == configDevices[i].NewData || configDevices[i].ParamNO > LastParam - 1)
                         {
+                            sqlCommand = null;
                             /* sqlCommand = new SQLiteCommand($"DELETE FROM Config WHERE OwnerID={DataArray[2]} AND ParamNO={configDevices[i].ParamNO};", sqlConnection);*/
                             sqlCommand = new NpgsqlCommand($"DELETE FROM Config WHERE OwnerID={DataArray[2]} AND ParamNO={configDevices[i].ParamNO};", sqlConnection);
                             sqlCommand.ExecuteNonQuery();
@@ -1840,6 +1849,7 @@ class Program
         sqlDataReader = null;
         try
         {
+            sqlCommand = null;
             /* sqlCommand = new SQLiteCommand($"SELECT * FROM Config WHERE OwnerID={MyOwnerID}", sqlConnection);*/
             sqlCommand = new NpgsqlCommand($"SELECT * FROM Config WHERE OwnerID={MyOwnerID}", sqlConnection);
             DataTable dataTable = new DataTable();
@@ -1868,6 +1878,7 @@ class Program
         {
             for (int i = 0; i < deletDevices.Length; i++)
             {
+                sqlCommand = null;
                 /*sqlCommand = new SQLiteCommand($"DELETE FROM Devices WHERE P2={deletDevices[i].OwnerID};", sqlConnection);*/
                 sqlCommand = new NpgsqlCommand($"DELETE FROM Devices WHERE P2={deletDevices[i].OwnerID};", sqlConnection);
                 sqlCommand.ExecuteNonQuery();
@@ -1892,6 +1903,7 @@ class Program
         sqlDataReader = null;
         try
         {
+            sqlCommand = null;
             /*sqlCommand = new SQLiteCommand($"SELECT * FROM Devices WHERE P2>={MyOwnerID*1000} AND P2<={(MyOwnerID+1) * 1000}", sqlConnection);*/
             sqlCommand = new NpgsqlCommand($"SELECT * FROM Devices WHERE P2>={MyOwnerID * 1000} AND P2<={(MyOwnerID + 1) * 1000}", sqlConnection);
             DataTable dataTable = new DataTable();
@@ -1926,6 +1938,7 @@ class Program
 
         try
         {
+            sqlCommand = null;
             sqlCommand = new NpgsqlCommand($"SELECT OwnerID FROM Money WHERE OwnerID={DataArray[0]};", sqlConnection);
             sqlDataReader = sqlCommand.ExecuteReader();
             bool tempState = false;
@@ -2005,6 +2018,7 @@ class Program
         sqlDataReader = null;
         try
         {
+            sqlCommand = null;
             //sqlCommand = new SQLiteCommand($"SELECT * FROM Devices", sqlConnection);
             sqlCommand = new NpgsqlCommand($"SELECT * FROM Money", sqlConnection);
             DataTable dataTable = new DataTable();
@@ -2033,6 +2047,7 @@ class Program
         sqlDataReader = null;
         try
         {
+            sqlCommand = null;
             /* sqlCommand = new SQLiteCommand($"SELECT * FROM Config WHERE OwnerID={MyOwnerID}", sqlConnection);*/
             sqlCommand = new NpgsqlCommand($"SELECT * FROM Money WHERE OwnerID={MyOwnerID}", sqlConnection);
             DataTable dataTable = new DataTable();
@@ -2062,7 +2077,7 @@ class Program
         sqlDataReader = null;
         try
         {
-
+            sqlCommand = null;
             /*sqlCommand = new SQLiteCommand($"SELECT OwnerID FROM Config WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};", sqlConnection);*/
             sqlCommand = new NpgsqlCommand($"SELECT OwnerID FROM Reserv WHERE OwnerID={MyReserv.OwnerID};", sqlConnection);
             sqlDataReader = sqlCommand.ExecuteReader();
@@ -2134,6 +2149,7 @@ class Program
         sqlDataReader = null;
         try
         {
+            sqlCommand = null;
             //sqlCommand = new SQLiteCommand($"SELECT * FROM Devices", sqlConnection);
             sqlCommand = new NpgsqlCommand($"SELECT * FROM Reserv", sqlConnection);
             DataTable dataTable = new DataTable();
@@ -2162,6 +2178,7 @@ class Program
         sqlDataReader = null;
         try
         {
+            sqlCommand = null;
             /* sqlCommand = new SQLiteCommand($"SELECT * FROM Config WHERE OwnerID={MyOwnerID}", sqlConnection);*/
             sqlCommand = new NpgsqlCommand($"SELECT * FROM Reserv WHERE OwnerID={MyOwnerID}", sqlConnection);
             DataTable dataTable = new DataTable();
@@ -2191,6 +2208,7 @@ class Program
         sqlDataReader = null;
         try
         {
+            sqlCommand = null;
             //Console.WriteLine(DataArray[0]);
             /*sqlCommand = new SQLiteCommand($"SELECT * FROM Config WHERE OwnerID={DataArray[2]}", sqlConnection);*/
             sqlCommand = new NpgsqlCommand($"SELECT * FROM Reserv WHERE OwnerID={DataArray[0]}", sqlConnection);
@@ -2247,6 +2265,7 @@ class Program
     {
         try
         {
+            sqlCommand = null;
             /*sqlCommand = new SQLiteCommand($"DELETE FROM Devices WHERE P2={deletDevices[i].OwnerID};", sqlConnection);*/
             sqlCommand = new NpgsqlCommand($"DELETE FROM Reserv WHERE OwnerID={deletDevices};", sqlConnection);
             sqlCommand.ExecuteNonQuery();
@@ -2273,6 +2292,7 @@ class Program
         try
         {
             /*var tempState;*/
+            sqlCommand = null;
             sqlCommand = new NpgsqlCommand($"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name  = 'devices') AS table_existence;", sqlConnection);
             var tempState = sqlCommand.ExecuteScalar();
             //Console.WriteLine(tempState);
@@ -2297,6 +2317,7 @@ class Program
         //////////////////Config/////////////////////
         try
         {
+            sqlCommand = null;
             sqlCommand = new NpgsqlCommand($"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name  = 'config') AS table_existence;", sqlConnection);
             var tempState = sqlCommand.ExecuteScalar();
             //Console.WriteLine(tempState);
@@ -2321,6 +2342,7 @@ class Program
         //////////////////Money/////////////////////
         try
         {
+            sqlCommand = null;
             sqlCommand = new NpgsqlCommand($"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name  = 'money') AS table_existence;", sqlConnection);
             var tempState = sqlCommand.ExecuteScalar();
             //Console.WriteLine(tempState);
@@ -2345,6 +2367,7 @@ class Program
         //////////////////Set Money/////////////////////
         try
         {
+            sqlCommand = null;
             sqlCommand = new NpgsqlCommand($"SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name  = 'reserv') AS table_existence;", sqlConnection);
             var tempState = sqlCommand.ExecuteScalar();
             //Console.WriteLine(tempState);
@@ -2431,6 +2454,7 @@ class Program
     {
         try
         {
+            sqlCommand = null;
             sqlCommand = new NpgsqlCommand($"CREATE TABLE Devices(" +
                 $"DataTime CHAR(25)," +
                 $"P0 INT," +
@@ -2596,6 +2620,7 @@ class Program
     {
         try
         {
+            sqlCommand = null;
             sqlCommand = new NpgsqlCommand($"CREATE TABLE Config(" +
                 $"OwnerID INT," +
                 $"ParamNO INT," +
@@ -2613,6 +2638,7 @@ class Program
     {
         try
         {
+            sqlCommand = null;
             sqlCommand = new NpgsqlCommand($"CREATE TABLE Money(" +
                 $"DataTime CHAR(25)," +
                 $"OwnerID INT," +
@@ -2630,6 +2656,7 @@ class Program
     {
         try
         {
+            sqlCommand = null;
             sqlCommand = new NpgsqlCommand($"CREATE TABLE Reserv(" +
                 $"OwnerID INT NOT NULL PRIMARY KEY," +
                 $"Money INT," +
@@ -2647,6 +2674,7 @@ class Program
     {
         try
         {
+            sqlCommand = null;
             /*sqlCommand = new SQLiteCommand($"DELETE FROM Devices WHERE P2={deletDevices[i].OwnerID};", sqlConnection);*/
             uint MinimumOwnerID=0;
             sqlCommand = new NpgsqlCommand($"DELETE FROM {TableName} WHERE {NameOfID}<={MinimumOwnerID};", sqlConnection);
