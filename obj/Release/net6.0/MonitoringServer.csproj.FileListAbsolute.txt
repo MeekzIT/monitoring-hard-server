@@ -408,4 +408,3 @@ C:\Users\Hayk\Desktop\Monitoring\monitoring-hard-server-main\monitoring-hard-ser
 C:\Users\Hayk\Desktop\Monitoring\monitoring-hard-server-main\monitoring-hard-server-main\obj\Release\net6.0\ref\MonitoringServer.dll
 C:\Users\Hayk\Desktop\Monitoring\monitoring-hard-server-main\monitoring-hard-server-main\obj\Release\net6.0\MonitoringServer.pdb
 C:\Users\Hayk\Desktop\Monitoring\monitoring-hard-server-main\monitoring-hard-server-main\obj\Release\net6.0\MonitoringServer.genruntimeconfig.cache
-C:\Users\Hayk\Desktop\Monitoring\monitoring-hard-server-main\monitoring-hard-server-main\obj\Release\net6.0\MonitoringServer.csproj.AssemblyReference.cache

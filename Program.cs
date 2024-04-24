@@ -50,6 +50,9 @@ class Program
 
     /*public static SQLiteDataReader sqlDataReader = null;*/
     public static NpgsqlDataReader? sqlDataReader = null;
+
+    public static string? connString=null;
+
     static void Main(string[] args)
     {
 
@@ -79,7 +82,7 @@ class Program
                     Environment.Exit(0);
                 }*/
         //sqlConnection = new SQLiteConnection("Data Source=MoikaData.db; Version = 3;");
-        string? connString = config.GetValue<string>("ConnectionStrings:PgDbConnection");
+        connString = config.GetValue<string>("ConnectionStrings:PgDbConnection");
         Console.WriteLine(connString);
         sqlConnection = new NpgsqlConnection(connString);
         sqlConnection.Open();
@@ -260,8 +263,12 @@ class Program
                             SendOwnerID = uint.Parse(id);
                         }
 
+                        string? jsonResponse = null;
                         //Console.WriteLine(requestUrl);
-                        string? jsonResponse = SendOunerConfig(SendOwnerID);
+                        if(SendOwnerID>9999999 && SendOwnerID < 100000000)
+                        {
+                            jsonResponse = SendOunerConfig(SendOwnerID);
+                        }
                         URL_JsonResponse200(context, jsonResponse);
                     }
                     catch (Exception ex)
@@ -603,6 +610,17 @@ class Program
                             Console.WriteLine("Monitoring data: Stream is not open");
                         }
                     }
+                    else
+                    {
+                        if (stream.CanRead == true)
+                        {
+                            Console.WriteLine("TCP is OK");
+                        }
+                        else
+                        {
+                            Console.WriteLine("TCP Connection Error");
+                        }
+                    }
                 }
                 if (StartUncodingMoney && ActualMoney[0] > 0 && ActualMoney[0] < 100000000) 
                 {
@@ -628,6 +646,17 @@ class Program
                             else
                             {
                                 Console.WriteLine("Money data: Stream is not open");
+                            }
+                        }
+                        else
+                        {
+                            if (stream.CanRead == true)
+                            {
+                                Console.WriteLine("TCP is OK 2");
+                            }
+                            else
+                            {
+                                Console.WriteLine("TCP Connection Error 2");
                             }
                         }
                     }
@@ -1601,6 +1630,7 @@ class Program
         catch (Exception ex)
         {
             Console.Error.WriteLine(ex.Message);
+            DataBasueReConnect();
         }
         finally
         {
@@ -1706,7 +1736,7 @@ class Program
         sqlDataReader = null;
         try
         {
-            if (config.ParamNO > 2)
+            if (config.ParamNO > 2 && config.OwnerID>9999999 && config.OwnerID<100000000)
             {
                 sqlCommand = null;
                 /*sqlCommand = new SQLiteCommand($"SELECT OwnerID FROM Config WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};", sqlConnection);*/
@@ -1831,6 +1861,7 @@ class Program
         {
             Console.Error.WriteLine(ex.Message);
             SendMassage = "ERROR";
+            DataBasueReConnect();
         }
         finally
         {
@@ -2000,6 +2031,7 @@ class Program
         {
             Console.Error.WriteLine(ex.Message);
             StateReturn = "E1";
+            DataBasueReConnect();
         }
         finally
         {
@@ -2249,6 +2281,7 @@ class Program
         {
             Console.Error.WriteLine(ex.Message);
             SendMassage = "ERROR";
+            DataBasueReConnect();
         }
         finally
         {
@@ -2689,6 +2722,34 @@ class Program
             if (sqlDataReader != null && !sqlDataReader.IsClosed)
             {
                 sqlDataReader.Close();
+            }
+        }
+    }
+    static void DataBasueReConnect()
+    {
+        if (sqlConnection != null)
+        {
+            if (sqlConnection.State != ConnectionState.Open)
+            {
+                sqlConnection = new NpgsqlConnection(connString);
+                sqlConnection.Open();
+            }
+            else
+            {
+                sqlConnection.Close();
+            }
+        }
+        else
+        {
+            sqlConnection = new NpgsqlConnection(connString);
+            if (sqlConnection.State != ConnectionState.Open)
+            {
+                sqlConnection = new NpgsqlConnection(connString);
+                sqlConnection.Open();
+            }
+            else
+            {
+                sqlConnection.Close();
             }
         }
     }
