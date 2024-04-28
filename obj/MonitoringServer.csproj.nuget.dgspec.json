@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Hayk\\Desktop\\monitoring-hard-server\\MonitoringServer.csproj": {}
+    "C:\\Users\\37477\\Desktop\\JS Innovations\\monitoring-hard-server\\MonitoringServer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Hayk\\Desktop\\monitoring-hard-server\\MonitoringServer.csproj": {
+    "C:\\Users\\37477\\Desktop\\JS Innovations\\monitoring-hard-server\\MonitoringServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Hayk\\Desktop\\monitoring-hard-server\\MonitoringServer.csproj",
+        "projectUniqueName": "C:\\Users\\37477\\Desktop\\JS Innovations\\monitoring-hard-server\\MonitoringServer.csproj",
         "projectName": "MonitoringServer",
-        "projectPath": "C:\\Users\\Hayk\\Desktop\\monitoring-hard-server\\MonitoringServer.csproj",
-        "packagesPath": "C:\\Users\\Hayk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Hayk\\Desktop\\monitoring-hard-server\\obj\\",
+        "projectPath": "C:\\Users\\37477\\Desktop\\JS Innovations\\monitoring-hard-server\\MonitoringServer.csproj",
+        "packagesPath": "C:\\Users\\37477\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\37477\\Desktop\\JS Innovations\\monitoring-hard-server\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "D:\\VS\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Hayk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\37477\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -34,6 +38,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -82,7 +91,7 @@
             },
             "System.Data.SqlClient": {
               "target": "Package",
-              "version": "[4.8.5, )"
+              "version": "[4.8.6, )"
             }
           },
           "imports": [
@@ -91,7 +100,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -100,7 +110,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
         }
       }
     }
