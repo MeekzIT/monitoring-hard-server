@@ -36,7 +36,7 @@ class Program
     public class SetMoney
     {
         public int OwnerID { get; set; }
-        public int Money { get; set; }  
+        public int Money { get; set; }
         public int Reserv { get; set; }
     }
 
@@ -51,7 +51,7 @@ class Program
     /*public static SQLiteDataReader sqlDataReader = null;*/
     //public static NpgsqlDataReader? sqlDataReader = null;
 
-    public static string? connString=null;
+    public static string? connString = null;
 
     static void Main(string[] args)
     {
@@ -61,7 +61,7 @@ class Program
         // Ask the service provider for the configuration abstraction.
         IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
 
-       
+
         connString = config.GetValue<string>("ConnectionStrings:PgDbConnection");
         Console.WriteLine(connString);
         /*sqlConnection = new NpgsqlConnection(connString);
@@ -72,7 +72,7 @@ class Program
         _ = Task.Run(() => StartTcpListener());
 
         _ = Task.Run(() => StartHttpListener());
-        
+
         Console.WriteLine("Press Enter to exit.");
         while (true)
         {
@@ -103,16 +103,18 @@ class Program
 
     static void StartHttpListener()
     {
+
         // Set HTTP listener IP and port
         /*string ipAddress = "127.0.0.1";*/
         //string ipAddress = ;
         int port = 2000;
+        // int port = 5689;
 
         HttpListener httpListener = new HttpListener();
         //httpListener.Prefixes.Add($"http://{ipAddress}:{port}/");
         /* httpListener.Prefixes.Add($"http://+:{port}/");*/
 
-        httpListener.Prefixes.Add($"http://*:{port}/");
+        httpListener.Prefixes.Add($"http://localhost:{port}/");
         /*  httpListener.Prefixes.Add($"
       //  https ://hard-server-0e43d0480fed.herokuapp.com");*/
 
@@ -245,7 +247,7 @@ class Program
 
                         string? jsonResponse = null;
                         //Console.WriteLine(requestUrl);
-                        if(SendOwnerID>9999999 && SendOwnerID < 100000000)
+                        if (SendOwnerID > 9999999 && SendOwnerID < 100000000)
                         {
                             jsonResponse = await SendOunerConfig(SendOwnerID);
                         }
@@ -253,7 +255,7 @@ class Program
                     }
                     catch (Exception ex)
                     {
-                        URL_GET_ErrorCatch(context: context, ex: ex);  
+                        URL_GET_ErrorCatch(context: context, ex: ex);
                     }
                     finally
                     {
@@ -318,7 +320,7 @@ class Program
                     }
                     catch (Exception ex)
                     {
-                        URL_GET_ErrorCatch(context: context, ex: ex);   
+                        URL_GET_ErrorCatch(context: context, ex: ex);
                     }
                     finally
                     {
@@ -398,7 +400,7 @@ class Program
                     }
                     catch (Exception ex)
                     {
-                        URL_GET_ErrorCatch(context: context, ex: ex); 
+                        URL_GET_ErrorCatch(context: context, ex: ex);
                     }
                     finally
                     {
@@ -433,6 +435,46 @@ class Program
                         context.Response.Close();
                     }
                 }
+               else if (requestUrl.EndsWith("/api/v1/device/upload_hex"))
+                {
+                    try
+                    {
+                        // Создать директорию для временного хранения файла
+                        string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");      
+
+                        if (!Directory.Exists(uploadPath))
+                        {
+                            Directory.CreateDirectory(uploadPath);
+                        }
+                        // Сохранить загруженный файл
+                        string filePath = Path.Combine(uploadPath, "firmware.hex");
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await context.Request.InputStream.CopyToAsync(fileStream);
+                        }
+
+                        // Отправить файл на STM32
+                        string stm32Url = "http://127.0.0.1"; // Замените на IP STM32
+                        await SendHexFileToSTM32(filePath, stm32Url);
+
+                        // Ответ клиенту Postman
+                        context.Response.StatusCode = (int)HttpStatusCode.OK;
+                        byte[] responseBytes = Encoding.UTF8.GetBytes("Firmware uploaded and sent to STM32.");
+                        await context.Response.OutputStream.WriteAsync(responseBytes, 0, responseBytes.Length);
+                    }
+                    catch (Exception ex)
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        byte[] errorBytes = Encoding.UTF8.GetBytes($"Error: {ex.Message}");
+                        await context.Response.OutputStream.WriteAsync(errorBytes, 0, errorBytes.Length);
+                    }
+                    finally
+                    {
+                        context.Response.Close();
+                    }
+                }
+
+                // ### END OF ADDED BY ASSISTANT ###
                 else if (requestUrl.EndsWith("/api/v1/device/reserv"))
                 {
                     try
@@ -504,7 +546,7 @@ class Program
                 // Read data from the client
                 var bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
                 //var bytesRead = stream.Read(buffer, 0, buffer.Length);
-                
+
                 Array.Clear(TCPTempArray, 0, TCPTempArray.Length);
                 Array.Clear(ActualMoney, 0, ActualMoney.Length);
                 //Console.WriteLine(ActualMoney[0]);
@@ -573,14 +615,14 @@ class Program
                 }
                 //Console.WriteLine(message);
 
-                if (StartUncoding && TCPTempArray[2] > 0 && TCPTempArray[2] < 100000000) 
+                if (StartUncoding && TCPTempArray[2] > 0 && TCPTempArray[2] < 100000000)
                 {
                     _ = SQLWriteForTCP(TCPTempArray);
                     string? SendTCPMassage = await CheckConfigDevice(TCPTempArray, j);
                     Console.WriteLine(SendTCPMassage);
                     if (SendTCPMassage != "NO1" && SendTCPMassage != "NO2" && SendTCPMassage != "ERROR" && SendTCPMassage != null)
                     {
-                        if(stream.CanWrite==true)
+                        if (stream.CanWrite == true)
                         {
                             byte[] sendClientData = Encoding.ASCII.GetBytes(SendTCPMassage);
                             stream.Write(sendClientData, 0, sendClientData.Length);
@@ -602,7 +644,7 @@ class Program
                         }
                     }
                 }
-                if (StartUncodingMoney && ActualMoney[0] > 0 && ActualMoney[0] < 100000000) 
+                if (StartUncodingMoney && ActualMoney[0] > 0 && ActualMoney[0] < 100000000)
                 {
                     if (DeletReserv == true)
                     {
@@ -618,7 +660,7 @@ class Program
                         Console.WriteLine(SendTCPReservMasage);
                         if (SendTCPReservMasage != "NO1" && SendTCPReservMasage != "NO2" && SendTCPReservMasage != "ERROR" && SendTCPReservMasage != null)
                         {
-                            if(stream.CanWrite==true)
+                            if (stream.CanWrite == true)
                             {
                                 byte[] sendClientData = Encoding.ASCII.GetBytes(SendTCPReservMasage);
                                 stream.Write(sendClientData, 0, sendClientData.Length);
@@ -1750,7 +1792,7 @@ class Program
         NpgsqlDataReader? TempSQLDataReader = null;
         try
         {
-            if (config.ParamNO > 2 && config.OwnerID>9999999 && config.OwnerID<100000000)
+            if (config.ParamNO > 2 && config.OwnerID > 9999999 && config.OwnerID < 100000000)
             {
                 /*sqlCommand = new SQLiteCommand($"SELECT OwnerID FROM Config WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};", sqlConnection);*/
                 var TempSQLCommand = new NpgsqlCommand($"SELECT OwnerID FROM Config WHERE OwnerID={config.OwnerID} AND ParamNO={config.ParamNO};", TempSQLConnection);
@@ -1994,7 +2036,7 @@ class Program
 
     static async Task<string?> SaveActualMoney(uint[] DataArray)
     {
-        string? StateReturn=null;
+        string? StateReturn = null;
         Console.WriteLine("Save Money");
         DateTime localDate = new();
         localDate = DateTime.UtcNow;
@@ -2061,7 +2103,7 @@ class Program
             }
             StateReturn = "OK";
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.Error.WriteLine(ex.Message);
             StateReturn = "E1";
@@ -2321,9 +2363,9 @@ class Program
                 //Console.WriteLine(TempJSON);
                 SetMoney[]? reservDevices = JsonConvert.DeserializeObject<SetMoney[]>(TempJSON);
                 bool noChang = true;
-/*                Console.WriteLine(reservDevices[0].OwnerID);
-                Console.WriteLine(reservDevices[0].Money);
-                Console.WriteLine(reservDevices[0].Reserv);*/
+                /*                Console.WriteLine(reservDevices[0].OwnerID);
+                                Console.WriteLine(reservDevices[0].Money);
+                                Console.WriteLine(reservDevices[0].Reserv);*/
                 if (reservDevices != null && reservDevices.Length != 0)
                 {
                     noChang = false;
@@ -2513,7 +2555,7 @@ class Program
         byte[] errorData = Encoding.UTF8.GetBytes(errorResponse);
         context.Response.OutputStream.Write(errorData, 0, errorData.Length);
     }
-    static void URL_JsonResponse200(HttpListenerContext context ,string? jsonResponse)
+    static void URL_JsonResponse200(HttpListenerContext context, string? jsonResponse)
     {
         if (jsonResponse != null)
         {
@@ -2875,4 +2917,55 @@ class Program
             i++;
         }
     }
+    // ### ADDED BY ASSISTANT ###
+    static async Task SendHexFileToSTM32(string filePath, string stm32Url)
+    {
+        using var client = new HttpClient();
+        using var content = new MultipartFormDataContent();
+        using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+        content.Add(new StreamContent(fileStream), "file", Path.GetFileName(filePath));
+
+        try
+        {
+            var response = await client.PostAsync(stm32Url, content);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Firmware successfully sent to STM32.");
+            }
+            else
+            {
+                string errorResponse = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error sending firmware: {response.StatusCode}, {errorResponse}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception during STM32 communication: {ex.Message}");
+        }
+    }
+    // ### END OF ADDED BY ASSISTANT ###
+
+    static void SendFileToHard(string filePath)
+    {
+        try
+        {
+            using var client = new TcpClient("hard_ip_address", 1234); // Замените "hard_ip_address" и "1234" на реальные значения
+            using var networkStream = client.GetStream();
+            using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+            fileStream.CopyTo(networkStream);
+            Console.WriteLine("Файл отправлен на HARD");
+
+            // Ожидание подтверждения от HARD
+            byte[] responseBuffer = new byte[256];
+            int bytesRead = networkStream.Read(responseBuffer, 0, responseBuffer.Length);
+            string response = Encoding.UTF8.GetString(responseBuffer, 0, bytesRead);
+            Console.WriteLine($"Ответ от HARD: {response}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при отправке файла на HARD: {ex.Message}");
+        }
+    }
+
 }
